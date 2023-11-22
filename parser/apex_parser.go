@@ -1,4 +1,4 @@
-// Code generated from apex.g4 by ANTLR 4.13.1. DO NOT EDIT.
+// Code generated from ./apex.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package parser // apex
 import (
@@ -1209,6 +1209,16 @@ func (s *CompilationUnitContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *CompilationUnitContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitCompilationUnit(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) CompilationUnit() (localctx ICompilationUnitContext) {
 	localctx = NewCompilationUnitContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 0, apexParserRULE_compilationUnit)
@@ -1424,6 +1434,16 @@ func (s *PackageDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *PackageDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitPackageDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) PackageDeclaration() (localctx IPackageDeclarationContext) {
 	localctx = NewPackageDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 2, apexParserRULE_packageDeclaration)
@@ -1588,6 +1608,16 @@ func (s *ImportDeclarationContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ImportDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitImportDeclaration(s)
+	}
+}
+
+func (s *ImportDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitImportDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -1856,6 +1886,16 @@ func (s *TypeDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *TypeDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) TypeDeclaration() (localctx ITypeDeclarationContext) {
 	localctx = NewTypeDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 6, apexParserRULE_typeDeclaration)
@@ -2110,6 +2150,16 @@ func (s *ModifierContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitModifier(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) Modifier() (localctx IModifierContext) {
 	localctx = NewModifierContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 8, apexParserRULE_modifier)
@@ -2322,6 +2372,16 @@ func (s *ClassOrInterfaceModifierContext) EnterRule(listener antlr.ParseTreeList
 func (s *ClassOrInterfaceModifierContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitClassOrInterfaceModifier(s)
+	}
+}
+
+func (s *ClassOrInterfaceModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitClassOrInterfaceModifier(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -2590,6 +2650,16 @@ func (s *VariableModifierContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *VariableModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitVariableModifier(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) VariableModifier() (localctx IVariableModifierContext) {
 	localctx = NewVariableModifierContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 12, apexParserRULE_variableModifier)
@@ -2786,6 +2856,16 @@ func (s *ClassDeclarationContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ClassDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitClassDeclaration(s)
+	}
+}
+
+func (s *ClassDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitClassDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -3015,6 +3095,16 @@ func (s *TypeParametersContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *TypeParametersContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeParameters(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) TypeParameters() (localctx ITypeParametersContext) {
 	localctx = NewTypeParametersContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 16, apexParserRULE_typeParameters)
@@ -3172,6 +3262,16 @@ func (s *TypeParameterContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *TypeParameterContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitTypeParameter(s)
+	}
+}
+
+func (s *TypeParameterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeParameter(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -3340,6 +3440,16 @@ func (s *TypeBoundContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *TypeBoundContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitTypeBound(s)
+	}
+}
+
+func (s *TypeBoundContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeBound(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -3538,6 +3648,16 @@ func (s *EnumDeclarationContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *EnumDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitEnumDeclaration(s)
+	}
+}
+
+func (s *EnumDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitEnumDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -3779,6 +3899,16 @@ func (s *EnumConstantsContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *EnumConstantsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitEnumConstants(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) EnumConstants() (localctx IEnumConstantsContext) {
 	localctx = NewEnumConstantsContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 24, apexParserRULE_enumConstants)
@@ -3985,6 +4115,16 @@ func (s *EnumConstantContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *EnumConstantContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitEnumConstant(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) EnumConstant() (localctx IEnumConstantContext) {
 	localctx = NewEnumConstantContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 26, apexParserRULE_enumConstant)
@@ -4174,6 +4314,16 @@ func (s *EnumBodyDeclarationsContext) ExitRule(listener antlr.ParseTreeListener)
 	}
 }
 
+func (s *EnumBodyDeclarationsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitEnumBodyDeclarations(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) EnumBodyDeclarations() (localctx IEnumBodyDeclarationsContext) {
 	localctx = NewEnumBodyDeclarationsContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 28, apexParserRULE_enumBodyDeclarations)
@@ -4350,6 +4500,16 @@ func (s *InterfaceDeclarationContext) EnterRule(listener antlr.ParseTreeListener
 func (s *InterfaceDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitInterfaceDeclaration(s)
+	}
+}
+
+func (s *InterfaceDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitInterfaceDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -4547,6 +4707,16 @@ func (s *TypeListContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *TypeListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeList(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) TypeList() (localctx ITypeListContext) {
 	localctx = NewTypeListContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 32, apexParserRULE_typeList)
@@ -4714,6 +4884,16 @@ func (s *ClassBodyContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ClassBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitClassBody(s)
+	}
+}
+
+func (s *ClassBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitClassBody(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -4888,6 +5068,16 @@ func (s *InterfaceBodyContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *InterfaceBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitInterfaceBody(s)
+	}
+}
+
+func (s *InterfaceBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitInterfaceBody(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -5096,6 +5286,16 @@ func (s *ClassBodyDeclarationContext) EnterRule(listener antlr.ParseTreeListener
 func (s *ClassBodyDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitClassBodyDeclaration(s)
+	}
+}
+
+func (s *ClassBodyDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitClassBodyDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -5435,6 +5635,16 @@ func (s *MemberDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *MemberDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitMemberDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) MemberDeclaration() (localctx IMemberDeclarationContext) {
 	localctx = NewMemberDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 40, apexParserRULE_memberDeclaration)
@@ -5710,6 +5920,16 @@ func (s *MethodDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *MethodDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitMethodDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) MethodDeclaration() (localctx IMethodDeclarationContext) {
 	localctx = NewMethodDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 42, apexParserRULE_methodDeclaration)
@@ -5967,6 +6187,16 @@ func (s *GenericMethodDeclarationContext) ExitRule(listener antlr.ParseTreeListe
 	}
 }
 
+func (s *GenericMethodDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitGenericMethodDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) GenericMethodDeclaration() (localctx IGenericMethodDeclarationContext) {
 	localctx = NewGenericMethodDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 44, apexParserRULE_genericMethodDeclaration)
@@ -6116,6 +6346,16 @@ func (s *ConstructorDeclarationContext) EnterRule(listener antlr.ParseTreeListen
 func (s *ConstructorDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitConstructorDeclaration(s)
+	}
+}
+
+func (s *ConstructorDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitConstructorDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -6276,6 +6516,16 @@ func (s *GenericConstructorDeclarationContext) ExitRule(listener antlr.ParseTree
 	}
 }
 
+func (s *GenericConstructorDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitGenericConstructorDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) GenericConstructorDeclaration() (localctx IGenericConstructorDeclarationContext) {
 	localctx = NewGenericConstructorDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 48, apexParserRULE_genericConstructorDeclaration)
@@ -6403,6 +6653,16 @@ func (s *FieldDeclarationContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *FieldDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitFieldDeclaration(s)
+	}
+}
+
+func (s *FieldDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitFieldDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -6556,6 +6816,16 @@ func (s *PropertyDeclarationContext) ExitRule(listener antlr.ParseTreeListener) 
 	}
 }
 
+func (s *PropertyDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitPropertyDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) PropertyDeclaration() (localctx IPropertyDeclarationContext) {
 	localctx = NewPropertyDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 52, apexParserRULE_propertyDeclaration)
@@ -6701,6 +6971,16 @@ func (s *PropertyBodyDeclarationContext) EnterRule(listener antlr.ParseTreeListe
 func (s *PropertyBodyDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitPropertyBodyDeclaration(s)
+	}
+}
+
+func (s *PropertyBodyDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitPropertyBodyDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -6885,6 +7165,16 @@ func (s *InterfaceBodyDeclarationContext) EnterRule(listener antlr.ParseTreeList
 func (s *InterfaceBodyDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitInterfaceBodyDeclaration(s)
+	}
+}
+
+func (s *InterfaceBodyDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitInterfaceBodyDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -7147,6 +7437,16 @@ func (s *InterfaceMemberDeclarationContext) ExitRule(listener antlr.ParseTreeLis
 	}
 }
 
+func (s *InterfaceMemberDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitInterfaceMemberDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) InterfaceMemberDeclaration() (localctx IInterfaceMemberDeclarationContext) {
 	localctx = NewInterfaceMemberDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 58, apexParserRULE_interfaceMemberDeclaration)
@@ -7363,6 +7663,16 @@ func (s *ConstDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ConstDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitConstDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ConstDeclaration() (localctx IConstDeclarationContext) {
 	localctx = NewConstDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 60, apexParserRULE_constDeclaration)
@@ -7536,6 +7846,16 @@ func (s *ConstantDeclaratorContext) EnterRule(listener antlr.ParseTreeListener) 
 func (s *ConstantDeclaratorContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitConstantDeclarator(s)
+	}
+}
+
+func (s *ConstantDeclaratorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitConstantDeclarator(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -7767,6 +8087,16 @@ func (s *InterfaceMethodDeclarationContext) ExitRule(listener antlr.ParseTreeLis
 	}
 }
 
+func (s *InterfaceMethodDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitInterfaceMethodDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) InterfaceMethodDeclaration() (localctx IInterfaceMethodDeclarationContext) {
 	localctx = NewInterfaceMethodDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 64, apexParserRULE_interfaceMethodDeclaration)
@@ -7987,6 +8317,16 @@ func (s *GenericInterfaceMethodDeclarationContext) ExitRule(listener antlr.Parse
 	}
 }
 
+func (s *GenericInterfaceMethodDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitGenericInterfaceMethodDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) GenericInterfaceMethodDeclaration() (localctx IGenericInterfaceMethodDeclarationContext) {
 	localctx = NewGenericInterfaceMethodDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 66, apexParserRULE_genericInterfaceMethodDeclaration)
@@ -8128,6 +8468,16 @@ func (s *VariableDeclaratorsContext) EnterRule(listener antlr.ParseTreeListener)
 func (s *VariableDeclaratorsContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitVariableDeclarators(s)
+	}
+}
+
+func (s *VariableDeclaratorsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitVariableDeclarators(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -8287,6 +8637,16 @@ func (s *VariableDeclaratorContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *VariableDeclaratorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitVariableDeclarator(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) VariableDeclarator() (localctx IVariableDeclaratorContext) {
 	localctx = NewVariableDeclaratorContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 70, apexParserRULE_variableDeclarator)
@@ -8420,6 +8780,16 @@ func (s *VariableDeclaratorIdContext) EnterRule(listener antlr.ParseTreeListener
 func (s *VariableDeclaratorIdContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitVariableDeclaratorId(s)
+	}
+}
+
+func (s *VariableDeclaratorIdContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitVariableDeclaratorId(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -8579,6 +8949,16 @@ func (s *VariableInitializerContext) EnterRule(listener antlr.ParseTreeListener)
 func (s *VariableInitializerContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitVariableInitializer(s)
+	}
+}
+
+func (s *VariableInitializerContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitVariableInitializer(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -8749,6 +9129,16 @@ func (s *ArrayInitializerContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ArrayInitializerContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitArrayInitializer(s)
+	}
+}
+
+func (s *ArrayInitializerContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitArrayInitializer(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -8927,6 +9317,16 @@ func (s *EnumConstantNameContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *EnumConstantNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitEnumConstantName(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) EnumConstantName() (localctx IEnumConstantNameContext) {
 	localctx = NewEnumConstantNameContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 78, apexParserRULE_enumConstantName)
@@ -9069,6 +9469,16 @@ func (s *Type_Context) EnterRule(listener antlr.ParseTreeListener) {
 func (s *Type_Context) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitType_(s)
+	}
+}
+
+func (s *Type_Context) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitType_(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -9327,6 +9737,16 @@ func (s *ClassOrInterfaceTypeContext) ExitRule(listener antlr.ParseTreeListener)
 	}
 }
 
+func (s *ClassOrInterfaceTypeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitClassOrInterfaceType(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ClassOrInterfaceType() (localctx IClassOrInterfaceTypeContext) {
 	localctx = NewClassOrInterfaceTypeContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 82, apexParserRULE_classOrInterfaceType)
@@ -9536,6 +9956,16 @@ func (s *PrimitiveTypeContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *PrimitiveTypeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitPrimitiveType(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) PrimitiveType() (localctx IPrimitiveTypeContext) {
 	localctx = NewPrimitiveTypeContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 84, apexParserRULE_primitiveType)
@@ -9692,6 +10122,16 @@ func (s *TypeArgumentsContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *TypeArgumentsContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitTypeArguments(s)
+	}
+}
+
+func (s *TypeArgumentsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeArguments(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -9857,6 +10297,16 @@ func (s *TypeArgumentContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *TypeArgumentContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitTypeArgument(s)
+	}
+}
+
+func (s *TypeArgumentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeArgument(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -10051,6 +10501,16 @@ func (s *QualifiedNameListContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *QualifiedNameListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitQualifiedNameList(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) QualifiedNameList() (localctx IQualifiedNameListContext) {
 	localctx = NewQualifiedNameListContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 90, apexParserRULE_qualifiedNameList)
@@ -10192,6 +10652,16 @@ func (s *FormalParametersContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *FormalParametersContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitFormalParameters(s)
+	}
+}
+
+func (s *FormalParametersContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitFormalParameters(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -10377,6 +10847,16 @@ func (s *FormalParameterListContext) EnterRule(listener antlr.ParseTreeListener)
 func (s *FormalParameterListContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitFormalParameterList(s)
+	}
+}
+
+func (s *FormalParameterListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitFormalParameterList(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -10624,6 +11104,16 @@ func (s *FormalParameterContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *FormalParameterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitFormalParameter(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) FormalParameter() (localctx IFormalParameterContext) {
 	localctx = NewFormalParameterContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 96, apexParserRULE_formalParameter)
@@ -10819,6 +11309,16 @@ func (s *LastFormalParameterContext) ExitRule(listener antlr.ParseTreeListener) 
 	}
 }
 
+func (s *LastFormalParameterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitLastFormalParameter(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) LastFormalParameter() (localctx ILastFormalParameterContext) {
 	localctx = NewLastFormalParameterContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 98, apexParserRULE_lastFormalParameter)
@@ -10957,6 +11457,16 @@ func (s *MethodBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *MethodBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitMethodBody(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) MethodBody() (localctx IMethodBodyContext) {
 	localctx = NewMethodBodyContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 100, apexParserRULE_methodBody)
@@ -11058,6 +11568,16 @@ func (s *ConstructorBodyContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ConstructorBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitConstructorBody(s)
+	}
+}
+
+func (s *ConstructorBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitConstructorBody(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -11165,6 +11685,16 @@ func (s *QualifiedNameContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *QualifiedNameContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitQualifiedName(s)
+	}
+}
+
+func (s *QualifiedNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitQualifiedName(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -11330,6 +11860,16 @@ func (s *LiteralContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *LiteralContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitLiteral(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) Literal() (localctx ILiteralContext) {
 	localctx = NewLiteralContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 106, apexParserRULE_literal)
@@ -11489,6 +12029,16 @@ func (s *AnnotationContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *AnnotationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitAnnotation(s)
+	}
+}
+
+func (s *AnnotationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotation(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -11652,6 +12202,16 @@ func (s *AnnotationNameContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *AnnotationNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationName(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) AnnotationName() (localctx IAnnotationNameContext) {
 	localctx = NewAnnotationNameContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 110, apexParserRULE_annotationName)
@@ -11789,6 +12349,16 @@ func (s *ElementValuePairsContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ElementValuePairsContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitElementValuePairs(s)
+	}
+}
+
+func (s *ElementValuePairsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitElementValuePairs(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -11946,6 +12516,16 @@ func (s *ElementValuePairContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ElementValuePairContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitElementValuePair(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ElementValuePair() (localctx IElementValuePairContext) {
 	localctx = NewElementValuePairContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 114, apexParserRULE_elementValuePair)
@@ -12097,6 +12677,16 @@ func (s *ElementValueContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ElementValueContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitElementValue(s)
+	}
+}
+
+func (s *ElementValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitElementValue(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -12274,6 +12864,16 @@ func (s *ElementValueArrayInitializerContext) EnterRule(listener antlr.ParseTree
 func (s *ElementValueArrayInitializerContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitElementValueArrayInitializer(s)
+	}
+}
+
+func (s *ElementValueArrayInitializerContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitElementValueArrayInitializer(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -12479,6 +13079,16 @@ func (s *AnnotationTypeDeclarationContext) ExitRule(listener antlr.ParseTreeList
 	}
 }
 
+func (s *AnnotationTypeDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationTypeDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) AnnotationTypeDeclaration() (localctx IAnnotationTypeDeclarationContext) {
 	localctx = NewAnnotationTypeDeclarationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 120, apexParserRULE_annotationTypeDeclaration)
@@ -12640,6 +13250,16 @@ func (s *AnnotationTypeBodyContext) EnterRule(listener antlr.ParseTreeListener) 
 func (s *AnnotationTypeBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitAnnotationTypeBody(s)
+	}
+}
+
+func (s *AnnotationTypeBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationTypeBody(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -12826,6 +13446,16 @@ func (s *AnnotationTypeElementDeclarationContext) EnterRule(listener antlr.Parse
 func (s *AnnotationTypeElementDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitAnnotationTypeElementDeclaration(s)
+	}
+}
+
+func (s *AnnotationTypeElementDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationTypeElementDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -13076,6 +13706,16 @@ func (s *AnnotationTypeElementRestContext) ExitRule(listener antlr.ParseTreeList
 	}
 }
 
+func (s *AnnotationTypeElementRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationTypeElementRest(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) AnnotationTypeElementRest() (localctx IAnnotationTypeElementRestContext) {
 	localctx = NewAnnotationTypeElementRestContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 126, apexParserRULE_annotationTypeElementRest)
@@ -13314,6 +13954,16 @@ func (s *AnnotationMethodOrConstantRestContext) ExitRule(listener antlr.ParseTre
 	}
 }
 
+func (s *AnnotationMethodOrConstantRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationMethodOrConstantRest(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) AnnotationMethodOrConstantRest() (localctx IAnnotationMethodOrConstantRestContext) {
 	localctx = NewAnnotationMethodOrConstantRestContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 128, apexParserRULE_annotationMethodOrConstantRest)
@@ -13449,6 +14099,16 @@ func (s *AnnotationMethodRestContext) EnterRule(listener antlr.ParseTreeListener
 func (s *AnnotationMethodRestContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitAnnotationMethodRest(s)
+	}
+}
+
+func (s *AnnotationMethodRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationMethodRest(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -13592,6 +14252,16 @@ func (s *AnnotationConstantRestContext) ExitRule(listener antlr.ParseTreeListene
 	}
 }
 
+func (s *AnnotationConstantRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitAnnotationConstantRest(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) AnnotationConstantRest() (localctx IAnnotationConstantRestContext) {
 	localctx = NewAnnotationConstantRestContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 132, apexParserRULE_annotationConstantRest)
@@ -13698,6 +14368,16 @@ func (s *DefaultValueContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *DefaultValueContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitDefaultValue(s)
+	}
+}
+
+func (s *DefaultValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitDefaultValue(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -13846,6 +14526,16 @@ func (s *BlockContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *BlockContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitBlock(s)
+	}
+}
+
+func (s *BlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitBlock(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -14021,6 +14711,16 @@ func (s *BlockStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *BlockStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitBlockStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) BlockStatement() (localctx IBlockStatementContext) {
 	localctx = NewBlockStatementContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 138, apexParserRULE_blockStatement)
@@ -14153,6 +14853,16 @@ func (s *LocalVariableDeclarationStatementContext) EnterRule(listener antlr.Pars
 func (s *LocalVariableDeclarationStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitLocalVariableDeclarationStatement(s)
+	}
+}
+
+func (s *LocalVariableDeclarationStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitLocalVariableDeclarationStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -14325,6 +15035,16 @@ func (s *LocalVariableDeclarationContext) EnterRule(listener antlr.ParseTreeList
 func (s *LocalVariableDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitLocalVariableDeclaration(s)
+	}
+}
+
+func (s *LocalVariableDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitLocalVariableDeclaration(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -14740,6 +15460,16 @@ func (s *StatementContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *StatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitStatement(s)
+	}
+}
+
+func (s *StatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -15399,6 +16129,16 @@ func (s *PropertyBlockContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *PropertyBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitPropertyBlock(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) PropertyBlock() (localctx IPropertyBlockContext) {
 	localctx = NewPropertyBlockContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 146, apexParserRULE_propertyBlock)
@@ -15554,6 +16294,16 @@ func (s *GetterContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *GetterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitGetter(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) Getter() (localctx IGetterContext) {
 	localctx = NewGetterContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 148, apexParserRULE_getter)
@@ -15696,6 +16446,16 @@ func (s *SetterContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *SetterContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitSetter(s)
+	}
+}
+
+func (s *SetterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitSetter(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -15914,6 +16674,16 @@ func (s *CatchClauseContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *CatchClauseContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitCatchClause(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) CatchClause() (localctx ICatchClauseContext) {
 	localctx = NewCatchClauseContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 152, apexParserRULE_catchClause)
@@ -16112,6 +16882,16 @@ func (s *CatchTypeContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *CatchTypeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitCatchType(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) CatchType() (localctx ICatchTypeContext) {
 	localctx = NewCatchTypeContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 154, apexParserRULE_catchType)
@@ -16251,6 +17031,16 @@ func (s *FinallyBlockContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *FinallyBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitFinallyBlock(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) FinallyBlock() (localctx IFinallyBlockContext) {
 	localctx = NewFinallyBlockContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 156, apexParserRULE_finallyBlock)
@@ -16375,6 +17165,16 @@ func (s *ResourceSpecificationContext) EnterRule(listener antlr.ParseTreeListene
 func (s *ResourceSpecificationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitResourceSpecification(s)
+	}
+}
+
+func (s *ResourceSpecificationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitResourceSpecification(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -16551,6 +17351,16 @@ func (s *ResourcesContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ResourcesContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitResources(s)
+	}
+}
+
+func (s *ResourcesContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitResources(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -16777,6 +17587,16 @@ func (s *ResourceContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ResourceContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitResource(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) Resource() (localctx IResourceContext) {
 	localctx = NewResourceContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 162, apexParserRULE_resource)
@@ -16980,6 +17800,16 @@ func (s *ForControlContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ForControlContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitForControl(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ForControl() (localctx IForControlContext) {
 	localctx = NewForControlContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 164, apexParserRULE_forControl)
@@ -17173,6 +18003,16 @@ func (s *ForInitContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ForInitContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitForInit(s)
+	}
+}
+
+func (s *ForInitContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitForInit(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -17381,6 +18221,16 @@ func (s *EnhancedForControlContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *EnhancedForControlContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitEnhancedForControl(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) EnhancedForControl() (localctx IEnhancedForControlContext) {
 	localctx = NewEnhancedForControlContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 168, apexParserRULE_enhancedForControl)
@@ -17523,6 +18373,16 @@ func (s *ForUpdateContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ForUpdateContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitForUpdate(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ForUpdate() (localctx IForUpdateContext) {
 	localctx = NewForUpdateContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 170, apexParserRULE_forUpdate)
@@ -17634,6 +18494,16 @@ func (s *ParExpressionContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ParExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitParExpression(s)
+	}
+}
+
+func (s *ParExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitParExpression(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -17793,6 +18663,16 @@ func (s *ExpressionListContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ExpressionListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitExpressionList(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ExpressionList() (localctx IExpressionListContext) {
 	localctx = NewExpressionListContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 174, apexParserRULE_expressionList)
@@ -17927,6 +18807,16 @@ func (s *StatementExpressionContext) ExitRule(listener antlr.ParseTreeListener) 
 	}
 }
 
+func (s *StatementExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitStatementExpression(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) StatementExpression() (localctx IStatementExpressionContext) {
 	localctx = NewStatementExpressionContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 176, apexParserRULE_statementExpression)
@@ -18028,6 +18918,16 @@ func (s *ConstantExpressionContext) EnterRule(listener antlr.ParseTreeListener) 
 func (s *ConstantExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitConstantExpression(s)
+	}
+}
+
+func (s *ConstantExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitConstantExpression(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -18163,6 +19063,16 @@ func (s *ApexDbUpsertExpressionContext) EnterRule(listener antlr.ParseTreeListen
 func (s *ApexDbUpsertExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitApexDbUpsertExpression(s)
+	}
+}
+
+func (s *ApexDbUpsertExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitApexDbUpsertExpression(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -18334,6 +19244,16 @@ func (s *ApexDbExpressionContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ApexDbExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitApexDbExpression(s)
+	}
+}
+
+func (s *ApexDbExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitApexDbExpression(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -18864,6 +19784,16 @@ func (s *ExpressionContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitExpression(s)
+	}
+}
+
+func (s *ExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitExpression(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -19996,6 +20926,16 @@ func (s *PrimaryContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *PrimaryContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitPrimary(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) Primary() (localctx IPrimaryContext) {
 	localctx = NewPrimaryContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 186, apexParserRULE_primary)
@@ -20352,6 +21292,16 @@ func (s *CreatorContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *CreatorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitCreator(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) Creator() (localctx ICreatorContext) {
 	localctx = NewCreatorContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 188, apexParserRULE_creator)
@@ -20586,6 +21536,16 @@ func (s *CreatedNameContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *CreatedNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitCreatedName(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) CreatedName() (localctx ICreatedNameContext) {
 	localctx = NewCreatedNameContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 190, apexParserRULE_createdName)
@@ -20813,6 +21773,16 @@ func (s *InnerCreatorContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *InnerCreatorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitInnerCreator(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) InnerCreator() (localctx IInnerCreatorContext) {
 	localctx = NewInnerCreatorContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 192, apexParserRULE_innerCreator)
@@ -21001,6 +21971,16 @@ func (s *ArrayCreatorRestContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ArrayCreatorRestContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitArrayCreatorRest(s)
+	}
+}
+
+func (s *ArrayCreatorRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitArrayCreatorRest(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -21378,6 +22358,16 @@ func (s *MapCreatorRestContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *MapCreatorRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitMapCreatorRest(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) MapCreatorRest() (localctx IMapCreatorRestContext) {
 	localctx = NewMapCreatorRestContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 196, apexParserRULE_mapCreatorRest)
@@ -21744,6 +22734,16 @@ func (s *SetCreatorRestContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *SetCreatorRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitSetCreatorRest(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) SetCreatorRest() (localctx ISetCreatorRestContext) {
 	localctx = NewSetCreatorRestContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 198, apexParserRULE_setCreatorRest)
@@ -21970,6 +22970,16 @@ func (s *ClassCreatorRestContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ClassCreatorRestContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitClassCreatorRest(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ClassCreatorRest() (localctx IClassCreatorRestContext) {
 	localctx = NewClassCreatorRestContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 200, apexParserRULE_classCreatorRest)
@@ -22103,6 +23113,16 @@ func (s *ExplicitGenericInvocationContext) ExitRule(listener antlr.ParseTreeList
 	}
 }
 
+func (s *ExplicitGenericInvocationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitExplicitGenericInvocation(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ExplicitGenericInvocation() (localctx IExplicitGenericInvocationContext) {
 	localctx = NewExplicitGenericInvocationContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 202, apexParserRULE_explicitGenericInvocation)
@@ -22218,6 +23238,16 @@ func (s *NonWildcardTypeArgumentsContext) EnterRule(listener antlr.ParseTreeList
 func (s *NonWildcardTypeArgumentsContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitNonWildcardTypeArguments(s)
+	}
+}
+
+func (s *NonWildcardTypeArgumentsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitNonWildcardTypeArguments(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -22348,6 +23378,16 @@ func (s *TypeArgumentsOrDiamondContext) EnterRule(listener antlr.ParseTreeListen
 func (s *TypeArgumentsOrDiamondContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitTypeArgumentsOrDiamond(s)
+	}
+}
+
+func (s *TypeArgumentsOrDiamondContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitTypeArgumentsOrDiamond(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -22496,6 +23536,16 @@ func (s *NonWildcardTypeArgumentsOrDiamondContext) ExitRule(listener antlr.Parse
 	}
 }
 
+func (s *NonWildcardTypeArgumentsOrDiamondContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitNonWildcardTypeArgumentsOrDiamond(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) NonWildcardTypeArgumentsOrDiamond() (localctx INonWildcardTypeArgumentsOrDiamondContext) {
 	localctx = NewNonWildcardTypeArgumentsOrDiamondContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 208, apexParserRULE_nonWildcardTypeArgumentsOrDiamond)
@@ -22638,6 +23688,16 @@ func (s *SuperSuffixContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *SuperSuffixContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitSuperSuffix(s)
+	}
+}
+
+func (s *SuperSuffixContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitSuperSuffix(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -22816,6 +23876,16 @@ func (s *ExplicitGenericInvocationSuffixContext) ExitRule(listener antlr.ParseTr
 	}
 }
 
+func (s *ExplicitGenericInvocationSuffixContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitExplicitGenericInvocationSuffix(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *apexParser) ExplicitGenericInvocationSuffix() (localctx IExplicitGenericInvocationSuffixContext) {
 	localctx = NewExplicitGenericInvocationSuffixContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 212, apexParserRULE_explicitGenericInvocationSuffix)
@@ -22963,6 +24033,16 @@ func (s *ArgumentsContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *ArgumentsContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(apexListener); ok {
 		listenerT.ExitArguments(s)
+	}
+}
+
+func (s *ArgumentsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case apexVisitor:
+		return t.VisitArguments(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 

@@ -1,4 +1,4 @@
-// Code generated from apex.g4 by ANTLR 4.13.1. DO NOT EDIT.
+// Code generated from ./apex.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package parser // apex
 import "github.com/antlr4-go/antlr/v4"
