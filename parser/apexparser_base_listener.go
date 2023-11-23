@@ -489,12 +489,6 @@ func (s *BaseApexParserListener) EnterArrayExpression(ctx *ArrayExpressionContex
 // ExitArrayExpression is called when production arrayExpression is exited.
 func (s *BaseApexParserListener) ExitArrayExpression(ctx *ArrayExpressionContext) {}
 
-// EnterNewExpression is called when production newExpression is entered.
-func (s *BaseApexParserListener) EnterNewExpression(ctx *NewExpressionContext) {}
-
-// ExitNewExpression is called when production newExpression is exited.
-func (s *BaseApexParserListener) ExitNewExpression(ctx *NewExpressionContext) {}
-
 // EnterAssignExpression is called when production assignExpression is entered.
 func (s *BaseApexParserListener) EnterAssignExpression(ctx *AssignExpressionContext) {}
 
@@ -512,6 +506,12 @@ func (s *BaseApexParserListener) EnterBitNotExpression(ctx *BitNotExpressionCont
 
 // ExitBitNotExpression is called when production bitNotExpression is exited.
 func (s *BaseApexParserListener) ExitBitNotExpression(ctx *BitNotExpressionContext) {}
+
+// EnterNewInstanceExpression is called when production newInstanceExpression is entered.
+func (s *BaseApexParserListener) EnterNewInstanceExpression(ctx *NewInstanceExpressionContext) {}
+
+// ExitNewInstanceExpression is called when production newInstanceExpression is exited.
+func (s *BaseApexParserListener) ExitNewInstanceExpression(ctx *NewInstanceExpressionContext) {}
 
 // EnterArth2Expression is called when production arth2Expression is entered.
 func (s *BaseApexParserListener) EnterArth2Expression(ctx *Arth2ExpressionContext) {}

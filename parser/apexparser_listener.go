@@ -238,9 +238,6 @@ type ApexParserListener interface {
 	// EnterArrayExpression is called when entering the arrayExpression production.
 	EnterArrayExpression(c *ArrayExpressionContext)
 
-	// EnterNewExpression is called when entering the newExpression production.
-	EnterNewExpression(c *NewExpressionContext)
-
 	// EnterAssignExpression is called when entering the assignExpression production.
 	EnterAssignExpression(c *AssignExpressionContext)
 
@@ -249,6 +246,9 @@ type ApexParserListener interface {
 
 	// EnterBitNotExpression is called when entering the bitNotExpression production.
 	EnterBitNotExpression(c *BitNotExpressionContext)
+
+	// EnterNewInstanceExpression is called when entering the newInstanceExpression production.
+	EnterNewInstanceExpression(c *NewInstanceExpressionContext)
 
 	// EnterArth2Expression is called when entering the arth2Expression production.
 	EnterArth2Expression(c *Arth2ExpressionContext)
@@ -745,9 +745,6 @@ type ApexParserListener interface {
 	// ExitArrayExpression is called when exiting the arrayExpression production.
 	ExitArrayExpression(c *ArrayExpressionContext)
 
-	// ExitNewExpression is called when exiting the newExpression production.
-	ExitNewExpression(c *NewExpressionContext)
-
 	// ExitAssignExpression is called when exiting the assignExpression production.
 	ExitAssignExpression(c *AssignExpressionContext)
 
@@ -756,6 +753,9 @@ type ApexParserListener interface {
 
 	// ExitBitNotExpression is called when exiting the bitNotExpression production.
 	ExitBitNotExpression(c *BitNotExpressionContext)
+
+	// ExitNewInstanceExpression is called when exiting the newInstanceExpression production.
+	ExitNewInstanceExpression(c *NewInstanceExpressionContext)
 
 	// ExitArth2Expression is called when exiting the arth2Expression production.
 	ExitArth2Expression(c *Arth2ExpressionContext)

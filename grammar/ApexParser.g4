@@ -430,7 +430,7 @@ expression
         )                                                                                             # dotExpression
     | expression LBRACK expression RBRACK                                                             # arrayExpression
     | methodCall                                                                                      # methodCallExpression
-    | NEW creator                                                                                     # newExpression
+    | NEW creator                                                                                     # newInstanceExpression
     | LPAREN typeRef RPAREN expression                                                                # castExpression
     | LPAREN expression RPAREN                                                                        # subExpression
     | expression (INC | DEC)                                                                          # postOpExpression

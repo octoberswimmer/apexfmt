@@ -238,9 +238,6 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#arrayExpression.
 	VisitArrayExpression(ctx *ArrayExpressionContext) interface{}
 
-	// Visit a parse tree produced by ApexParser#newExpression.
-	VisitNewExpression(ctx *NewExpressionContext) interface{}
-
 	// Visit a parse tree produced by ApexParser#assignExpression.
 	VisitAssignExpression(ctx *AssignExpressionContext) interface{}
 
@@ -249,6 +246,9 @@ type ApexParserVisitor interface {
 
 	// Visit a parse tree produced by ApexParser#bitNotExpression.
 	VisitBitNotExpression(ctx *BitNotExpressionContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#newInstanceExpression.
+	VisitNewInstanceExpression(ctx *NewInstanceExpressionContext) interface{}
 
 	// Visit a parse tree produced by ApexParser#arth2Expression.
 	VisitArth2Expression(ctx *Arth2ExpressionContext) interface{}

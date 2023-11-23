@@ -315,10 +315,6 @@ func (v *BaseApexParserVisitor) VisitArrayExpression(ctx *ArrayExpressionContext
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseApexParserVisitor) VisitNewExpression(ctx *NewExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseApexParserVisitor) VisitAssignExpression(ctx *AssignExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -328,6 +324,10 @@ func (v *BaseApexParserVisitor) VisitMethodCallExpression(ctx *MethodCallExpress
 }
 
 func (v *BaseApexParserVisitor) VisitBitNotExpression(ctx *BitNotExpressionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitNewInstanceExpression(ctx *NewInstanceExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
