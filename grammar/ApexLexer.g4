@@ -40,10 +40,6 @@
  */
 lexer grammar ApexLexer;
 
-@lexer::members {
-    // public void clearCache() {_interp.clearDFA();}
-}
-
 channels {
     WHITESPACE_CHANNEL,
     COMMENT_CHANNEL
@@ -66,7 +62,7 @@ FINAL         : 'final';
 FINALLY       : 'finally';
 FOR           : 'for';
 GET           : 'get';
-GLOBAL	      : 'global';
+GLOBAL        : 'global';
 IF            : 'if';
 IMPLEMENTS    : 'implements';
 INHERITED     : 'inherited';

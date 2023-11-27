@@ -1074,11 +1074,6 @@ func NewApexParser(input antlr.TokenStream) *ApexParser {
 	return this
 }
 
-// Note that '@members' cannot be changed now, but this should have been 'globals'
-// If you are looking to have variables for each instance, use '@structmembers'
-
-// public void clearCache() {_interp.clearDFA();}
-
 // ApexParser tokens.
 const (
 	ApexParserEOF                      = antlr.TokenEOF

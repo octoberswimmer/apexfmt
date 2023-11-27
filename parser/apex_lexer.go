@@ -1553,5 +1553,3 @@ const (
 	ApexLexerWHITESPACE_CHANNEL = 2
 	ApexLexerCOMMENT_CHANNEL    = 3
 )
-
-// public void clearCache() {_interp.clearDFA();}
