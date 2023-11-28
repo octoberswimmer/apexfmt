@@ -39,8 +39,15 @@ func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) inter
 		fmt.Fprintln(os.Stderr, "IT'S AN INTERFACE")
 		return fmt.Sprintf("%s%s", modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
 	case t.EnumDeclaration() != nil:
-		// TODO: Handle Enums
+		enum := t.EnumDeclaration()
+		constants := []string{}
+		if enum.EnumConstants() != nil {
+			for _, e := range enum.EnumConstants().AllId() {
+				constants = append(constants, e.GetText())
+			}
+		}
 		fmt.Fprintln(os.Stderr, "IT'S AN ENUM")
+		return fmt.Sprintf("enum %s {%s}", enum.Id().GetText(), strings.Join(constants, ", "))
 	}
 	return ""
 }
@@ -104,7 +111,6 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 	case ctx.SEMI() != nil:
 		return ";"
 	case ctx.Block() != nil:
-		// TODO: Handle static
 		static := ""
 		if ctx.STATIC() != nil {
 			static = "static "
@@ -112,7 +118,6 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 		fmt.Fprintln(os.Stderr, "GOT A BLOCK")
 		return fmt.Sprintf("%s%s", static, indent(v.VisitBlock(ctx.Block().(*parser.BlockContext)).(string)))
 	case ctx.MemberDeclaration() != nil:
-		// fmt.Fprintln(os.Stderr, "IT'S A MEMBER")
 		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
 	}
 	return ""
@@ -123,24 +128,22 @@ func (v *Visitor) VisitMemberDeclaration(ctx *parser.MemberDeclarationContext) i
 	switch {
 	case ctx.MethodDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND METHOD DECLARATION")
-		return v.visitRule(ctx.MethodDeclaration())
+		return v.VisitMethodDeclaration(ctx.MethodDeclaration().(*parser.MethodDeclarationContext))
 	case ctx.FieldDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND FIELD DECLARATION")
-		// return v.visitRule(ctx.FieldDeclaration())
 		return v.VisitFieldDeclaration(ctx.FieldDeclaration().(*parser.FieldDeclarationContext))
 	case ctx.ConstructorDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND CONSTRUCTOR DECLARATION")
-		// return v.visitRule(ctx.ConstructorDeclaration())
 		return v.VisitConstructorDeclaration(ctx.ConstructorDeclaration().(*parser.ConstructorDeclarationContext))
 	case ctx.InterfaceDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND INTERFACE DECLARATION")
-		return v.visitRule(ctx.InterfaceDeclaration())
+		return v.VisitInterfaceDeclaration(ctx.InterfaceDeclaration().(*parser.InterfaceDeclarationContext))
 	case ctx.ClassDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND CLASS DECLARATION")
-		return v.visitRule(ctx.ClassDeclaration())
+		return v.VisitClassDeclaration(ctx.ClassDeclaration().(*parser.ClassDeclarationContext))
 	case ctx.EnumDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND ENUM DECLARATION")
-		return v.visitRule(ctx.EnumDeclaration())
+		return v.VisitEnumDeclaration(ctx.EnumDeclaration().(*parser.EnumDeclarationContext))
 	case ctx.PropertyDeclaration() != nil:
 		fmt.Fprintln(os.Stderr, "FOUND PROPERTY DECLARATION")
 		return v.visitRule(ctx.PropertyDeclaration())
@@ -163,13 +166,48 @@ func (v *Visitor) VisitFieldDeclaration(ctx *parser.FieldDeclarationContext) int
 	return fmt.Sprintf("%s %s;", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.VariableDeclarators()))
 }
 
+func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContext) interface{} {
+	fmt.Fprintln(os.Stderr, "IN PROPERTY DECLARATION")
+	propertyBlocks := []string{}
+	if ctx.AllPropertyBlock() != nil {
+		for _, p := range ctx.AllPropertyBlock() {
+			propertyBlocks = append(propertyBlocks, v.VisitPropertyBlock(p.(*parser.PropertyBlockContext)).(string))
+		}
+	}
+	return fmt.Sprintf("%s %s {\n%s}\n", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), strings.Join(propertyBlocks, "\n"))
+}
+
+func (v *Visitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
+	if ctx.Getter() != nil {
+		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.VisitGetter(ctx.Getter().(*parser.GetterContext)))
+	} else {
+		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.VisitSetter(ctx.Setter().(*parser.SetterContext)))
+	}
+}
+
+func (v *Visitor) VisitGetter(ctx *parser.GetterContext) interface{} {
+	if ctx.SEMI() != nil {
+		return "get;"
+	} else {
+		return fmt.Sprintf("get %s", v.VisitBlock(ctx.Block().(*parser.BlockContext)))
+	}
+}
+
+func (v *Visitor) VisitSetter(ctx *parser.SetterContext) interface{} {
+	if ctx.SEMI() != nil {
+		return "set;"
+	} else {
+		return fmt.Sprintf("set %s", v.VisitBlock(ctx.Block().(*parser.BlockContext)))
+	}
+}
+
 func (v *Visitor) VisitConstructorDeclaration(ctx *parser.ConstructorDeclarationContext) interface{} {
 	fmt.Fprintln(os.Stderr, "IN CONSTRUCTOR DECLARATION")
-	return fmt.Sprintf("%s%s {\n%s}", v.visitRule(ctx.QualifiedName()), v.visitRule(ctx.FormalParameters()), indent(v.visitRule(ctx.Block()).(string)))
+	return fmt.Sprintf("%s%s %s", v.visitRule(ctx.QualifiedName()), v.visitRule(ctx.FormalParameters()), v.visitRule(ctx.Block()).(string))
 }
 
 func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
-	return "BLOCK"
+	return fmt.Sprintf("{\n%s}", indent("BLOCK"))
 }
 
 func (v *Visitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {
@@ -245,15 +283,18 @@ func (v *Visitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationContext) i
 	if ctx.TypeRef() != nil {
 		returnType = v.visitRule(ctx.TypeRef()).(string)
 	}
-	return fmt.Sprintf("%s %s%s {\n%s}\n", returnType, ctx.Id().GetText(),
+	body := ";"
+	if ctx.Block() != nil {
+		body = " " + v.VisitBlock(ctx.Block().(*parser.BlockContext)).(string)
+	}
+	return fmt.Sprintf("%s %s%s%s", returnType, ctx.Id().GetText(),
 		v.VisitFormalParameters(ctx.FormalParameters().(*parser.FormalParametersContext)),
-		indent(v.VisitBlock(ctx.Block().(*parser.BlockContext)).(string)))
+		body)
 }
 
 func (v *Visitor) VisitTypeRef(ctx *parser.TypeRefContext) interface{} {
 	typeNames := []string{}
 	for _, t := range ctx.AllTypeName() {
-		// TODO: format typeList
 		typeNames = append(typeNames, t.GetText())
 	}
 
