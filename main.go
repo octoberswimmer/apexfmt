@@ -77,8 +77,51 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 }
 
 func (v *Visitor) VisitMemberDeclaration(ctx *parser.MemberDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "MEMBER DECLARATION")
+	fmt.Fprintln(os.Stderr, "IN MEMBER DECLARATION")
+	switch {
+	case ctx.MethodDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND METHOD DECLARATION")
+		return v.visitRule(ctx.MethodDeclaration())
+	case ctx.FieldDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND FIELD DECLARATION")
+		return v.visitRule(ctx.FieldDeclaration())
+	case ctx.ConstructorDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND CONSTRUCTOR DECLARATION")
+		return v.visitRule(ctx.ConstructorDeclaration())
+	case ctx.InterfaceDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND INTERFACE DECLARATION")
+		return v.visitRule(ctx.InterfaceDeclaration())
+	case ctx.ClassDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND CLASS DECLARATION")
+		return v.visitRule(ctx.ClassDeclaration())
+	case ctx.EnumDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND ENUM DECLARATION")
+		return v.visitRule(ctx.EnumDeclaration())
+	case ctx.PropertyDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "FOUND PROPERTY DECLARATION")
+		return v.visitRule(ctx.PropertyDeclaration())
+	}
+	fmt.Fprintln(os.Stderr, "FOUND UNEXPECTED DECLARATION")
 	return ""
+}
+
+func (v *Visitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationContext) interface{} {
+	returnType := "void"
+	if ctx.TypeRef() != nil {
+		returnType = v.visitRule(ctx.TypeRef()).(string)
+	}
+	// TODO: formalParameters
+	return fmt.Sprintf("%s %s() {\n%s\n}\n", returnType, ctx.Id().GetText(), "")
+}
+
+func (v *Visitor) VisitTypeRef(ctx *parser.TypeRefContext) interface{} {
+	typeNames := []string{}
+	for _, t := range ctx.AllTypeName() {
+		// TODO: format typeList
+		typeNames = append(typeNames, t.GetText())
+	}
+
+	return fmt.Sprintf("%s%s", strings.Join(typeNames, "."), ctx.ArraySubscripts().GetText())
 }
 
 func main() {
