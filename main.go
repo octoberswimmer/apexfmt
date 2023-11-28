@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"reflect"
+	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
@@ -14,85 +14,71 @@ type TreeShapeListener struct {
 	*parser.BaseApexParserListener
 }
 
-func NewTreeShapeListener() *TreeShapeListener {
-	return new(TreeShapeListener)
+type Visitor struct {
+	indentLevel int
+	parser.BaseApexParserVisitor
 }
 
-func (l *TreeShapeListener) indent() {
-	for i := 0; i < l.indentLevel; i++ {
-		fmt.Printf("\t")
+func NewVisitor() *Visitor {
+	return &Visitor{}
+}
+
+func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
+	return node.Accept(v)
+}
+
+func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) interface{} {
+	fmt.Fprintln(os.Stderr, "HERE WE GO!")
+	t := ctx.TypeDeclaration()
+	// TODO: Handle the typeDeclaration modifiers
+	switch {
+	case t.ClassDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "IT'S A CLASS")
+		return v.visitRule(t.ClassDeclaration()).(string)
+	case t.InterfaceDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "IT'S AN INTERFACE")
+	case t.EnumDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "IT'S AN ENUM")
 	}
+	return ""
 }
 
-func (l *TreeShapeListener) EnterClassDeclaration(ctx *parser.ClassDeclarationContext) {
-	l.indent()
-	fmt.Printf("class %s ", ctx.Id().GetText())
+func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
+	fmt.Fprintln(os.Stderr, "IN THE CLASS DECLARATION")
+	// TODO: handle extends and implements
+	return fmt.Sprintf("class %s {\n%s\n}", ctx.Id().GetText(), v.visitRule(ctx.ClassBody()))
 }
 
-func (l *TreeShapeListener) EnterClassBody(ctx *parser.ClassBodyContext) {
-	fmt.Printf("{\n")
-	l.indentLevel++
-}
-
-func (l *TreeShapeListener) ExitClassBody(ctx *parser.ClassBodyContext) {
-	l.indent()
-	fmt.Printf("}\n")
-	l.indentLevel--
-}
-
-func (l *TreeShapeListener) EnterFieldDeclaration(ctx *parser.FieldDeclarationContext) {
-	l.indent()
-	fmt.Printf("%s", ctx.TypeRef().GetText())
-}
-
-func (l *TreeShapeListener) EnterVariableDeclarator(ctx *parser.VariableDeclaratorContext) {
-	fmt.Printf(" %s", ctx.Id().GetText())
-	e := ctx.Expression()
-	if e != nil {
-		fmt.Printf(" = %s", e.GetText())
+func (v *Visitor) VisitClassBody(ctx *parser.ClassBodyContext) interface{} {
+	fmt.Fprintln(os.Stderr, "NEED TO DEAL WITH THE CLASS BODY")
+	var cb []string
+	for _, b := range ctx.AllClassBodyDeclaration() {
+		cb = append(cb, v.visitRule(b).(string))
 	}
+	return strings.Join(cb, "\n")
 }
 
-func (l *TreeShapeListener) ExitFieldDeclaration(ctx *parser.FieldDeclarationContext) {
-	fmt.Printf(";\n")
-}
-
-func (l *TreeShapeListener) EnterMethodDeclaration(ctx *parser.MethodDeclarationContext) {
-	t := ""
-	if ctx.TypeRef() != nil {
-		t = ctx.TypeRef().GetText()
+func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationContext) interface{} {
+	switch {
+	case ctx.SEMI() != nil:
+		return ";"
+	case ctx.Block() != nil:
+		// TODO: Handle static
+		fmt.Fprintln(os.Stderr, "GOT A BLOCK")
+	case ctx.MemberDeclaration() != nil:
+		fmt.Fprintln(os.Stderr, "IT'S A MEMBER")
+		mods := []string{}
+		for _, m := range ctx.AllModifier() {
+			mods = append(mods, m.GetText())
+		}
+		return fmt.Sprintf("%s %s", strings.Join(mods, " "), v.visitRule(ctx.MemberDeclaration()))
 	}
-	l.indent()
-	fmt.Printf("%s %s ", t, ctx.Id().GetText())
+	return ""
 }
 
-func (l *TreeShapeListener) ExitMethodDeclaration(ctx *parser.MethodDeclarationContext) {
-	l.indent()
-	fmt.Printf("}\n")
-	l.indentLevel--
-}
-
-func (l *TreeShapeListener) EnterBlock(ctx *parser.BlockContext) {
-	l.indent()
-	fmt.Printf("{\n")
-	l.indentLevel++
-}
-
-func (l *TreeShapeListener) ExitBlock(ctx *parser.BlockContext) {
-	l.indent()
-	fmt.Printf("}\n")
-	l.indentLevel--
-}
-
-func (l *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
-	ctxType := reflect.TypeOf(ctx)
-	// fmt.Println(ctxType, ctx.GetStart().GetText())
-	// fmt.Println(ctx.GetText(), "\n\n")
-	switch ctx.(type) {
-	default:
-		fmt.Fprintf(os.Stderr, "(%s) %s\n", ctxType, ctx.GetStart().GetText())
-	}
-	_ = ctxType
+func (v *Visitor) VisitMemberDeclaration(ctx *parser.MemberDeclarationContext) interface{} {
+	fmt.Fprintln(os.Stderr, "MEMBER DECLARATION")
+	return ""
 }
 
 func main() {
@@ -104,5 +90,10 @@ func main() {
 	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 
 	// fmt.Println(TreesIndentedStringTree(p.CompilationUnit(), "", nil, p))
-	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), p.CompilationUnit())
+	// antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), p.CompilationUnit())
+	v := NewVisitor()
+	out, ok := p.CompilationUnit().Accept(v).(string)
+	if !ok {
+	}
+	fmt.Println(out)
 }
