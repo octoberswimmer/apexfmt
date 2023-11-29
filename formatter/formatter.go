@@ -20,7 +20,11 @@ func NewVisitor() *Visitor {
 }
 
 func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
-	return node.Accept(v)
+	result := node.Accept(v)
+	if result == nil {
+		panic(fmt.Sprintf("MISSING VISIT FUNCTION FOR %T", node))
+	}
+	return result
 }
 
 func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) interface{} {
