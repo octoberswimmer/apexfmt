@@ -334,7 +334,13 @@ func (v *Visitor) VisitCondExpression(ctx *parser.CondExpressionContext) interfa
 }
 
 func (v *Visitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContext) interface{} {
+	// TODO: Wrap long expressions
 	return fmt.Sprintf("%s && %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext) interface{} {
+	// TODO: Wrap long expressions
+	return fmt.Sprintf("%s || %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }
 
 func (v *Visitor) VisitBitAndExpression(ctx *parser.BitAndExpressionContext) interface{} {
