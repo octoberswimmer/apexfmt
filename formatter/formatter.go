@@ -473,7 +473,15 @@ func (v *Visitor) VisitSoslPrimary(ctx *parser.SoslPrimaryContext) interface{} {
 }
 
 func (v *Visitor) VisitSoqlPrimary(ctx *parser.SoqlPrimaryContext) interface{} {
-	return fmt.Sprintf("TODO: IMPLEMENT SOQL PRIMARY")
+	return v.visitRule(ctx.SoqlLiteral())
+}
+
+func (v *Visitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interface{} {
+	return fmt.Sprintf("[\n%s]", indent(v.visitRule(ctx.Query()).(string)))
+}
+
+func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
+	return fmt.Sprintf("SELECT\nTODO: FINISH VisitQuery")
 }
 
 func (v *Visitor) VisitCreator(ctx *parser.CreatorContext) interface{} {
