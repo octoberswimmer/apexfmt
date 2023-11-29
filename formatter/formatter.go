@@ -317,19 +317,11 @@ func (v *Visitor) VisitReturnStatement(ctx *parser.ReturnStatementContext) inter
 }
 
 func (v *Visitor) VisitParExpression(ctx *parser.ParExpressionContext) interface{} {
-	return fmt.Sprintf("(|%T|%s)", ctx.Expression(), v.visitRule(ctx.Expression()))
+	return fmt.Sprintf("(%s)", v.visitRule(ctx.Expression()))
 }
 
 func (v *Visitor) VisitExpressionStatement(ctx *parser.ExpressionStatementContext) interface{} {
 	return v.visitRule(ctx.Expression())
-	/*
-		switch e := ctx.Expression().(type) {
-		case *parser.AssignExpressionContext:
-			return v.VisitAssignExpression(e)
-		default:
-			return fmt.Sprintf("UNHANDLED EXPRESSION TYPE %T: %s", e, e.GetText())
-		}
-	*/
 }
 
 func (v *Visitor) VisitAssignExpression(ctx *parser.AssignExpressionContext) interface{} {
