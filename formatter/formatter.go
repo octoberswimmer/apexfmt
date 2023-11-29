@@ -329,7 +329,7 @@ func (v *Visitor) VisitAssignExpression(ctx *parser.AssignExpressionContext) int
 	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), assignmentToken.GetText(), v.visitRule(ctx.Expression(1)))
 }
 
-func (v *Visitor) VisitCondExpresssion(ctx *parser.CondExpressionContext) interface{} {
+func (v *Visitor) VisitCondExpression(ctx *parser.CondExpressionContext) interface{} {
 	return fmt.Sprintf("%s ? %s : %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)), v.visitRule(ctx.Expression(2)))
 }
 
