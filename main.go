@@ -10,11 +10,6 @@ import (
 	"github.com/octoberswimmer/apexfmt/parser"
 )
 
-type TreeShapeListener struct {
-	indentLevel int
-	*parser.BaseApexParserListener
-}
-
 type Visitor struct {
 	indentLevel int
 	parser.BaseApexParserVisitor
@@ -207,7 +202,198 @@ func (v *Visitor) VisitConstructorDeclaration(ctx *parser.ConstructorDeclaration
 }
 
 func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
-	return fmt.Sprintf("{\n%s}", indent("BLOCK"))
+	statements := []string{}
+	for _, stmt := range ctx.AllStatement() {
+		statements = append(statements, v.VisitStatement(stmt.(*parser.StatementContext)).(string))
+	}
+	return fmt.Sprintf("{\n%s}", indent(strings.Join(statements, "\n")))
+}
+
+func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
+	switch {
+	case ctx.Block() != nil:
+		return v.VisitBlock(ctx.Block().(*parser.BlockContext)).(string)
+	case ctx.IfStatement() != nil:
+		return v.VisitIfStatement(ctx.IfStatement().(*parser.IfStatementContext)).(string)
+	case ctx.ExpressionStatement() != nil:
+		return fmt.Sprintf("%s;", v.VisitExpressionStatement(ctx.ExpressionStatement().(*parser.ExpressionStatementContext)))
+	case ctx.ReturnStatement() != nil:
+		return fmt.Sprintf("%s", v.VisitReturnStatement(ctx.ReturnStatement().(*parser.ReturnStatementContext)))
+	}
+	return "UNHANDLED STATEMENT: " + ctx.GetText()
+}
+
+func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
+	elseStatement := ""
+	if ctx.ELSE() != nil {
+		elseStatement = " } else { " + v.VisitStatement(ctx.Statement(1).(*parser.StatementContext)).(string)
+	}
+	return fmt.Sprintf("if %s {\n%s}%s", v.VisitParExpression(ctx.ParExpression().(*parser.ParExpressionContext)),
+		v.VisitStatement(ctx.Statement(0).(*parser.StatementContext)),
+		elseStatement)
+}
+
+func (v *Visitor) VisitReturnStatement(ctx *parser.ReturnStatementContext) interface{} {
+	if e := ctx.Expression(); e != nil {
+		return fmt.Sprintf("return %s;", v.visitRule(e))
+	}
+	return "return;"
+}
+
+func (v *Visitor) VisitParExpression(ctx *parser.ParExpressionContext) interface{} {
+	return fmt.Sprintf("(%s)", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitExpressionStatement(ctx *parser.ExpressionStatementContext) interface{} {
+	return v.visitRule(ctx.Expression())
+	/*
+		switch e := ctx.Expression().(type) {
+		case *parser.AssignExpressionContext:
+			return v.VisitAssignExpression(e)
+		default:
+			return fmt.Sprintf("UNHANDLED EXPRESSION TYPE %T: %s", e, e.GetText())
+		}
+	*/
+}
+
+func (v *Visitor) VisitAssignExpression(ctx *parser.AssignExpressionContext) interface{} {
+	assignmentToken := ctx.GetChild(1).(antlr.TerminalNode)
+	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), assignmentToken.GetText(), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitCondExpresssion(ctx *parser.CondExpressionContext) interface{} {
+	return fmt.Sprintf("%s ? %s : %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)), v.visitRule(ctx.Expression(2)))
+}
+
+func (v *Visitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContext) interface{} {
+	return fmt.Sprintf("%s && %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitBitAndExpression(ctx *parser.BitAndExpressionContext) interface{} {
+	return fmt.Sprintf("%s & %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitBitOrExpression(ctx *parser.BitOrExpressionContext) interface{} {
+	return fmt.Sprintf("%s | %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitBitNotExpression(ctx *parser.BitNotExpressionContext) interface{} {
+	return fmt.Sprintf("%s ^ %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitBitExpression(ctx *parser.BitExpressionContext) interface{} {
+	return fmt.Sprintf("TODO: IMPLEMENT BIT EXPRESSION")
+}
+
+func (v *Visitor) VisitArth1Expression(ctx *parser.Arth1ExpressionContext) interface{} {
+	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext) interface{} {
+	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitNegExpression(ctx *parser.NegExpressionContext) interface{} {
+	return fmt.Sprintf("%s%s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitPreOpExpression(ctx *parser.PreOpExpressionContext) interface{} {
+	return fmt.Sprintf("%s%s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitPostOpExpression(ctx *parser.PostOpExpressionContext) interface{} {
+	return fmt.Sprintf("%s%s", v.visitRule(ctx.Expression()), ctx.GetChild(1).(antlr.TerminalNode).GetText())
+}
+
+func (v *Visitor) VisitSubExpression(ctx *parser.SubExpressionContext) interface{} {
+	return fmt.Sprintf("(%s)", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitCastExpression(ctx *parser.CastExpressionContext) interface{} {
+	return fmt.Sprintf("(%s)%s", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitNewInstanceExpression(ctx *parser.NewInstanceExpressionContext) interface{} {
+	return fmt.Sprintf("new %s", v.visitRule(ctx.Creator()))
+}
+
+func (v *Visitor) VisitArrayExpression(ctx *parser.ArrayExpressionContext) interface{} {
+	return fmt.Sprintf("%s[%s]", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitDotExpression(ctx *parser.DotExpressionContext) interface{} {
+	expr := v.visitRule(ctx.Expression())
+	dot := ctx.GetChild(1).(antlr.TerminalNode).GetText()
+
+	switch {
+	case ctx.DotMethodCall() != nil:
+		return fmt.Sprintf("%s%s%s", expr, dot, v.visitRule(ctx.DotMethodCall()))
+	case ctx.AnyId() != nil:
+		return fmt.Sprintf("%s%s%s", expr, dot, v.visitRule(ctx.AnyId()))
+	}
+	return ""
+}
+
+func (v *Visitor) VisitDotMethodCall(ctx *parser.DotMethodCallContext) interface{} {
+	expressionList := ""
+	if l := ctx.ExpressionList(); l != nil {
+		expressionList = v.visitRule(l).(string)
+	}
+	return fmt.Sprintf("%s(%s)", v.visitRule(ctx.AnyId()), expressionList)
+}
+
+func (v *Visitor) VisitExpressionList(ctx *parser.ExpressionListContext) interface{} {
+	expressions := []string{}
+	for _, p := range ctx.AllExpression() {
+		expressions = append(expressions, v.visitRule(p).(string))
+	}
+	return strings.Join(expressions, ", ")
+}
+
+func (v *Visitor) VisitAnyId(ctx *parser.AnyIdContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitPrimaryExpression(ctx *parser.PrimaryExpressionContext) interface{} {
+	switch e := ctx.Primary().(type) {
+	case *parser.ThisPrimaryContext:
+		return "this"
+	case *parser.SuperPrimaryContext:
+		return "super"
+	case *parser.LiteralPrimaryContext:
+		return e.GetText()
+	case *parser.TypeRefPrimaryContext:
+		return fmt.Sprintf("%s.class", v.visitRule(e))
+	case *parser.IdPrimaryContext:
+		return e.GetText()
+	case *parser.SoqlPrimaryContext, *parser.SoslPrimaryContext:
+		return v.visitRule(e)
+	}
+	return fmt.Sprintf("UNHANDLED PRIMARY EXPRESSION")
+}
+
+func (v *Visitor) VisitMethodCallExpression(ctx *parser.MethodCallExpressionContext) interface{} {
+	return fmt.Sprintf("TODO: IMPLEMENT METHOD CALL")
+}
+
+func (v *Visitor) VisitSoslPrimary(ctx *parser.SoslPrimaryContext) interface{} {
+	return fmt.Sprintf("TODO: IMPLEMENT SOSL PRIMARY")
+}
+
+func (v *Visitor) VisitSoqlPrimary(ctx *parser.SoqlPrimaryContext) interface{} {
+	return fmt.Sprintf("TODO: IMPLEMENT SOQL PRIMARY")
+}
+
+func (v *Visitor) VisitCreator(ctx *parser.CreatorContext) interface{} {
+	return fmt.Sprintf("TODO: IMPLEMENT CREATOR")
+}
+
+func (v *Visitor) VisitCmpExpression(ctx *parser.CmpExpressionContext) interface{} {
+	cmpToken := ctx.GetChild(1).(antlr.TerminalNode).GetText()
+	if ctx.ASSIGN() != nil {
+		cmpToken += "="
+	}
+	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), cmpToken, v.visitRule(ctx.Expression(1)))
 }
 
 func (v *Visitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {
