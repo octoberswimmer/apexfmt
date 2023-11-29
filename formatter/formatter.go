@@ -416,10 +416,6 @@ func (v *Visitor) VisitDotMethodCall(ctx *parser.DotMethodCallContext) interface
 	return fmt.Sprintf("%s(%s)", v.visitRule(ctx.AnyId()), expressionList)
 }
 
-func (v *Visitor) VisitExpression(ctx *parser.ExpressionContext) interface{} {
-	return "GOT UNEXPECTED VISIT TO EXPRESSION"
-}
-
 func (v *Visitor) VisitExpressionList(ctx *parser.ExpressionListContext) interface{} {
 	expressions := []string{}
 	for _, p := range ctx.AllExpression() {
