@@ -173,7 +173,7 @@ func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContex
 			propertyBlocks = append(propertyBlocks, v.VisitPropertyBlock(p.(*parser.PropertyBlockContext)).(string))
 		}
 	}
-	return fmt.Sprintf("%s %s {\n%s}\n", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), strings.Join(propertyBlocks, "\n"))
+	return fmt.Sprintf("%s %s {\n%s}\n", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), indent(strings.Join(propertyBlocks, "\n")))
 }
 
 func (v *Visitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
@@ -241,11 +241,23 @@ func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
 	elseStatement := ""
 	if ctx.ELSE() != nil {
-		elseStatement = " } else { " + v.VisitStatement(ctx.Statement(1).(*parser.StatementContext)).(string)
+		if block := ctx.Statement(1).Block(); block != nil {
+			elseStatement = " else " + v.VisitStatement(ctx.Statement(1).(*parser.StatementContext)).(string)
+		} else if ifStatement := ctx.Statement(1).IfStatement(); ifStatement != nil {
+			elseStatement = fmt.Sprintf(" else %s", v.VisitIfStatement(ifStatement.(*parser.IfStatementContext)))
+		} else {
+			elseStatement = fmt.Sprintf(" else {\n%s}", indent(v.VisitStatement(ctx.Statement(1).(*parser.StatementContext)).(string)))
+		}
 	}
-	return fmt.Sprintf("if %s {\n%s}%s", v.VisitParExpression(ctx.ParExpression().(*parser.ParExpressionContext)),
-		v.VisitStatement(ctx.Statement(0).(*parser.StatementContext)),
-		elseStatement)
+	if block := ctx.Statement(0).Block(); block != nil {
+		return fmt.Sprintf("if %s %s%s", v.VisitParExpression(ctx.ParExpression().(*parser.ParExpressionContext)),
+			v.VisitStatement(ctx.Statement(0).(*parser.StatementContext)),
+			elseStatement)
+	} else {
+		return fmt.Sprintf("if %s {\n%s}%s", v.VisitParExpression(ctx.ParExpression().(*parser.ParExpressionContext)),
+			v.VisitStatement(ctx.Statement(0).(*parser.StatementContext)),
+			elseStatement)
+	}
 }
 
 func (v *Visitor) VisitForStatement(ctx *parser.ForStatementContext) interface{} {
