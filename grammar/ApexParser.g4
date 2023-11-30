@@ -567,7 +567,11 @@ fieldName
     : soqlId (DOT soqlId)*;
 
 fromNameList
-    : fieldName soqlId? (COMMA fieldName soqlId?)*;
+    : fieldNameAlias (COMMA fieldNameAlias)*;
+
+fieldNameAlias
+    : fieldName soqlId?
+    ;
 
 subFieldList
     : subFieldEntry (COMMA subFieldEntry)*;

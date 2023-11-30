@@ -370,6 +370,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#fromNameList.
 	VisitFromNameList(ctx *FromNameListContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#fieldNameAlias.
+	VisitFieldNameAlias(ctx *FieldNameAliasContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#subFieldList.
 	VisitSubFieldList(ctx *SubFieldListContext) interface{}
 

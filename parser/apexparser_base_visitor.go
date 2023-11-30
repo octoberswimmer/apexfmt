@@ -491,6 +491,10 @@ func (v *BaseApexParserVisitor) VisitFromNameList(ctx *FromNameListContext) inte
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitFieldNameAlias(ctx *FieldNameAliasContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitSubFieldList(ctx *SubFieldListContext) interface{} {
 	return v.VisitChildren(ctx)
 }

@@ -458,7 +458,119 @@ func (v *Visitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interface{} {
 }
 
 func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
-	return fmt.Sprintf("SELECT\nTODO: FINISH VisitQuery")
+	return fmt.Sprintf("SELECT\n%sFROM\n%sTODO: FINISH VisitQuery",
+		indent(v.visitRule(ctx.SelectList()).(string)),
+		indent(v.visitRule(ctx.FromNameList()).(string)),
+	)
+}
+
+func (v *Visitor) VisitSubQuery(ctx *parser.SubQueryContext) interface{} {
+	return fmt.Sprintf("SELECT\n%sTODO: FINISH VisitSubQuery",
+		indent(v.visitRule(ctx.SubFieldList()).(string)),
+	)
+}
+
+func (v *Visitor) VisitFromNameList(ctx *parser.FromNameListContext) interface{} {
+	fieldNames := []string{}
+	for _, p := range ctx.AllFieldNameAlias() {
+		fieldNames = append(fieldNames, v.visitRule(p).(string))
+	}
+	return strings.Join(fieldNames, ",\n")
+}
+
+func (v *Visitor) VisitFieldNameAlias(ctx *parser.FieldNameAliasContext) interface{} {
+	soqlId := ""
+	if s := ctx.SoqlId(); s != nil {
+		soqlId = " " + s.GetText()
+	}
+	return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
+}
+
+func (v *Visitor) VisitSelectList(ctx *parser.SelectListContext) interface{} {
+	selectEntries := []string{}
+	for _, p := range ctx.AllSelectEntry() {
+		selectEntries = append(selectEntries, v.visitRule(p).(string))
+	}
+	return strings.Join(selectEntries, ",\n")
+}
+
+func (v *Visitor) VisitSubFieldList(ctx *parser.SubFieldListContext) interface{} {
+	selectEntries := []string{}
+	for _, p := range ctx.AllSubFieldEntry() {
+		selectEntries = append(selectEntries, v.visitRule(p).(string))
+	}
+	return strings.Join(selectEntries, ",\n")
+}
+
+func (v *Visitor) VisitSelectEntry(ctx *parser.SelectEntryContext) interface{} {
+	soqlId := ""
+	if s := ctx.SoqlId(); s != nil {
+		soqlId = " " + s.GetText()
+	}
+	switch {
+	case ctx.FieldName() != nil:
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
+	case ctx.SoqlFunction() != nil:
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), soqlId)
+	case ctx.SubQuery() != nil:
+		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), soqlId)
+	case ctx.TypeOf() != nil:
+		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
+	}
+	panic("Unexpected selectEntry")
+}
+
+func (v *Visitor) VisitSubFieldEntry(ctx *parser.SubFieldEntryContext) interface{} {
+	soqlId := ""
+	if s := ctx.SoqlId(); s != nil {
+		soqlId = " " + s.GetText()
+	}
+	switch {
+	case ctx.FieldName() != nil:
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
+	case ctx.SoqlFunction() != nil:
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), soqlId)
+	case ctx.TypeOf() != nil:
+		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
+	}
+	panic("Unexpected selectEntry")
+}
+
+func (v *Visitor) VisitFieldName(ctx *parser.FieldNameContext) interface{} {
+	ids := []string{}
+	for _, t := range ctx.AllSoqlId() {
+		ids = append(ids, t.GetText())
+	}
+	return strings.Join(ids, ".")
+}
+
+func (v *Visitor) VisitFieldNameList(ctx *parser.FieldNameListContext) interface{} {
+	fieldNames := []string{}
+	for _, p := range ctx.AllFieldName() {
+		fieldNames = append(fieldNames, v.visitRule(p).(string))
+	}
+	return strings.Join(fieldNames, ",\n")
+}
+
+func (v *Visitor) VisitTypeOf(ctx *parser.TypeOfContext) interface{} {
+	whenClauses := []string{}
+	for _, w := range ctx.AllWhenClause() {
+		whenClauses = append(whenClauses, v.visitRule(w).(string))
+	}
+	elseClause := ""
+	if e := ctx.ElseClause(); e != nil {
+		elseClause = fmt.Sprintf("ELSE %s", v.visitRule(e))
+	}
+
+	return fmt.Sprintf("TYPEOF %s\n%s\n%sEND",
+		v.visitRule(ctx.FieldName()),
+		strings.Join(whenClauses, "\n"),
+		elseClause,
+	)
+}
+
+func (v *Visitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface{} {
+	return fmt.Sprintf("WHEN\n%sTHEN\n%s", indent(v.visitRule(ctx.FieldName()).(string)), indent(v.visitRule(ctx.FieldNameList()).(string)))
 }
 
 func (v *Visitor) VisitCreator(ctx *parser.CreatorContext) interface{} {
