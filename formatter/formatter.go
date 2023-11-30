@@ -3,7 +3,6 @@ package formatter
 import (
 	"bufio"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -11,31 +10,44 @@ import (
 )
 
 type Visitor struct {
-	indentLevel int
+	tokens         *antlr.CommonTokenStream
+	commentsOutput map[int]struct{}
 	parser.BaseApexParserVisitor
 }
 
-func NewVisitor() *Visitor {
-	return &Visitor{}
+func NewVisitor(tokens *antlr.CommonTokenStream) *Visitor {
+	return &Visitor{
+		tokens:         tokens,
+		commentsOutput: make(map[int]struct{}),
+	}
 }
 
 func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
+	start := node.(antlr.ParserRuleContext).GetStart()
+	beforeComments := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 3)
 	result := node.Accept(v)
 	if result == nil {
 		panic(fmt.Sprintf("MISSING VISIT FUNCTION FOR %T", node))
+	}
+	if beforeComments != nil {
+		comments := []string{}
+		for _, c := range beforeComments {
+			if _, seen := v.commentsOutput[c.GetTokenIndex()]; !seen {
+				comments = append(comments, c.GetText())
+				v.commentsOutput[c.GetTokenIndex()] = struct{}{}
+			}
+		}
+		result = fmt.Sprintf("%s\n%s", strings.Join(comments, "\n"), result)
 	}
 	return result
 }
 
 func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) interface{} {
-	fmt.Fprintln(os.Stderr, "HERE WE GO!")
 	t := ctx.TypeDeclaration()
 	switch {
 	case t.ClassDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "IT'S A CLASS")
 		return fmt.Sprintf("%s%s", modifiers(t.AllModifier()), v.visitRule(t.ClassDeclaration()).(string))
 	case t.InterfaceDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "IT'S AN INTERFACE")
 		return fmt.Sprintf("%s%s", modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
 	case t.EnumDeclaration() != nil:
 		enum := t.EnumDeclaration()
@@ -45,14 +57,12 @@ func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) inter
 				constants = append(constants, e.GetText())
 			}
 		}
-		fmt.Fprintln(os.Stderr, "IT'S AN ENUM")
 		return fmt.Sprintf("enum %s {%s}", enum.Id().GetText(), strings.Join(constants, ", "))
 	}
 	return ""
 }
 
 func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN THE CLASS DECLARATION")
 	extends := ""
 	if ctx.EXTENDS() != nil {
 		extends = fmt.Sprintf(" extends %s ", v.VisitTypeRef(ctx.TypeRef().(*parser.TypeRefContext)))
@@ -79,7 +89,6 @@ func indent(text string) string {
 }
 
 func (v *Visitor) VisitInterfaceDeclaration(ctx *parser.InterfaceDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN THE INTERFACE DECLARATION")
 	extends := ""
 	if ctx.EXTENDS() != nil {
 		extends = fmt.Sprintf(" extends %s ", v.VisitTypeList(ctx.TypeList().(*parser.TypeListContext)))
@@ -88,7 +97,6 @@ func (v *Visitor) VisitInterfaceDeclaration(ctx *parser.InterfaceDeclarationCont
 }
 
 func (v *Visitor) VisitInterfaceBody(ctx *parser.InterfaceBodyContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN THE INTERFACE BODY")
 	declarations := []string{}
 	for _, d := range ctx.AllInterfaceMethodDeclaration() {
 		declarations = append(declarations, v.visitRule(d).(string))
@@ -97,7 +105,6 @@ func (v *Visitor) VisitInterfaceBody(ctx *parser.InterfaceBodyContext) interface
 }
 
 func (v *Visitor) VisitClassBody(ctx *parser.ClassBodyContext) interface{} {
-	fmt.Fprintln(os.Stderr, "NEED TO DEAL WITH THE CLASS BODY")
 	var cb []string
 	for _, b := range ctx.AllClassBodyDeclaration() {
 		cb = append(cb, v.visitRule(b).(string))
@@ -114,7 +121,6 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 		if ctx.STATIC() != nil {
 			static = "static "
 		}
-		fmt.Fprintln(os.Stderr, "GOT A BLOCK")
 		return fmt.Sprintf("%s%s", static, indent(v.VisitBlock(ctx.Block().(*parser.BlockContext)).(string)))
 	case ctx.MemberDeclaration() != nil:
 		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
@@ -123,36 +129,26 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 }
 
 func (v *Visitor) VisitMemberDeclaration(ctx *parser.MemberDeclarationContext) interface{} {
-	// fmt.Fprintln(os.Stderr, "IN MEMBER DECLARATION")
 	switch {
 	case ctx.MethodDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND METHOD DECLARATION")
 		return v.VisitMethodDeclaration(ctx.MethodDeclaration().(*parser.MethodDeclarationContext))
 	case ctx.FieldDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND FIELD DECLARATION")
 		return v.VisitFieldDeclaration(ctx.FieldDeclaration().(*parser.FieldDeclarationContext))
 	case ctx.ConstructorDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND CONSTRUCTOR DECLARATION")
 		return v.VisitConstructorDeclaration(ctx.ConstructorDeclaration().(*parser.ConstructorDeclarationContext))
 	case ctx.InterfaceDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND INTERFACE DECLARATION")
 		return v.VisitInterfaceDeclaration(ctx.InterfaceDeclaration().(*parser.InterfaceDeclarationContext))
 	case ctx.ClassDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND CLASS DECLARATION")
 		return v.VisitClassDeclaration(ctx.ClassDeclaration().(*parser.ClassDeclarationContext))
 	case ctx.EnumDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND ENUM DECLARATION")
 		return v.VisitEnumDeclaration(ctx.EnumDeclaration().(*parser.EnumDeclarationContext))
 	case ctx.PropertyDeclaration() != nil:
-		fmt.Fprintln(os.Stderr, "FOUND PROPERTY DECLARATION")
 		return v.visitRule(ctx.PropertyDeclaration())
 	}
-	fmt.Fprintln(os.Stderr, "FOUND UNEXPECTED DECLARATION")
 	return ""
 }
 
 func (v *Visitor) VisitInterfaceMethodDeclaration(ctx *parser.InterfaceMethodDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN INTERFACE METHOD DECLARATION")
 	returnType := "void"
 	if ctx.TypeRef() != nil {
 		returnType = v.visitRule(ctx.TypeRef()).(string)
@@ -161,12 +157,10 @@ func (v *Visitor) VisitInterfaceMethodDeclaration(ctx *parser.InterfaceMethodDec
 }
 
 func (v *Visitor) VisitFieldDeclaration(ctx *parser.FieldDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN FIELD DECLARATION")
 	return fmt.Sprintf("%s %s;", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.VariableDeclarators()))
 }
 
 func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN PROPERTY DECLARATION")
 	propertyBlocks := []string{}
 	if ctx.AllPropertyBlock() != nil {
 		for _, p := range ctx.AllPropertyBlock() {
@@ -201,7 +195,6 @@ func (v *Visitor) VisitSetter(ctx *parser.SetterContext) interface{} {
 }
 
 func (v *Visitor) VisitConstructorDeclaration(ctx *parser.ConstructorDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN CONSTRUCTOR DECLARATION")
 	return fmt.Sprintf("%s%s %s\n", v.visitRule(ctx.QualifiedName()), v.visitRule(ctx.FormalParameters()), v.visitRule(ctx.Block()).(string))
 }
 
@@ -581,7 +574,6 @@ func (v *Visitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {
 }
 
 func (v *Visitor) VisitFormalParameters(ctx *parser.FormalParametersContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN FORMAL PARAMETERS")
 	params := []string{}
 	list := ctx.FormalParameterList()
 	if list == nil {
@@ -591,7 +583,6 @@ func (v *Visitor) VisitFormalParameters(ctx *parser.FormalParametersContext) int
 		params = append(params, v.visitRule(p).(string))
 	}
 	val := fmt.Sprintf("(%s)", strings.Join(params, ", "))
-	fmt.Fprintf(os.Stderr, "FORMAL PARAMETERS:|%s|\n", val)
 	return val
 }
 
@@ -608,12 +599,10 @@ func modifiers(ctxs []parser.IModifierContext) string {
 }
 
 func (v *Visitor) VisitFormalParameter(ctx *parser.FormalParameterContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN FORMAL PARAMETER")
 	return fmt.Sprintf("%s%s %s", modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), ctx.Id().GetText())
 }
 
 func (v *Visitor) VisitQualifiedName(ctx *parser.QualifiedNameContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN QUALIFIED NAME")
 	ids := []string{}
 	for _, i := range ctx.AllId() {
 		ids = append(ids, i.GetText())
@@ -622,7 +611,6 @@ func (v *Visitor) VisitQualifiedName(ctx *parser.QualifiedNameContext) interface
 }
 
 func (v *Visitor) VisitVariableDeclarators(ctx *parser.VariableDeclaratorsContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN VARIABLE DECLARATORS")
 	vars := []string{}
 	for _, vd := range ctx.AllVariableDeclarator() {
 		vars = append(vars, v.visitRule(vd).(string))
@@ -631,7 +619,6 @@ func (v *Visitor) VisitVariableDeclarators(ctx *parser.VariableDeclaratorsContex
 }
 
 func (v *Visitor) VisitVariableDeclarator(ctx *parser.VariableDeclaratorContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN VARIABLE DECLARATOR")
 	decl := ctx.Id().GetText()
 	if ctx.Expression() != nil {
 		decl = fmt.Sprintf("%s = %s", decl, v.visitRule(ctx.Expression()))
@@ -640,7 +627,6 @@ func (v *Visitor) VisitVariableDeclarator(ctx *parser.VariableDeclaratorContext)
 }
 
 func (v *Visitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationContext) interface{} {
-	fmt.Fprintln(os.Stderr, "IN METHOD DECLARATION")
 	returnType := "void"
 	if ctx.TypeRef() != nil {
 		returnType = v.visitRule(ctx.TypeRef()).(string)
@@ -659,8 +645,6 @@ func (v *Visitor) VisitTypeRef(ctx *parser.TypeRefContext) interface{} {
 	for _, t := range ctx.AllTypeName() {
 		typeNames = append(typeNames, t.GetText())
 	}
-
-	fmt.Fprintf(os.Stderr, "TYPE NAMES:|%s|\n", strings.Join(typeNames, "."))
 
 	val := fmt.Sprintf("%s%s", strings.Join(typeNames, "."), ctx.ArraySubscripts().GetText())
 	return val

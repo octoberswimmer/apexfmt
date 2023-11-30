@@ -17,9 +17,7 @@ func main() {
 	p := parser.NewApexParser(stream)
 	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 
-	// fmt.Println(TreesIndentedStringTree(p.CompilationUnit(), "", nil, p))
-	// antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), p.CompilationUnit())
-	v := formatter.NewVisitor()
+	v := formatter.NewVisitor(stream)
 	out, ok := p.CompilationUnit().Accept(v).(string)
 	if !ok {
 	}
