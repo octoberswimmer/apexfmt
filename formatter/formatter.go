@@ -71,7 +71,7 @@ func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) int
 	if ctx.IMPLEMENTS() != nil {
 		extends = fmt.Sprintf(" implements %s ", v.visitRule(ctx.TypeList()))
 	}
-	return fmt.Sprintf("class %s%s%s{\n%s\n}\n", ctx.Id().GetText(),
+	return fmt.Sprintf("class %s%s%s {\n%s\n}\n", ctx.Id().GetText(),
 		extends,
 		implements,
 		indent(v.visitRule(ctx.ClassBody()).(string)))
@@ -458,9 +458,19 @@ func (v *Visitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interface{} {
 }
 
 func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
-	return fmt.Sprintf("SELECT\n%sFROM\n%sTODO: FINISH VisitQuery",
+	usingScope := ""
+	if scope := ctx.UsingScope(); scope != nil {
+		usingScope = fmt.Sprintf("\n%s", v.visitRule(scope).(string))
+	}
+	whereClause := ""
+	if where := ctx.WhereClause(); where != nil {
+		whereClause = fmt.Sprintf("%s", v.visitRule(where).(string))
+	}
+	return fmt.Sprintf("SELECT\n%sFROM\n%s%s%sTODO: FINISH VisitQuery",
 		indent(v.visitRule(ctx.SelectList()).(string)),
 		indent(v.visitRule(ctx.FromNameList()).(string)),
+		usingScope,
+		whereClause,
 	)
 }
 
@@ -571,6 +581,76 @@ func (v *Visitor) VisitTypeOf(ctx *parser.TypeOfContext) interface{} {
 
 func (v *Visitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface{} {
 	return fmt.Sprintf("WHEN\n%sTHEN\n%s", indent(v.visitRule(ctx.FieldName()).(string)), indent(v.visitRule(ctx.FieldNameList()).(string)))
+}
+
+func (v *Visitor) VisitWhereClause(ctx *parser.WhereClauseContext) interface{} {
+	return fmt.Sprintf("WHERE\n%s", indent(v.visitRule(ctx.LogicalExpression()).(string)))
+}
+
+func (v *Visitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) interface{} {
+	switch {
+	case ctx.NOT() != nil:
+		return fmt.Sprintf("NOT %s", ctx.ConditionalExpression(0))
+	case len(ctx.AllSOQLOR()) > 0:
+		conditions := []string{}
+		for _, cond := range ctx.AllConditionalExpression() {
+			conditions = append(conditions, v.visitRule(cond).(string))
+		}
+		return strings.Join(conditions, "OR ")
+	case len(ctx.AllSOQLAND()) > 0:
+		conditions := []string{}
+		for _, cond := range ctx.AllConditionalExpression() {
+			conditions = append(conditions, v.visitRule(cond).(string))
+		}
+		return strings.Join(conditions, "AND ")
+	default:
+		// Only a single condition
+		return v.visitRule(ctx.ConditionalExpression(0))
+	}
+}
+
+func (v *Visitor) VisitConditionalExpression(ctx *parser.ConditionalExpressionContext) interface{} {
+	switch {
+	case ctx.LogicalExpression() != nil:
+		return fmt.Sprintf("(%s)", v.visitRule(ctx.LogicalExpression()))
+	case ctx.FieldExpression() != nil:
+		return v.visitRule(ctx.FieldExpression())
+	}
+	panic("Unexpected conditionalExpression")
+}
+
+func (v *Visitor) VisitFieldExpression(ctx *parser.FieldExpressionContext) interface{} {
+	switch {
+	case ctx.FieldName() != nil:
+		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.FieldName()), ctx.ComparisonOperator().GetText(), v.visitRule(ctx.Value()))
+	case ctx.SoqlFunction() != nil:
+		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.SoqlFunction()), ctx.ComparisonOperator().GetText(), v.visitRule(ctx.Value()))
+	}
+	panic("Unexpected fieldExpression")
+}
+
+func (v *Visitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) interface{} {
+	param := ""
+	switch {
+	case ctx.FieldName() != nil:
+		param = v.visitRule(ctx.FieldName()).(string)
+	case ctx.DateFieldName() != nil:
+		param = v.visitRule(ctx.DateFieldName()).(string)
+	case ctx.SoqlFieldsParameter() != nil:
+		param = v.visitRule(ctx.SoqlFieldsParameter()).(string)
+	default:
+		panic("Unexpected parameter type for soqlFunction")
+	}
+	ctx.AVG()
+	return fmt.Sprintf("%s(%s)", ctx.GetChild(0).(antlr.TerminalNode).GetText(), param)
+}
+
+func (v *Visitor) VisitValue(ctx *parser.ValueContext) interface{} {
+	return "TODO: IMPLEMENT VisitValue\n"
+}
+
+func (v *Visitor) VisitUsingScope(ctx *parser.UsingScopeContext) interface{} {
+	return fmt.Sprintf("USING SCOPE %s", ctx.SoqlId().GetText())
 }
 
 func (v *Visitor) VisitCreator(ctx *parser.CreatorContext) interface{} {
