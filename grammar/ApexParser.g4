@@ -69,8 +69,7 @@ classDeclaration
     ;
 
 enumDeclaration
-    : ENUM id
-      LBRACE enumConstants? RBRACE
+    : ENUM id LBRACE enumConstants? RBRACE
     ;
 
 enumConstants
@@ -742,32 +741,39 @@ dateFormula
     | NEXT_MONTH
     | LAST_90_DAYS
     | NEXT_90_DAYS
-    | LAST_N_DAYS_N COLON signedInteger
-    | NEXT_N_DAYS_N COLON signedInteger
-    | NEXT_N_WEEKS_N COLON signedInteger
-    | LAST_N_WEEKS_N COLON signedInteger
-    | NEXT_N_MONTHS_N COLON signedInteger
-    | LAST_N_MONTHS_N COLON signedInteger
+    | LAST_N_DAYS COLON signedInteger
+    | NEXT_N_DAYS COLON signedInteger
+    | NEXT_N_WEEKS COLON signedInteger
+    | LAST_N_WEEKS COLON signedInteger
+    | NEXT_N_MONTHS COLON signedInteger
+    | LAST_N_MONTHS COLON signedInteger
+    | N_DAYS_AGO COLON signedInteger
+    | N_WEEKS_AGO COLON signedInteger
+    | N_MONTHS_AGO COLON signedInteger
+    | N_QUARTERS_AGO COLON signedInteger
+    | N_FISCAL_QUARTERS_AGO COLON signedInteger
+    | N_YEARS_AGO COLON signedInteger
+    | N_FISCAL_YEARS_AGO COLON signedInteger
     | THIS_QUARTER
     | LAST_QUARTER
     | NEXT_QUARTER
-    | NEXT_N_QUARTERS_N COLON signedInteger
-    | LAST_N_QUARTERS_N COLON signedInteger
+    | NEXT_N_QUARTERS COLON signedInteger
+    | LAST_N_QUARTERS COLON signedInteger
     | THIS_YEAR
     | LAST_YEAR
     | NEXT_YEAR
-    | NEXT_N_YEARS_N COLON signedInteger
-    | LAST_N_YEARS_N COLON signedInteger
+    | NEXT_N_YEARS COLON signedInteger
+    | LAST_N_YEARS COLON signedInteger
     | THIS_FISCAL_QUARTER
     | LAST_FISCAL_QUARTER
     | NEXT_FISCAL_QUARTER
-    | NEXT_N_FISCAL_QUARTERS_N COLON signedInteger
-    | LAST_N_FISCAL_QUARTERS_N COLON signedInteger
+    | NEXT_N_FISCAL_QUARTERS COLON signedInteger
+    | LAST_N_FISCAL_QUARTERS COLON signedInteger
     | THIS_FISCAL_YEAR
     | LAST_FISCAL_YEAR
     | NEXT_FISCAL_YEAR
-    | NEXT_N_FISCAL_YEARS_N COLON signedInteger
-    | LAST_N_FISCAL_YEARS_N COLON signedInteger
+    | NEXT_N_FISCAL_YEARS COLON signedInteger
+    | LAST_N_FISCAL_YEARS COLON signedInteger
     ;
 
 signedInteger
@@ -938,32 +944,39 @@ id
     | NEXT_MONTH
     | LAST_90_DAYS
     | NEXT_90_DAYS
-    | LAST_N_DAYS_N
-    | NEXT_N_DAYS_N
-    | NEXT_N_WEEKS_N
-    | LAST_N_WEEKS_N
-    | NEXT_N_MONTHS_N
-    | LAST_N_MONTHS_N
+    | LAST_N_DAYS
+    | NEXT_N_DAYS
+    | NEXT_N_WEEKS
+    | LAST_N_WEEKS
+    | NEXT_N_MONTHS
+    | LAST_N_MONTHS
+    | N_DAYS_AGO
+    | N_WEEKS_AGO
+    | N_MONTHS_AGO
+    | N_QUARTERS_AGO
+    | N_FISCAL_QUARTERS_AGO
+    | N_YEARS_AGO
+    | N_FISCAL_YEARS_AGO
     | THIS_QUARTER
     | LAST_QUARTER
     | NEXT_QUARTER
-    | NEXT_N_QUARTERS_N
-    | LAST_N_QUARTERS_N
+    | NEXT_N_QUARTERS
+    | LAST_N_QUARTERS
     | THIS_YEAR
     | LAST_YEAR
     | NEXT_YEAR
-    | NEXT_N_YEARS_N
-    | LAST_N_YEARS_N
+    | NEXT_N_YEARS
+    | LAST_N_YEARS
     | THIS_FISCAL_QUARTER
     | LAST_FISCAL_QUARTER
     | NEXT_FISCAL_QUARTER
-    | NEXT_N_FISCAL_QUARTERS_N
-    | LAST_N_FISCAL_QUARTERS_N
+    | NEXT_N_FISCAL_QUARTERS
+    | LAST_N_FISCAL_QUARTERS
     | THIS_FISCAL_YEAR
     | LAST_FISCAL_YEAR
     | NEXT_FISCAL_YEAR
-    | NEXT_N_FISCAL_YEARS_N
-    | LAST_N_FISCAL_YEARS_N
+    | NEXT_N_FISCAL_YEARS
+    | LAST_N_FISCAL_YEARS
     // SOSL Keywords
     | FIND
     | EMAIL
@@ -1122,32 +1135,39 @@ anyId
     | NEXT_MONTH
     | LAST_90_DAYS
     | NEXT_90_DAYS
-    | LAST_N_DAYS_N
-    | NEXT_N_DAYS_N
-    | NEXT_N_WEEKS_N
-    | LAST_N_WEEKS_N
-    | NEXT_N_MONTHS_N
-    | LAST_N_MONTHS_N
+    | LAST_N_DAYS
+    | NEXT_N_DAYS
+    | NEXT_N_WEEKS
+    | LAST_N_WEEKS
+    | NEXT_N_MONTHS
+    | LAST_N_MONTHS
+    | N_DAYS_AGO
+    | N_WEEKS_AGO
+    | N_MONTHS_AGO
+    | N_QUARTERS_AGO
+    | N_FISCAL_QUARTERS_AGO
+    | N_YEARS_AGO
+    | N_FISCAL_YEARS_AGO
     | THIS_QUARTER
     | LAST_QUARTER
     | NEXT_QUARTER
-    | NEXT_N_QUARTERS_N
-    | LAST_N_QUARTERS_N
+    | NEXT_N_QUARTERS
+    | LAST_N_QUARTERS
     | THIS_YEAR
     | LAST_YEAR
     | NEXT_YEAR
-    | NEXT_N_YEARS_N
-    | LAST_N_YEARS_N
+    | NEXT_N_YEARS
+    | LAST_N_YEARS
     | THIS_FISCAL_QUARTER
     | LAST_FISCAL_QUARTER
     | NEXT_FISCAL_QUARTER
-    | NEXT_N_FISCAL_QUARTERS_N
-    | LAST_N_FISCAL_QUARTERS_N
+    | NEXT_N_FISCAL_QUARTERS
+    | LAST_N_FISCAL_QUARTERS
     | THIS_FISCAL_YEAR
     | LAST_FISCAL_YEAR
     | NEXT_FISCAL_YEAR
-    | NEXT_N_FISCAL_YEARS_N
-    | LAST_N_FISCAL_YEARS_N
+    | NEXT_N_FISCAL_YEARS
+    | LAST_N_FISCAL_YEARS
     // SOSL Keywords
     | FIND
     | EMAIL
