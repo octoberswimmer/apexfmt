@@ -475,7 +475,7 @@ func apexparserParserInit() {
 		497, 41, 1, 0, 0, 0, 498, 510, 5, 194, 0, 0, 499, 504, 3, 148, 74, 0, 500,
 		501, 5, 199, 0, 0, 501, 503, 3, 148, 74, 0, 502, 500, 1, 0, 0, 0, 503,
 		506, 1, 0, 0, 0, 504, 502, 1, 0, 0, 0, 504, 505, 1, 0, 0, 0, 505, 508,
-		1, 0, 0, 0, 506, 504, 1, 0, 0, 0, 507, 509, 5, 199, 0, 0, 508, 507, 1,
+		1, 0, 0, 0, 506, 504, 1, 0, 0, 0, 507, 509, 3, 74, 37, 0, 508, 507, 1,
 		0, 0, 0, 508, 509, 1, 0, 0, 0, 509, 511, 1, 0, 0, 0, 510, 499, 1, 0, 0,
 		0, 510, 511, 1, 0, 0, 0, 511, 512, 1, 0, 0, 0, 512, 513, 5, 195, 0, 0,
 		513, 43, 1, 0, 0, 0, 514, 519, 3, 48, 24, 0, 515, 516, 5, 200, 0, 0, 516,
@@ -5747,6 +5747,7 @@ type IArrayInitializerContext interface {
 	Expression(i int) IExpressionContext
 	AllCOMMA() []antlr.TerminalNode
 	COMMA(i int) antlr.TerminalNode
+	TrailingComma() ITrailingCommaContext
 
 	// IsArrayInitializerContext differentiates from other interfaces.
 	IsArrayInitializerContext()
@@ -5841,6 +5842,22 @@ func (s *ArrayInitializerContext) COMMA(i int) antlr.TerminalNode {
 	return s.GetToken(ApexParserCOMMA, i)
 }
 
+func (s *ArrayInitializerContext) TrailingComma() ITrailingCommaContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITrailingCommaContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITrailingCommaContext)
+}
+
 func (s *ArrayInitializerContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -5932,11 +5949,7 @@ func (p *ApexParser) ArrayInitializer() (localctx IArrayInitializerContext) {
 		if _la == ApexParserCOMMA {
 			{
 				p.SetState(507)
-				p.Match(ApexParserCOMMA)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
-				}
+				p.TrailingComma()
 			}
 
 		}

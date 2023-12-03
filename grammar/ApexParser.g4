@@ -167,7 +167,7 @@ variableDeclarator
     ;
 
 arrayInitializer
-    : LBRACE (expression (COMMA expression)* (COMMA)? )? RBRACE
+    : LBRACE (expression (COMMA expression)* trailingComma? )? RBRACE
     ;
 
 typeRef

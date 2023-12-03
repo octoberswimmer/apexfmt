@@ -833,7 +833,11 @@ func (v *Visitor) VisitSetCreatorRest(ctx *parser.SetCreatorRestContext) interfa
 }
 
 func (v *Visitor) VisitArrayInitializer(ctx *parser.ArrayInitializerContext) interface{} {
-	return fmt.Sprintf("TODO: IMPLEMENT ARRAY INITIALIZER")
+	expressions := []string{}
+	for _, i := range ctx.AllExpression() {
+		expressions = append(expressions, v.visitRule(i).(string))
+	}
+	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))
 }
 
 func (v *Visitor) VisitArguments(ctx *parser.ArgumentsContext) interface{} {
