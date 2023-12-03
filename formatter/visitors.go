@@ -162,28 +162,16 @@ func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
 }
 
 func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
-	if ctx.GetChild(0) == nil {
-		return "NIL STATEMENT?" + ctx.GetText()
-	}
-	if errNode, ok := ctx.GetChild(0).(antlr.ErrorNode); ok {
-		return fmt.Sprintf("ERROR: %+v", errNode)
-	}
+	/*
+		if ctx.GetChild(0) == nil {
+			return "NIL STATEMENT?" + ctx.GetText()
+		}
+		if errNode, ok := ctx.GetChild(0).(antlr.ErrorNode); ok {
+			return fmt.Sprintf("ERROR: %+v", errNode)
+		}
+	*/
 	child := ctx.GetChild(0).(antlr.RuleNode)
-	switch s := child.(type) {
-	case *parser.BlockContext:
-		return v.visitRule(s)
-	case *parser.IfStatementContext:
-		return v.visitRule(s)
-	case *parser.ForStatementContext:
-		return v.visitRule(s)
-	case *parser.ExpressionStatementContext:
-		return fmt.Sprintf("%s;", v.visitRule(s))
-	case *parser.ReturnStatementContext:
-		return fmt.Sprintf("%s", v.visitRule(s))
-	case *parser.LocalVariableDeclarationStatementContext:
-		return fmt.Sprintf("%s", v.visitRule(s))
-	}
-	return fmt.Sprintf("UNHANDLED STATEMENT: %T %s", ctx.GetChild(0).(antlr.RuleNode), ctx.GetText())
+	return v.visitRule(child)
 }
 
 func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
@@ -208,6 +196,17 @@ func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
 	}
 }
 
+func (v *Visitor) VisitWhileStatement(ctx *parser.WhileStatementContext) interface{} {
+	if s := ctx.Statement; s == nil {
+		return fmt.Sprintf("while %s;", v.visitRule(ctx.ParExpression()))
+	}
+	if block := ctx.Statement().Block(); block != nil {
+		return fmt.Sprintf("while %s %s", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
+	} else {
+		return fmt.Sprintf("while %s {\n%s}", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
+	}
+}
+
 func (v *Visitor) VisitForStatement(ctx *parser.ForStatementContext) interface{} {
 	if statement := ctx.Statement(); statement != nil {
 		if statement.Block() != nil {
@@ -218,6 +217,83 @@ func (v *Visitor) VisitForStatement(ctx *parser.ForStatementContext) interface{}
 	} else {
 		return fmt.Sprintf("for (%s);", v.visitRule(ctx.ForControl()))
 	}
+}
+
+func (v *Visitor) VisitSwitchStatement(ctx *parser.SwitchStatementContext) interface{} {
+	when := []string{}
+	for _, w := range ctx.AllWhenControl() {
+		when = append(when, v.visitRule(w).(string))
+	}
+	return fmt.Sprintf("switch on %s {\n%s}", v.visitRule(ctx.Expression()), indent(strings.Join(when, "\n")))
+}
+
+func (v *Visitor) VisitWhenControl(ctx *parser.WhenControlContext) interface{} {
+	return fmt.Sprintf("when %s %s", v.visitRule(ctx.WhenValue()), v.visitRule(ctx.Block()))
+}
+
+func (v *Visitor) VisitWhenValue(ctx *parser.WhenValueContext) interface{} {
+	switch {
+	case ctx.ELSE() != nil:
+		return "else"
+	case len(ctx.AllId()) == 2:
+		return fmt.Sprintf("%s %s", v.visitRule(ctx.Id(0)), v.visitRule(ctx.Id(1)))
+	default:
+		whenLiterals := []string{}
+		for _, w := range ctx.AllWhenLiteral() {
+			whenLiterals = append(whenLiterals, v.visitRule(w).(string))
+		}
+		return strings.Join(whenLiterals, ", ")
+	}
+}
+
+func (v *Visitor) VisitWhenLiteral(ctx *parser.WhenLiteralContext) interface{} {
+	if w := ctx.WhenLiteral(); w != nil {
+		return fmt.Sprintf("(%s)", v.visitRule(w))
+	}
+	if i := ctx.Id(); i != nil {
+		return v.visitRule(i)
+	}
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitTryStatement(ctx *parser.TryStatementContext) interface{} {
+	if len(ctx.AllCatchClause()) > 0 {
+		catchClauses := []string{}
+		for _, c := range ctx.AllCatchClause() {
+			catchClauses = append(catchClauses, v.visitRule(c).(string))
+		}
+		finally := ""
+		if f := ctx.FinallyBlock(); f != nil {
+			finally = fmt.Sprintf("\n%s", v.visitRule(f).(string))
+		}
+		return fmt.Sprintf("try %s\n%s%s", v.visitRule(ctx.Block()), strings.Join(catchClauses, "\n"), finally)
+	} else {
+		return fmt.Sprintf("try %s\n%s", v.visitRule(ctx.Block()), v.visitRule(ctx.FinallyBlock()))
+	}
+}
+
+func (v *Visitor) VisitCatchClause(ctx *parser.CatchClauseContext) interface{} {
+	return fmt.Sprintf("catch (%s %s %s) %s",
+		v.Modifiers(ctx.AllModifier()),
+		v.visitRule(ctx.QualifiedName()),
+		v.visitRule(ctx.Id()),
+		v.visitRule(ctx.Block()))
+}
+
+func (v *Visitor) VisitFinallyBlock(ctx *parser.FinallyBlockContext) interface{} {
+	return fmt.Sprintf("finally %s", v.visitRule(ctx.Block()))
+}
+
+func (v *Visitor) VisitThrowStatement(ctx *parser.ThrowStatementContext) interface{} {
+	return fmt.Sprintf("throw %s;", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitRunAsStatement(ctx *parser.RunAsStatementContext) interface{} {
+	expressionList := ""
+	if e := ctx.ExpressionList(); e != nil {
+		expressionList = v.visitRule(e).(string)
+	}
+	return fmt.Sprintf("System.runAs (%s) %s", expressionList, v.visitRule(ctx.Block()))
 }
 
 func (v *Visitor) VisitForControl(ctx *parser.ForControlContext) interface{} {
@@ -245,12 +321,44 @@ func (v *Visitor) VisitForInit(ctx *parser.ForInitContext) interface{} {
 	return v.visitRule(ctx.GetChild(0).(antlr.RuleNode))
 }
 
+func (v *Visitor) VisitContinueStatement(ctx *parser.ContinueStatementContext) interface{} {
+	return "continue;"
+}
+
+func (v *Visitor) VisitBreakStatement(ctx *parser.BreakStatementContext) interface{} {
+	return "break;"
+}
+
 func (v *Visitor) VisitForUpdate(ctx *parser.ForUpdateContext) interface{} {
 	return v.visitRule(ctx.ExpressionList())
 }
 
 func (v *Visitor) VisitLocalVariableDeclarationStatement(ctx *parser.LocalVariableDeclarationStatementContext) interface{} {
 	return fmt.Sprintf("%s;", v.visitRule(ctx.LocalVariableDeclaration()))
+}
+
+func (v *Visitor) VisitInsertStatement(ctx *parser.InsertStatementContext) interface{} {
+	return fmt.Sprintf("insert %s;", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitUpdateStatement(ctx *parser.UpdateStatementContext) interface{} {
+	return fmt.Sprintf("update %s;", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitUpsertStatement(ctx *parser.UpsertStatementContext) interface{} {
+	return fmt.Sprintf("upsert %s;", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitMergeStatement(ctx *parser.MergeStatementContext) interface{} {
+	return fmt.Sprintf("merge %s %s;", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
+func (v *Visitor) VisitDeleteStatement(ctx *parser.DeleteStatementContext) interface{} {
+	return fmt.Sprintf("delete %s;", v.visitRule(ctx.Expression()))
+}
+
+func (v *Visitor) VisitUndeleteStatement(ctx *parser.UndeleteStatementContext) interface{} {
+	return fmt.Sprintf("undelete %s;", v.visitRule(ctx.Expression()))
 }
 
 func (v *Visitor) VisitLocalVariableDeclaration(ctx *parser.LocalVariableDeclarationContext) interface{} {
@@ -269,7 +377,7 @@ func (v *Visitor) VisitParExpression(ctx *parser.ParExpressionContext) interface
 }
 
 func (v *Visitor) VisitExpressionStatement(ctx *parser.ExpressionStatementContext) interface{} {
-	return v.visitRule(ctx.Expression())
+	return fmt.Sprintf("%s;", v.visitRule(ctx.Expression()))
 }
 
 func (v *Visitor) VisitAssignExpression(ctx *parser.AssignExpressionContext) interface{} {
