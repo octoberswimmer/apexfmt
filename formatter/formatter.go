@@ -774,6 +774,11 @@ func modifiers(ctxs []parser.IModifierContext) string {
 	return modifiers
 }
 
+func (v *Visitor) VisitModifier(ctx *parser.ModifierContext) string {
+	return "MOD"
+	// return ctx.GetText()
+}
+
 func (v *Visitor) VisitFormalParameter(ctx *parser.FormalParameterContext) interface{} {
 	return fmt.Sprintf("%s%s %s", modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), ctx.Id().GetText())
 }
