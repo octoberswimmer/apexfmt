@@ -46,9 +46,9 @@ func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) inter
 	t := ctx.TypeDeclaration()
 	switch {
 	case t.ClassDeclaration() != nil:
-		return fmt.Sprintf("%s%s", modifiers(t.AllModifier()), v.visitRule(t.ClassDeclaration()).(string))
+		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.ClassDeclaration()).(string))
 	case t.InterfaceDeclaration() != nil:
-		return fmt.Sprintf("%s%s", modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
+		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
 	case t.EnumDeclaration() != nil:
 		enum := t.EnumDeclaration()
 		constants := []string{}
@@ -123,7 +123,7 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 		}
 		return fmt.Sprintf("%s%s", static, indent(v.visitRule(ctx.Block()).(string)))
 	case ctx.MemberDeclaration() != nil:
-		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
+		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
 	}
 	return ""
 }
@@ -137,7 +137,7 @@ func (v *Visitor) VisitInterfaceMethodDeclaration(ctx *parser.InterfaceMethodDec
 	if ctx.TypeRef() != nil {
 		returnType = v.visitRule(ctx.TypeRef()).(string)
 	}
-	return fmt.Sprintf("%s%s %s%s;", modifiers(ctx.AllModifier()), returnType, ctx.Id().GetText(), v.visitRule(ctx.FormalParameters()))
+	return fmt.Sprintf("%s%s %s%s;", v.Modifiers(ctx.AllModifier()), returnType, ctx.Id().GetText(), v.visitRule(ctx.FormalParameters()))
 }
 
 func (v *Visitor) VisitFieldDeclaration(ctx *parser.FieldDeclarationContext) interface{} {
@@ -156,9 +156,9 @@ func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContex
 
 func (v *Visitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
 	if ctx.Getter() != nil {
-		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.visitRule(ctx.Getter()))
+		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.Getter()))
 	} else {
-		return fmt.Sprintf("%s%s", modifiers(ctx.AllModifier()), v.visitRule(ctx.Setter()))
+		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.Setter()))
 	}
 }
 
@@ -283,7 +283,7 @@ func (v *Visitor) VisitLocalVariableDeclarationStatement(ctx *parser.LocalVariab
 }
 
 func (v *Visitor) VisitLocalVariableDeclaration(ctx *parser.LocalVariableDeclarationContext) interface{} {
-	return fmt.Sprintf("%s%s %s", modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), v.visitRule(ctx.VariableDeclarators()))
+	return fmt.Sprintf("%s%s %s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), v.visitRule(ctx.VariableDeclarators()))
 }
 
 func (v *Visitor) VisitReturnStatement(ctx *parser.ReturnStatementContext) interface{} {
@@ -762,25 +762,63 @@ func (v *Visitor) VisitFormalParameters(ctx *parser.FormalParametersContext) int
 	return val
 }
 
-func modifiers(ctxs []parser.IModifierContext) string {
+func (v *Visitor) Modifiers(ctxs []parser.IModifierContext) string {
 	mods := []string{}
 	for _, m := range ctxs {
-		mods = append(mods, m.GetText())
+		if m.Annotation() != nil {
+			mods = append(mods, fmt.Sprintf("%s\n", v.visitRule(m.Annotation())))
+		} else {
+			mods = append(mods, fmt.Sprintf("%s ", m.GetText()))
+		}
 	}
-	modifiers := strings.Join(mods, " ")
-	if modifiers != "" {
-		modifiers += " "
-	}
+	modifiers := strings.Join(mods, "")
 	return modifiers
 }
 
-func (v *Visitor) VisitModifier(ctx *parser.ModifierContext) string {
-	return "MOD"
-	// return ctx.GetText()
+func (v *Visitor) VisitAnnotation(ctx *parser.AnnotationContext) interface{} {
+	args := ""
+	if ctx.LPAREN() != nil {
+		vals := ""
+		if ctx.ElementValuePairs() != nil {
+			vals = v.visitRule(ctx.ElementValuePairs()).(string)
+		} else {
+			vals = v.visitRule(ctx.ElementValue()).(string)
+		}
+		args = fmt.Sprintf("(%s)", vals)
+	}
+	return fmt.Sprintf("@%s%s", v.visitRule(ctx.QualifiedName()), args)
+}
+
+func (v *Visitor) VisitElementValuePairs(ctx *parser.ElementValuePairsContext) interface{} {
+	pairs := []string{v.visitRule(ctx.ElementValuePair()).(string)}
+	for _, p := range ctx.AllDelimitedElementValuePair() {
+		pairs = append(pairs, v.visitRule(p).(string))
+	}
+	return strings.Join(pairs, "")
+}
+
+func (v *Visitor) VisitDelimitedElementValuePair(ctx *parser.DelimitedElementValuePairContext) interface{} {
+	delimiter := " "
+	if ctx.COMMA() != nil {
+		delimiter = ", "
+	}
+	return fmt.Sprintf("%s%s", delimiter, v.visitRule(ctx.ElementValuePair()))
+}
+
+func (v *Visitor) VisitElementValuePair(ctx *parser.ElementValuePairContext) interface{} {
+	return fmt.Sprintf("%s = %s", v.visitRule(ctx.Id()), v.visitRule(ctx.ElementValue()))
+}
+
+func (v *Visitor) VisitElementValue(ctx *parser.ElementValueContext) interface{} {
+	return v.visitRule(ctx.GetChild(0).(antlr.RuleNode))
+}
+
+func (v *Visitor) VisitElementValueArrayInitializer(ctx *parser.ElementValueArrayInitializerContext) interface{} {
+	return "TODO: IMPLEMENT VisitElementValueArrayInitializer"
 }
 
 func (v *Visitor) VisitFormalParameter(ctx *parser.FormalParameterContext) interface{} {
-	return fmt.Sprintf("%s%s %s", modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), ctx.Id().GetText())
+	return fmt.Sprintf("%s%s %s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), ctx.Id().GetText())
 }
 
 func (v *Visitor) VisitQualifiedName(ctx *parser.QualifiedNameContext) interface{} {

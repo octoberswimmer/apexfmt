@@ -139,6 +139,10 @@ func (v *BaseApexParserVisitor) VisitElementValuePairs(ctx *ElementValuePairsCon
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitDelimitedElementValuePair(ctx *DelimitedElementValuePairContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitElementValuePair(ctx *ElementValuePairContext) interface{} {
 	return v.VisitChildren(ctx)
 }

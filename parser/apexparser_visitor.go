@@ -106,6 +106,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#elementValuePairs.
 	VisitElementValuePairs(ctx *ElementValuePairsContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#delimitedElementValuePair.
+	VisitDelimitedElementValuePair(ctx *DelimitedElementValuePairContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#elementValuePair.
 	VisitElementValuePair(ctx *ElementValuePairContext) interface{}
 

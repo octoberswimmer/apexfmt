@@ -222,7 +222,11 @@ annotation
     ;
 
 elementValuePairs
-    : elementValuePair (COMMA? elementValuePair)*
+    : elementValuePair (delimitedElementValuePair)*
+    ;
+
+delimitedElementValuePair
+    : COMMA? elementValuePair
     ;
 
 elementValuePair
