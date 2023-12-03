@@ -118,6 +118,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#elementValueArrayInitializer.
 	VisitElementValueArrayInitializer(ctx *ElementValueArrayInitializerContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#trailingComma.
+	VisitTrailingComma(ctx *TrailingCommaContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#block.
 	VisitBlock(ctx *BlockContext) interface{}
 

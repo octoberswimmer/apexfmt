@@ -155,6 +155,10 @@ func (v *BaseApexParserVisitor) VisitElementValueArrayInitializer(ctx *ElementVa
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitTrailingComma(ctx *TrailingCommaContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitBlock(ctx *BlockContext) interface{} {
 	return v.VisitChildren(ctx)
 }

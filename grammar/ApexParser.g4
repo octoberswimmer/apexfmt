@@ -240,9 +240,12 @@ elementValue
     ;
 
 elementValueArrayInitializer
-    : LBRACE (elementValue (COMMA elementValue)*)? (COMMA)? RBRACE
+    : LBRACE (elementValue (COMMA elementValue)*)? trailingComma? RBRACE
     ;
 
+trailingComma
+    : COMMA
+    ;
 
 // STATEMENTS / BLOCKS
 

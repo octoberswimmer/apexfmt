@@ -814,7 +814,15 @@ func (v *Visitor) VisitElementValue(ctx *parser.ElementValueContext) interface{}
 }
 
 func (v *Visitor) VisitElementValueArrayInitializer(ctx *parser.ElementValueArrayInitializerContext) interface{} {
-	return "TODO: IMPLEMENT VisitElementValueArrayInitializer"
+	values := []string{}
+	for _, val := range ctx.AllElementValue() {
+		values = append(values, v.visitRule(val).(string))
+	}
+	trailingComma := ""
+	if ctx.TrailingComma() != nil {
+		trailingComma = ","
+	}
+	return fmt.Sprintf("(%s%s)", strings.Join(values, ", "), trailingComma)
 }
 
 func (v *Visitor) VisitFormalParameter(ctx *parser.FormalParameterContext) interface{} {
