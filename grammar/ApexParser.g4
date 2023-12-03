@@ -666,7 +666,7 @@ value
     | DateLiteral
     | DateTimeLiteral
     | dateFormula
-    | IntegralCurrencyLiteral (DOT IntegerLiteral?)?
+    | currencyValue
     | LPAREN subQuery RPAREN
     | valueList
     | boundExpression
@@ -674,6 +674,10 @@ value
 
 valueList
     : LPAREN value (COMMA value)* RPAREN;
+
+currencyValue
+    : IntegralCurrencyLiteral (DOT IntegerLiteral?)?
+    ;
 
 // TODO: NumberLiteral has trailing [dD]?, SOQL does not support this but a fix would need wider changes
 signedNumber

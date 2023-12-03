@@ -617,12 +617,51 @@ func (v *Visitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) interface{}
 	return fmt.Sprintf("%s(%s)", ctx.GetChild(0).(antlr.TerminalNode).GetText(), param)
 }
 
+func (v *Visitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameterContext) interface{} {
+	return ctx.GetText()
+}
+
 func (v *Visitor) VisitValue(ctx *parser.ValueContext) interface{} {
-	return "TODO: IMPLEMENT VisitValue\n"
+	if ctx.SubQuery() != nil {
+		return fmt.Sprintf("(%s)", v.visitRule(ctx.SubQuery()))
+	}
+	switch e := ctx.GetChild(0).(type) {
+	case antlr.TerminalNode:
+		return strings.ToLower(e.GetText())
+	default:
+		return v.visitRule(e.(antlr.RuleNode))
+	}
+}
+
+func (v *Visitor) VisitDateFormula(ctx *parser.DateFormulaContext) interface{} {
+	if ctx.SignedInteger() != nil {
+		return fmt.Sprintf("%s:%s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.SignedInteger()))
+	}
+	return ctx.GetChild(0).(antlr.TerminalNode).GetText()
+}
+
+func (v *Visitor) VisitSignedInteger(ctx *parser.SignedIntegerContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitSignedNumber(ctx *parser.SignedNumberContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitValueList(ctx *parser.ValueListContext) interface{} {
+	values := []string{}
+	for _, i := range ctx.AllValue() {
+		values = append(values, v.visitRule(i).(string))
+	}
+	return fmt.Sprintf("(%s)", strings.Join(values, ", "))
 }
 
 func (v *Visitor) VisitUsingScope(ctx *parser.UsingScopeContext) interface{} {
 	return fmt.Sprintf("USING SCOPE %s", ctx.SoqlId().GetText())
+}
+
+func (v *Visitor) VisitBoundExpression(ctx *parser.BoundExpressionContext) interface{} {
+	return fmt.Sprintf(":%s", v.visitRule(ctx.Expression()))
 }
 
 func (v *Visitor) VisitCreator(ctx *parser.CreatorContext) interface{} {

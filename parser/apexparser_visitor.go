@@ -430,6 +430,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#valueList.
 	VisitValueList(ctx *ValueListContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#currencyValue.
+	VisitCurrencyValue(ctx *CurrencyValueContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#signedNumber.
 	VisitSignedNumber(ctx *SignedNumberContext) interface{}
 

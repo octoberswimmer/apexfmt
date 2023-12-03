@@ -571,6 +571,10 @@ func (v *BaseApexParserVisitor) VisitValueList(ctx *ValueListContext) interface{
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitCurrencyValue(ctx *CurrencyValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitSignedNumber(ctx *SignedNumberContext) interface{} {
 	return v.VisitChildren(ctx)
 }
