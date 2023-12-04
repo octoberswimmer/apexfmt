@@ -196,8 +196,8 @@ func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
 		out.WriteString(fmt.Sprintf("if %s %s", v.visitRule(ctx.ParExpression()),
 			v.visitRule(ctx.Statement(0))))
 	} else {
-		out.WriteString(fmt.Sprintf("if %s {\n%s}%s", v.visitRule(ctx.ParExpression()),
-			v.visitRule(ctx.Statement(0))))
+		out.WriteString(fmt.Sprintf("if %s {\n%s\n}", v.visitRule(ctx.ParExpression()),
+			indent(v.visitRule(ctx.Statement(0)).(string))))
 	}
 	if ctx.ELSE() != nil {
 		if block := ctx.Statement(1).Block(); block != nil {
