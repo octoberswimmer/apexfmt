@@ -120,7 +120,8 @@ func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContex
 			propertyBlocks = append(propertyBlocks, v.visitRule(p).(string))
 		}
 	}
-	return fmt.Sprintf("%s %s {\n%s}\n", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), indent(strings.Join(propertyBlocks, "\n")))
+	// TODO: collapse if empty getter and setter
+	return fmt.Sprintf("%s %s {\n%s\n}\n", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), indent(strings.Join(propertyBlocks, "\n")))
 }
 
 func (v *Visitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
@@ -538,7 +539,7 @@ func (v *Visitor) VisitSoqlPrimary(ctx *parser.SoqlPrimaryContext) interface{} {
 }
 
 func (v *Visitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interface{} {
-	return fmt.Sprintf("[\n%s]", indent(v.visitRule(ctx.Query()).(string)))
+	return fmt.Sprintf("[\n%s\n]", indent(v.visitRule(ctx.Query()).(string)))
 }
 
 func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
