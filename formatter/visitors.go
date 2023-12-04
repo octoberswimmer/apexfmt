@@ -71,7 +71,7 @@ func (v *Visitor) VisitEnumConstants(ctx *parser.EnumConstantsContext) interface
 	for _, t := range ctx.AllId() {
 		ids = append(ids, t.GetText())
 	}
-	return strings.Join(ids, ".")
+	return strings.Join(ids, ", ")
 }
 
 func (v *Visitor) VisitInterfaceDeclaration(ctx *parser.InterfaceDeclarationContext) interface{} {
