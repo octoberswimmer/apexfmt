@@ -12,6 +12,7 @@ import (
 type Visitor struct {
 	tokens         *antlr.CommonTokenStream
 	commentsOutput map[int]struct{}
+	newlinesOutput map[int]struct{}
 	parser.BaseApexParserVisitor
 }
 
@@ -19,11 +20,13 @@ func NewVisitor(tokens *antlr.CommonTokenStream) *Visitor {
 	return &Visitor{
 		tokens:         tokens,
 		commentsOutput: make(map[int]struct{}),
+		newlinesOutput: make(map[int]struct{}),
 	}
 }
 
 func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
 	start := node.(antlr.ParserRuleContext).GetStart()
+	beforeWhitespace := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 2)
 	beforeComments := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 3)
 	result := node.Accept(v)
 	if result == nil {
@@ -37,7 +40,23 @@ func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
 				v.commentsOutput[c.GetTokenIndex()] = struct{}{}
 			}
 		}
-		result = fmt.Sprintf("%s\n%s", strings.Join(comments, "\n"), result)
+		if len(comments) > 0 {
+			result = fmt.Sprintf("%s\n%s", strings.Join(comments, "\n"), result)
+		}
+	}
+	if beforeWhitespace != nil {
+		injectNewline := false
+		for _, c := range beforeWhitespace {
+			if len(strings.Split(c.GetText(), "\n")) > 2 {
+				if _, seen := v.newlinesOutput[c.GetTokenIndex()]; !seen {
+					v.newlinesOutput[c.GetTokenIndex()] = struct{}{}
+					injectNewline = true
+				}
+			}
+		}
+		if injectNewline {
+			result = fmt.Sprintf("\n%s", result)
+		}
 	}
 	return result
 }
@@ -72,12 +91,13 @@ func indent(text string) string {
 	for scanner.Scan() {
 		if isFirstLine {
 			isFirstLine = false
+		} else {
+			indentedText.WriteString("\n")
 		}
 		if scanner.Text() != "" {
-			if !isFirstLine {
-				indentedText.WriteString("\n")
-			}
 			indentedText.WriteString("\t" + scanner.Text())
+		} else {
+			indentedText.WriteString(scanner.Text())
 		}
 	}
 

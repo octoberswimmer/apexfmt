@@ -37,7 +37,7 @@ func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) int
 	if ctx.IMPLEMENTS() != nil {
 		class.WriteString(fmt.Sprintf(" implements %s", v.visitRule(ctx.TypeList())))
 	}
-	class.WriteString(fmt.Sprintf(" {\n%s\n}\n", indent(v.visitRule(ctx.ClassBody()).(string))))
+	class.WriteString(fmt.Sprintf(" {\n%s\n}", indent(v.visitRule(ctx.ClassBody()).(string))))
 	return class.String()
 }
 
@@ -62,7 +62,7 @@ func (v *Visitor) VisitInterfaceDeclaration(ctx *parser.InterfaceDeclarationCont
 	if ctx.EXTENDS() != nil {
 		extends = fmt.Sprintf(" extends %s ", v.visitRule(ctx.TypeList()))
 	}
-	return fmt.Sprintf("interface %s%s {\n%s\n}\n", ctx.Id().GetText(), extends, indent(v.visitRule(ctx.InterfaceBody()).(string)))
+	return fmt.Sprintf("interface %s%s {\n%s\n}", ctx.Id().GetText(), extends, indent(v.visitRule(ctx.InterfaceBody()).(string)))
 }
 
 func (v *Visitor) VisitInterfaceBody(ctx *parser.InterfaceBodyContext) interface{} {
@@ -121,7 +121,7 @@ func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContex
 		}
 	}
 	// TODO: collapse if empty getter and setter
-	return fmt.Sprintf("%s %s {\n%s\n}\n", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), indent(strings.Join(propertyBlocks, "\n")))
+	return fmt.Sprintf("%s %s {\n%s\n}", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), indent(strings.Join(propertyBlocks, "\n")))
 }
 
 func (v *Visitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
@@ -149,7 +149,7 @@ func (v *Visitor) VisitSetter(ctx *parser.SetterContext) interface{} {
 }
 
 func (v *Visitor) VisitConstructorDeclaration(ctx *parser.ConstructorDeclarationContext) interface{} {
-	return fmt.Sprintf("%s%s %s\n", v.visitRule(ctx.QualifiedName()), v.visitRule(ctx.FormalParameters()), v.visitRule(ctx.Block()).(string))
+	return fmt.Sprintf("%s%s %s", v.visitRule(ctx.QualifiedName()), v.visitRule(ctx.FormalParameters()), v.visitRule(ctx.Block()).(string))
 }
 
 func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
@@ -174,25 +174,24 @@ func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 }
 
 func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
-	elseStatement := ""
+	var out strings.Builder
+	if block := ctx.Statement(0).Block(); block != nil {
+		out.WriteString(fmt.Sprintf("if %s %s", v.visitRule(ctx.ParExpression()),
+			v.visitRule(ctx.Statement(0))))
+	} else {
+		out.WriteString(fmt.Sprintf("if %s {\n%s}%s", v.visitRule(ctx.ParExpression()),
+			v.visitRule(ctx.Statement(0))))
+	}
 	if ctx.ELSE() != nil {
 		if block := ctx.Statement(1).Block(); block != nil {
-			elseStatement = " else " + v.visitRule(ctx.Statement(1)).(string)
+			out.WriteString(fmt.Sprintf(" else %s", v.visitRule(ctx.Statement(1)).(string)))
 		} else if ifStatement := ctx.Statement(1).IfStatement(); ifStatement != nil {
-			elseStatement = fmt.Sprintf(" else %s", v.visitRule(ifStatement))
+			out.WriteString(fmt.Sprintf(" else %s", v.visitRule(ifStatement)))
 		} else {
-			elseStatement = fmt.Sprintf(" else {\n%s}", indent(v.visitRule(ctx.Statement(1)).(string)))
+			out.WriteString(fmt.Sprintf(" else {\n%s}", indent(v.visitRule(ctx.Statement(1)).(string))))
 		}
 	}
-	if block := ctx.Statement(0).Block(); block != nil {
-		return fmt.Sprintf("if %s %s%s", v.visitRule(ctx.ParExpression()),
-			v.visitRule(ctx.Statement(0)),
-			elseStatement)
-	} else {
-		return fmt.Sprintf("if %s {\n%s}%s", v.visitRule(ctx.ParExpression()),
-			v.visitRule(ctx.Statement(0)),
-			elseStatement)
-	}
+	return out.String()
 }
 
 func (v *Visitor) VisitWhileStatement(ctx *parser.WhileStatementContext) interface{} {
@@ -1136,7 +1135,7 @@ func (v *Visitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationContext) i
 	if ctx.Block() != nil {
 		body = " " + v.visitRule(ctx.Block()).(string)
 	}
-	return fmt.Sprintf("%s %s%s%s\n", returnType, ctx.Id().GetText(),
+	return fmt.Sprintf("%s %s%s%s", returnType, ctx.Id().GetText(),
 		v.visitRule(ctx.FormalParameters()),
 		body)
 }
