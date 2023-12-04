@@ -26,7 +26,7 @@ func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) inter
 				constants = append(constants, e.GetText())
 			}
 		}
-		return fmt.Sprintf("enum %s {%s}", enum.Id().GetText(), strings.Join(constants, ", "))
+		return fmt.Sprintf("enum %s {%s}", v.visitRule(enum.Id()), strings.Join(constants, ", "))
 	}
 	return ""
 }
