@@ -412,7 +412,14 @@ func (v *Visitor) VisitBitNotExpression(ctx *parser.BitNotExpressionContext) int
 }
 
 func (v *Visitor) VisitBitExpression(ctx *parser.BitExpressionContext) interface{} {
-	return fmt.Sprintf("TODO: IMPLEMENT BIT EXPRESSION")
+	ops := []string{}
+	for _, o := range ctx.AllGT() {
+		ops = append(ops, o.GetText())
+	}
+	for _, o := range ctx.AllLT() {
+		ops = append(ops, o.GetText())
+	}
+	return strings.Join(ops, "")
 }
 
 func (v *Visitor) VisitArth1Expression(ctx *parser.Arth1ExpressionContext) interface{} {
