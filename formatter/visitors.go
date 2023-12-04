@@ -722,7 +722,7 @@ func (v *Visitor) VisitForClause(ctx *parser.ForClauseContext) interface{} {
 }
 
 func (v *Visitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface{} {
-	return fmt.Sprintf("WHEN\n%sTHEN\n%s", indent(v.visitRule(ctx.FieldName()).(string)), indent(v.visitRule(ctx.FieldNameList()).(string)))
+	return fmt.Sprintf("WHEN\n%s\nTHEN\n%s", indent(v.visitRule(ctx.FieldName()).(string)), indent(v.visitRule(ctx.FieldNameList()).(string)))
 }
 
 func (v *Visitor) VisitWhereClause(ctx *parser.WhereClauseContext) interface{} {
