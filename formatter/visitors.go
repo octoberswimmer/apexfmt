@@ -1115,9 +1115,27 @@ func (v *Visitor) VisitTypeRefPrimary(ctx *parser.TypeRefPrimaryContext) interfa
 func (v *Visitor) VisitTypeRef(ctx *parser.TypeRefContext) interface{} {
 	typeNames := []string{}
 	for _, t := range ctx.AllTypeName() {
-		typeNames = append(typeNames, t.GetText())
+		typeNames = append(typeNames, v.visitRule(t).(string))
 	}
 
 	val := fmt.Sprintf("%s%s", strings.Join(typeNames, "."), ctx.ArraySubscripts().GetText())
 	return val
+}
+
+func (v *Visitor) VisitTypeName(ctx *parser.TypeNameContext) interface{} {
+	typeName := ""
+	if id := ctx.Id(); id != nil {
+		typeName = v.visitRule(id).(string)
+	} else {
+		typeName = ctx.GetChild(0).(antlr.TerminalNode).GetText()
+	}
+	typeArguments := ""
+	if args := ctx.TypeArguments(); args != nil {
+		typeArguments = v.visitRule(args).(string)
+	}
+	return fmt.Sprintf("%s%s", typeName, typeArguments)
+}
+
+func (v *Visitor) VisitTypeArguments(ctx *parser.TypeArgumentsContext) interface{} {
+	return fmt.Sprintf("<%s>", v.visitRule(ctx.TypeList()))
 }
