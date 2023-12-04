@@ -519,7 +519,7 @@ func (v *Visitor) VisitPrimaryExpression(ctx *parser.PrimaryExpressionContext) i
 	case *parser.LiteralPrimaryContext:
 		return e.GetText()
 	case *parser.TypeRefPrimaryContext:
-		return fmt.Sprintf("%s.class", v.visitRule(e))
+		return v.visitRule(e)
 	case *parser.IdPrimaryContext:
 		return e.GetText()
 	case *parser.SoqlPrimaryContext:
