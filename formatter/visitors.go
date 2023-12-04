@@ -767,7 +767,7 @@ func (v *Visitor) VisitOffsetClause(ctx *parser.OffsetClauseContext) interface{}
 func (v *Visitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) interface{} {
 	switch {
 	case ctx.NOT() != nil:
-		return fmt.Sprintf("NOT %s", ctx.ConditionalExpression(0))
+		return fmt.Sprintf("NOT %s", v.visitRule(ctx.ConditionalExpression(0)))
 	case len(ctx.AllSOQLOR()) > 0:
 		conditions := []string{}
 		for _, cond := range ctx.AllConditionalExpression() {
