@@ -976,11 +976,11 @@ func (v *Visitor) VisitClassCreatorRest(ctx *parser.ClassCreatorRestContext) int
 
 func (v *Visitor) VisitArrayCreatorRest(ctx *parser.ArrayCreatorRestContext) interface{} {
 	if expression := ctx.Expression(); expression != nil {
-		return fmt.Sprintf("{ %s }", v.visitRule(expression))
+		return fmt.Sprintf("[ %s ]", v.visitRule(expression))
 	} else if arrayInitializer := ctx.ArrayInitializer(); arrayInitializer != nil {
-		return fmt.Sprintf("{}%s", v.visitRule(arrayInitializer))
+		return fmt.Sprintf("[]%s", v.visitRule(arrayInitializer))
 	}
-	return "{}"
+	return "[]"
 }
 
 func (v *Visitor) VisitMapCreatorRest(ctx *parser.MapCreatorRestContext) interface{} {
