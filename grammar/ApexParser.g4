@@ -728,7 +728,10 @@ allRowsClause
     : ALL ROWS;
 
 forClauses
-    : (FOR (VIEW | UPDATE | REFERENCE))*;
+    : (forClause)*;
+
+forClause
+    : FOR (VIEW | UPDATE | REFERENCE);
 
 boundExpression
     : COLON expression;

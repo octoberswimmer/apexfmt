@@ -544,26 +544,64 @@ func (v *Visitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interface{} {
 }
 
 func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
-	usingScope := ""
-	if scope := ctx.UsingScope(); scope != nil {
-		usingScope = fmt.Sprintf("\n%s", v.visitRule(scope).(string))
-	}
-	whereClause := ""
-	if where := ctx.WhereClause(); where != nil {
-		whereClause = fmt.Sprintf("%s", v.visitRule(where).(string))
-	}
-	return fmt.Sprintf("SELECT\n%sFROM\n%s%s%sTODO: FINISH VisitQuery",
+	var query strings.Builder
+	query.WriteString(fmt.Sprintf("SELECT\n%sFROM\n%s",
 		indent(v.visitRule(ctx.SelectList()).(string)),
-		indent(v.visitRule(ctx.FromNameList()).(string)),
-		usingScope,
-		whereClause,
-	)
+		indent(v.visitRule(ctx.FromNameList()).(string))))
+	if scope := ctx.UsingScope(); scope != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(scope).(string)))
+	}
+	if where := ctx.WhereClause(); where != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(where).(string)))
+	}
+	if groupBy := ctx.GroupByClause(); groupBy != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(groupBy).(string)))
+	}
+	if orderBy := ctx.OrderByClause(); orderBy != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(orderBy).(string)))
+	}
+	if limit := ctx.LimitClause(); limit != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(limit).(string)))
+	}
+	if offset := ctx.OffsetClause(); offset != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(offset).(string)))
+	}
+	if ctx.OffsetClause() != nil {
+		query.WriteString("\nALL ROWS")
+	}
+	forClauses := v.visitRule(ctx.ForClauses())
+	if forClauses != "" {
+		query.WriteString(fmt.Sprintf("\n%s", forClauses))
+	}
+	if update := ctx.UpdateList(); update != nil {
+		query.WriteString(fmt.Sprintf("\nUPDATE %s", v.visitRule(update).(string)))
+	}
+	return query.String()
 }
 
 func (v *Visitor) VisitSubQuery(ctx *parser.SubQueryContext) interface{} {
-	return fmt.Sprintf("SELECT\n%sTODO: FINISH VisitSubQuery",
+	var query strings.Builder
+	query.WriteString(fmt.Sprintf("SELECT\n%sFROM\n%s",
 		indent(v.visitRule(ctx.SubFieldList()).(string)),
-	)
+		indent(v.visitRule(ctx.FromNameList()).(string)),
+	))
+	if where := ctx.WhereClause(); where != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(where).(string)))
+	}
+	if orderBy := ctx.OrderByClause(); orderBy != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(orderBy).(string)))
+	}
+	if limit := ctx.LimitClause(); limit != nil {
+		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(limit).(string)))
+	}
+	forClauses := v.visitRule(ctx.ForClauses())
+	if forClauses != "" {
+		query.WriteString(fmt.Sprintf("\n%s", forClauses))
+	}
+	if update := ctx.UpdateList(); update != nil {
+		query.WriteString(fmt.Sprintf("\nUPDATE %s", v.visitRule(update).(string)))
+	}
+	return query.String()
 }
 
 func (v *Visitor) VisitFromNameList(ctx *parser.FromNameListContext) interface{} {
@@ -572,6 +610,14 @@ func (v *Visitor) VisitFromNameList(ctx *parser.FromNameListContext) interface{}
 		fieldNames = append(fieldNames, v.visitRule(p).(string))
 	}
 	return strings.Join(fieldNames, ",\n")
+}
+
+func (v *Visitor) VisitUpdateList(ctx *parser.UpdateListContext) interface{} {
+	updateList := ""
+	if u := ctx.UpdateList(); u != nil {
+		updateList = fmt.Sprintf(", %s", v.visitRule(u).(string))
+	}
+	return fmt.Sprintf("%s%s", ctx.UpdateType().GetText(), updateList)
 }
 
 func (v *Visitor) VisitFieldNameAlias(ctx *parser.FieldNameAliasContext) interface{} {
@@ -665,12 +711,38 @@ func (v *Visitor) VisitTypeOf(ctx *parser.TypeOfContext) interface{} {
 	)
 }
 
+func (v *Visitor) VisitForClauses(ctx *parser.ForClausesContext) interface{} {
+	forClauses := []string{}
+	for _, f := range ctx.AllForClause() {
+		forClauses = append(forClauses, v.visitRule(f).(string))
+	}
+	return strings.Join(forClauses, " ")
+}
+
+func (v *Visitor) VisitForClause(ctx *parser.ForClauseContext) interface{} {
+	return fmt.Sprintf("FOR %s", ctx.GetChild(1).(antlr.TerminalNode).GetText())
+}
+
 func (v *Visitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface{} {
 	return fmt.Sprintf("WHEN\n%sTHEN\n%s", indent(v.visitRule(ctx.FieldName()).(string)), indent(v.visitRule(ctx.FieldNameList()).(string)))
 }
 
 func (v *Visitor) VisitWhereClause(ctx *parser.WhereClauseContext) interface{} {
 	return fmt.Sprintf("WHERE\n%s", indent(v.visitRule(ctx.LogicalExpression()).(string)))
+}
+
+func (v *Visitor) VisitLimitClause(ctx *parser.LimitClauseContext) interface{} {
+	if e := ctx.BoundExpression(); e != nil {
+		return fmt.Sprintf("LIMIT %s", v.visitRule(ctx.BoundExpression()))
+	}
+	return fmt.Sprintf("LIMIT %s", ctx.IntegerLiteral().GetText())
+}
+
+func (v *Visitor) VisitOffsetClause(ctx *parser.OffsetClauseContext) interface{} {
+	if e := ctx.BoundExpression(); e != nil {
+		return fmt.Sprintf("OFFSET %s", v.visitRule(ctx.BoundExpression()))
+	}
+	return fmt.Sprintf("OFFSET %s", ctx.IntegerLiteral().GetText())
 }
 
 func (v *Visitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) interface{} {
@@ -682,13 +754,13 @@ func (v *Visitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) i
 		for _, cond := range ctx.AllConditionalExpression() {
 			conditions = append(conditions, v.visitRule(cond).(string))
 		}
-		return strings.Join(conditions, "OR ")
+		return strings.Join(conditions, "OR\n")
 	case len(ctx.AllSOQLAND()) > 0:
 		conditions := []string{}
 		for _, cond := range ctx.AllConditionalExpression() {
 			conditions = append(conditions, v.visitRule(cond).(string))
 		}
-		return strings.Join(conditions, "AND ")
+		return strings.Join(conditions, " AND\n")
 	default:
 		// Only a single condition
 		return v.visitRule(ctx.ConditionalExpression(0))
@@ -771,8 +843,62 @@ func (v *Visitor) VisitValueList(ctx *parser.ValueListContext) interface{} {
 	return fmt.Sprintf("(%s)", strings.Join(values, ", "))
 }
 
+func (v *Visitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) interface{} {
+	fieldNames := []string{}
+	for _, i := range ctx.AllFieldName() {
+		fieldNames = append(fieldNames, v.visitRule(i).(string))
+	}
+	switch {
+	case ctx.ROLLUP() != nil:
+		return fmt.Sprintf("GROUP BY ROLLUP (%s)", strings.Join(fieldNames, ", "))
+	case ctx.CUBE() != nil:
+		return fmt.Sprintf("GROUP BY CUBE (%s)", strings.Join(fieldNames, ", "))
+	default:
+		having := ""
+		if l := ctx.LogicalExpression(); l != nil {
+			having = fmt.Sprintf("HAVING %s", v.visitRule(l))
+		}
+		return fmt.Sprintf("GROUP BY %s%s", v.visitRule(ctx.SelectList()), having)
+	}
+}
+
 func (v *Visitor) VisitUsingScope(ctx *parser.UsingScopeContext) interface{} {
 	return fmt.Sprintf("USING SCOPE %s", ctx.SoqlId().GetText())
+}
+
+func (v *Visitor) VisitOrderByClause(ctx *parser.OrderByClauseContext) interface{} {
+	return fmt.Sprintf("ORDER BY\n%s", indent(v.visitRule(ctx.FieldOrderList()).(string)))
+}
+
+func (v *Visitor) VisitFieldOrderList(ctx *parser.FieldOrderListContext) interface{} {
+	fields := []string{}
+	for _, i := range ctx.AllFieldOrder() {
+		fields = append(fields, v.visitRule(i).(string))
+	}
+	return strings.Join(fields, ", ")
+}
+
+func (v *Visitor) VisitFieldOrder(ctx *parser.FieldOrderContext) interface{} {
+	var field strings.Builder
+	if f := ctx.FieldName(); f != nil {
+		field.WriteString(v.visitRule(f).(string))
+	} else if s := ctx.SoqlFunction(); s != nil {
+		field.WriteString(v.visitRule(s).(string))
+	}
+	if ctx.ASC() != nil {
+		field.WriteString(" ASC")
+	} else if ctx.DESC() != nil {
+		field.WriteString(" DESC")
+	}
+	if ctx.NULLS() != nil {
+		field.WriteString(" NULLS")
+		if ctx.FIRST() != nil {
+			field.WriteString(" FIRST")
+		} else {
+			field.WriteString(" LAST")
+		}
+	}
+	return field.String()
 }
 
 func (v *Visitor) VisitBoundExpression(ctx *parser.BoundExpressionContext) interface{} {

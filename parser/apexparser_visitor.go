@@ -475,6 +475,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#forClauses.
 	VisitForClauses(ctx *ForClausesContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#forClause.
+	VisitForClause(ctx *ForClauseContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#boundExpression.
 	VisitBoundExpression(ctx *BoundExpressionContext) interface{}
 

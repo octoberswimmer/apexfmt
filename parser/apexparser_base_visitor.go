@@ -631,6 +631,10 @@ func (v *BaseApexParserVisitor) VisitForClauses(ctx *ForClausesContext) interfac
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitForClause(ctx *ForClauseContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitBoundExpression(ctx *BoundExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
