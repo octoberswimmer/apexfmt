@@ -43,7 +43,7 @@ options {tokenVocab=ApexLexer;}
 
 // entry point for Apex trigger files
 triggerUnit
-    : TRIGGER id ON id LPAREN triggerCase (COMMA triggerCase)* RPAREN block EOF
+    : TRIGGER id ON id LPAREN triggerCase (COMMA triggerCase)* RPAREN triggerBlock EOF
     ;
 
 triggerCase
@@ -249,6 +249,15 @@ trailingComma
 
 // STATEMENTS / BLOCKS
 
+triggerBlock
+    : LBRACE triggerStatement* RBRACE
+	 ;
+
+triggerStatement
+    : statement
+    | blockMemberDeclaration
+    ;
+
 block
     : LBRACE statement* RBRACE
     ;
@@ -283,6 +292,9 @@ statement
     | localVariableDeclarationStatement
     | expressionStatement
     ;
+
+blockMemberDeclaration
+    : modifier* memberDeclaration;
 
 ifStatement
     : IF parExpression statement (ELSE statement)?

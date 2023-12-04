@@ -51,7 +51,19 @@ func (v *Visitor) VisitTriggerUnit(ctx *parser.TriggerUnitContext) interface{} {
 	}
 	return fmt.Sprintf("trigger %s on %s (%s) %s", v.visitRule(ctx.Id(0)), v.visitRule(ctx.Id(1)),
 		strings.Join(triggerCases, ", "),
-		v.visitRule(ctx.Block()))
+		v.visitRule(ctx.TriggerBlock()))
+}
+
+func (v *Visitor) VisitTriggerBlock(ctx *parser.TriggerBlockContext) interface{} {
+	statements := []string{}
+	for _, stmt := range ctx.AllTriggerStatement() {
+		statements = append(statements, v.visitRule(stmt).(string))
+	}
+	return fmt.Sprintf("{\n%s\n}", indent(strings.Join(statements, "\n")))
+}
+
+func (v *Visitor) VisitTriggerStatement(ctx *parser.TriggerStatementContext) interface{} {
+	return v.visitRule(ctx.GetChild(0).(antlr.RuleNode))
 }
 
 func (v *Visitor) VisitTriggerCase(ctx *parser.TriggerCaseContext) interface{} {
@@ -188,6 +200,10 @@ func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 	*/
 	child := ctx.GetChild(0).(antlr.RuleNode)
 	return v.visitRule(child)
+}
+
+func (v *Visitor) VisitBlockMemberDeclaration(ctx *parser.BlockMemberDeclarationContext) interface{} {
+	return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
 }
 
 func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {

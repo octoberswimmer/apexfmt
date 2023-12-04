@@ -121,6 +121,12 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#trailingComma.
 	VisitTrailingComma(ctx *TrailingCommaContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#triggerBlock.
+	VisitTriggerBlock(ctx *TriggerBlockContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#triggerStatement.
+	VisitTriggerStatement(ctx *TriggerStatementContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#block.
 	VisitBlock(ctx *BlockContext) interface{}
 
@@ -132,6 +138,9 @@ type ApexParserVisitor interface {
 
 	// Visit a parse tree produced by ApexParser#statement.
 	VisitStatement(ctx *StatementContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#blockMemberDeclaration.
+	VisitBlockMemberDeclaration(ctx *BlockMemberDeclarationContext) interface{}
 
 	// Visit a parse tree produced by ApexParser#ifStatement.
 	VisitIfStatement(ctx *IfStatementContext) interface{}

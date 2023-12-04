@@ -159,6 +159,14 @@ func (v *BaseApexParserVisitor) VisitTrailingComma(ctx *TrailingCommaContext) in
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitTriggerBlock(ctx *TriggerBlockContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitTriggerStatement(ctx *TriggerStatementContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitBlock(ctx *BlockContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -172,6 +180,10 @@ func (v *BaseApexParserVisitor) VisitLocalVariableDeclaration(ctx *LocalVariable
 }
 
 func (v *BaseApexParserVisitor) VisitStatement(ctx *StatementContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitBlockMemberDeclaration(ctx *BlockMemberDeclarationContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
