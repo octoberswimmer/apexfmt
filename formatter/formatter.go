@@ -1,105 +1,118 @@
 package formatter
 
 import (
-	"bufio"
+	"bytes"
 	"fmt"
-	"strings"
+	"io"
+	"os"
+	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
 )
 
-type Visitor struct {
-	tokens         *antlr.CommonTokenStream
-	commentsOutput map[int]struct{}
-	newlinesOutput map[int]struct{}
-	parser.BaseApexParserVisitor
+type Formatter struct {
+	filename  string
+	source    []byte
+	formatted []byte
 }
 
-func NewVisitor(tokens *antlr.CommonTokenStream) *Visitor {
-	return &Visitor{
-		tokens:         tokens,
-		commentsOutput: make(map[int]struct{}),
-		newlinesOutput: make(map[int]struct{}),
+type errorListener struct {
+	*antlr.DefaultErrorListener
+	filename string
+}
+
+func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
+	_, _ = fmt.Fprintln(os.Stderr, e.filename+" line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+}
+
+func NewFormatter(filename string) *Formatter {
+	return &Formatter{
+		filename: filename,
 	}
 }
 
-func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
-	start := node.(antlr.ParserRuleContext).GetStart()
-	beforeWhitespace := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 2)
-	beforeComments := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 3)
-	result := node.Accept(v)
-	if result == nil {
-		panic(fmt.Sprintf("MISSING VISIT FUNCTION FOR %T", node))
-	}
-	if beforeComments != nil {
-		comments := []string{}
-		for _, c := range beforeComments {
-			if _, seen := v.commentsOutput[c.GetTokenIndex()]; !seen {
-				comments = append(comments, c.GetText())
-				v.commentsOutput[c.GetTokenIndex()] = struct{}{}
-			}
-		}
-		if len(comments) > 0 {
-			result = fmt.Sprintf("%s\n%s", strings.Join(comments, "\n"), result)
+func (f *Formatter) Formatted() (string, error) {
+	if f.formatted == nil {
+		err := f.Format()
+		if err != nil {
+			return "", err
 		}
 	}
-	if beforeWhitespace != nil {
-		injectNewline := false
-		for _, c := range beforeWhitespace {
-			if len(strings.Split(c.GetText(), "\n")) > 2 {
-				if _, seen := v.newlinesOutput[c.GetTokenIndex()]; !seen {
-					v.newlinesOutput[c.GetTokenIndex()] = struct{}{}
-					injectNewline = true
-				}
-			}
-		}
-		if injectNewline {
-			result = fmt.Sprintf("\n%s", result)
-		}
-	}
-	return result
+	return string(f.formatted), nil
 }
 
-func (v *Visitor) Modifiers(ctxs []parser.IModifierContext) string {
-	mods := []string{}
-	annotations := []string{}
-	for _, m := range ctxs {
-		if m.Annotation() != nil {
-			annotations = append(annotations, v.visitRule(m.Annotation()).(string))
-		} else {
-			for _, word := range m.GetChildren() {
-				mods = append(mods, word.(antlr.TerminalNode).GetText())
-			}
+func (f *Formatter) Changed() (bool, error) {
+	if f.formatted == nil {
+		err := f.Format()
+		if err != nil {
+			return false, err
 		}
 	}
-	var m strings.Builder
-	if len(annotations) > 0 {
-		m.WriteString(strings.Join(annotations, "\n") + "\n")
-	}
-	if len(mods) > 0 {
-		m.WriteString(strings.Join(mods, " ") + " ")
-	}
-	return m.String()
+	return !bytes.Equal(f.source, f.formatted), nil
 }
 
-func indent(text string) string {
-	var indentedText strings.Builder
-	scanner := bufio.NewScanner(strings.NewReader(text))
-	isFirstLine := true
-
-	for scanner.Scan() {
-		if isFirstLine {
-			isFirstLine = false
-		} else {
-			indentedText.WriteString("\n")
+func (f *Formatter) Format() error {
+	if f.source == nil {
+		src, err := readFile(f.filename)
+		if err != nil {
+			return fmt.Errorf("Failed to read file %s: %w", f.filename, err)
 		}
-		if scanner.Text() != "" {
-			indentedText.WriteString("\t" + scanner.Text())
-		} else {
-			indentedText.WriteString(scanner.Text())
-		}
+		f.source = src
 	}
+	input := antlr.NewInputStream(string(f.source))
+	lexer := parser.NewApexLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-	return indentedText.String()
+	p := parser.NewApexParser(stream)
+	p.AddErrorListener(&errorListener{filename: f.filename})
+	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
+
+	v := NewVisitor(stream)
+	out, ok := p.CompilationUnit().Accept(v).(string)
+	if !ok {
+		return fmt.Errorf("Unexpected result parsing apex")
+	}
+	f.formatted = []byte(out)
+	return nil
+}
+
+func (f *Formatter) Write() error {
+	if f.formatted == nil {
+		return fmt.Errorf("No formatted source found")
+	}
+	return writeFile(f.filename, f.formatted)
+}
+
+func readFile(filename string) ([]byte, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	src, err := io.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+	return src, nil
+}
+
+func writeFile(filename string, contents []byte) error {
+	info, err := os.Stat(filename)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to read file: %s\n", err.Error())
+		os.Exit(1)
+	}
+	perm := info.Mode().Perm()
+	size := info.Size()
+	fout, err := os.OpenFile(filename, os.O_WRONLY, perm)
+	if err != nil {
+		return err
+	}
+	defer fout.Close()
+	n, err := fout.Write(contents)
+	if err == nil && int64(n) < size {
+		err = fout.Truncate(int64(n))
+	}
+	return err
 }
