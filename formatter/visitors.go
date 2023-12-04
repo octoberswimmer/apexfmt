@@ -779,11 +779,18 @@ func (v *Visitor) VisitFieldExpression(ctx *parser.FieldExpressionContext) inter
 	switch {
 	case ctx.FieldName() != nil:
 		// TODO: Format IN/NOT IN
-		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.FieldName()), ctx.ComparisonOperator().GetText(), v.visitRule(ctx.Value()))
+		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.FieldName()), v.visitRule(ctx.ComparisonOperator()), v.visitRule(ctx.Value()))
 	case ctx.SoqlFunction() != nil:
-		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.SoqlFunction()), ctx.ComparisonOperator().GetText(), v.visitRule(ctx.Value()))
+		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.SoqlFunction()), v.visitRule(ctx.ComparisonOperator()), v.visitRule(ctx.Value()))
 	}
 	panic("Unexpected fieldExpression")
+}
+
+func (v *Visitor) VisitComparisonOperator(ctx *parser.ComparisonOperatorContext) interface{} {
+	if ctx.NOT() != nil {
+		return "NOT IN"
+	}
+	return ctx.GetText()
 }
 
 func (v *Visitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) interface{} {
