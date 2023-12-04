@@ -9,6 +9,9 @@ import (
 )
 
 func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) interface{} {
+	if trigger := ctx.TriggerUnit(); trigger != nil {
+		return v.visitRule(trigger)
+	}
 	t := ctx.TypeDeclaration()
 	switch {
 	case t.ClassDeclaration() != nil:
@@ -39,6 +42,20 @@ func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) int
 	}
 	class.WriteString(fmt.Sprintf(" {\n%s\n}", indent(v.visitRule(ctx.ClassBody()).(string))))
 	return class.String()
+}
+
+func (v *Visitor) VisitTriggerUnit(ctx *parser.TriggerUnitContext) interface{} {
+	triggerCases := []string{}
+	for _, t := range ctx.AllTriggerCase() {
+		triggerCases = append(triggerCases, v.visitRule(t).(string))
+	}
+	return fmt.Sprintf("trigger %s on %s (%s) %s", v.visitRule(ctx.Id(0)), v.visitRule(ctx.Id(1)),
+		strings.Join(triggerCases, ", "),
+		v.visitRule(ctx.Block()))
+}
+
+func (v *Visitor) VisitTriggerCase(ctx *parser.TriggerCaseContext) interface{} {
+	return fmt.Sprintf("%s %s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), ctx.GetChild(1).(antlr.TerminalNode).GetText())
 }
 
 func (v *Visitor) VisitEnumDeclaration(ctx *parser.EnumDeclarationContext) interface{} {

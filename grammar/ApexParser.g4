@@ -53,6 +53,7 @@ triggerCase
 // entry point for Apex class files
 compilationUnit
     : typeDeclaration EOF
+	 | triggerUnit
     ;
 
 typeDeclaration
