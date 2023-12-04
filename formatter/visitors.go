@@ -29,18 +29,16 @@ func (v *Visitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) inter
 }
 
 func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
-	extends := ""
+	var class strings.Builder
+	class.WriteString(fmt.Sprintf("class %s", v.visitRule(ctx.Id())))
 	if ctx.EXTENDS() != nil {
-		extends = fmt.Sprintf(" extends %s ", v.visitRule(ctx.TypeRef()))
+		class.WriteString(fmt.Sprintf(" extends %s", v.visitRule(ctx.TypeRef())))
 	}
-	implements := ""
 	if ctx.IMPLEMENTS() != nil {
-		extends = fmt.Sprintf(" implements %s ", v.visitRule(ctx.TypeList()))
+		class.WriteString(fmt.Sprintf(" implements %s", v.visitRule(ctx.TypeList())))
 	}
-	return fmt.Sprintf("class %s%s%s {\n%s\n}\n", ctx.Id().GetText(),
-		extends,
-		implements,
-		indent(v.visitRule(ctx.ClassBody()).(string)))
+	class.WriteString(fmt.Sprintf(" {\n%s\n}\n", indent(v.visitRule(ctx.ClassBody()).(string))))
+	return class.String()
 }
 
 func (v *Visitor) VisitEnumDeclaration(ctx *parser.EnumDeclarationContext) interface{} {
@@ -92,7 +90,7 @@ func (v *Visitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationCont
 		if ctx.STATIC() != nil {
 			static = "static "
 		}
-		return fmt.Sprintf("%s%s", static, indent(v.visitRule(ctx.Block()).(string)))
+		return fmt.Sprintf("%s%s", static, v.visitRule(ctx.Block()).(string))
 	case ctx.MemberDeclaration() != nil:
 		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
 	}
@@ -266,14 +264,14 @@ func (v *Visitor) VisitTryStatement(ctx *parser.TryStatementContext) interface{}
 		if f := ctx.FinallyBlock(); f != nil {
 			finally = fmt.Sprintf("\n%s", v.visitRule(f).(string))
 		}
-		return fmt.Sprintf("try %s\n%s%s", v.visitRule(ctx.Block()), strings.Join(catchClauses, "\n"), finally)
+		return fmt.Sprintf("try %s %s%s", v.visitRule(ctx.Block()), strings.Join(catchClauses, "\n"), finally)
 	} else {
-		return fmt.Sprintf("try %s\n%s", v.visitRule(ctx.Block()), v.visitRule(ctx.FinallyBlock()))
+		return fmt.Sprintf("try %s %s", v.visitRule(ctx.Block()), v.visitRule(ctx.FinallyBlock()))
 	}
 }
 
 func (v *Visitor) VisitCatchClause(ctx *parser.CatchClauseContext) interface{} {
-	return fmt.Sprintf("catch (%s %s %s) %s",
+	return fmt.Sprintf("catch (%s%s %s) %s",
 		v.Modifiers(ctx.AllModifier()),
 		v.visitRule(ctx.QualifiedName()),
 		v.visitRule(ctx.Id()),
