@@ -291,7 +291,7 @@ func (v *Visitor) VisitRunAsStatement(ctx *parser.RunAsStatementContext) interfa
 	if e := ctx.ExpressionList(); e != nil {
 		expressionList = v.visitRule(e).(string)
 	}
-	return fmt.Sprintf("System.runAs (%s) %s", expressionList, v.visitRule(ctx.Block()))
+	return fmt.Sprintf("System.runAs(%s) %s", expressionList, v.visitRule(ctx.Block()))
 }
 
 func (v *Visitor) VisitForControl(ctx *parser.ForControlContext) interface{} {
