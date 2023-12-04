@@ -801,17 +801,57 @@ soslLiteralAlt
     ;
 
 soslClauses
-    : (IN searchGroup)?
-      (RETURNING fieldSpecList)?
-      (WITH DIVISION ASSIGN StringLiteral)?
-      (WITH DATA CATEGORY filteringExpression)?
-      (WITH SNIPPET (LPAREN TARGET_LENGTH ASSIGN IntegerLiteral RPAREN)? )?
-      (WITH NETWORK IN LPAREN networkList RPAREN)?
-      (WITH NETWORK ASSIGN StringLiteral)?
-      (WITH PRICEBOOKID ASSIGN StringLiteral)?
-      (WITH METADATA ASSIGN StringLiteral)?
+    : inSearchGroup?
+      returningFieldSpecList?
+      withDivisionAssign?
+      withDataCategory?
+      withSnippet?
+      withNetworkIn?
+      withNetworkAssign?
+      withPricebookIdAssign?
+      withMetadataAssign?
       limitClause?
-      (UPDATE updateList)?
+      updateListClause?
+    ;
+
+inSearchGroup
+    : IN searchGroup
+    ;
+
+returningFieldSpecList
+    : RETURNING fieldSpecList
+    ;
+
+withDivisionAssign
+    : WITH DIVISION ASSIGN StringLiteral
+    ;
+
+withDataCategory
+    : WITH DATA CATEGORY filteringExpression
+    ;
+
+withSnippet
+    : WITH SNIPPET (LPAREN TARGET_LENGTH ASSIGN IntegerLiteral RPAREN)?
+    ;
+
+withNetworkIn
+    : WITH NETWORK IN LPAREN networkList RPAREN
+    ;
+
+withNetworkAssign
+    : WITH NETWORK ASSIGN StringLiteral
+    ;
+
+withPricebookIdAssign
+    : WITH PRICEBOOKID ASSIGN StringLiteral
+    ;
+
+withMetadataAssign
+    : WITH METADATA ASSIGN StringLiteral
+    ;
+
+updateListClause
+    : UPDATE updateList
     ;
 
 searchGroup
@@ -823,14 +863,17 @@ fieldSpecList
     ;
 
 fieldSpec
-    : soslId (LPAREN fieldList
+    : soslId (fieldSpecClauses)?
+    ;
+
+fieldSpecClauses
+    : LPAREN fieldList
         (WHERE logicalExpression)?
         (USING LISTVIEW ASSIGN soslId)?
         (ORDER BY fieldOrderList)?
         limitClause?
         offsetClause?
-        RPAREN)?
-    ;
+        RPAREN;
 
 fieldList
     : soslId (COMMA fieldList)*

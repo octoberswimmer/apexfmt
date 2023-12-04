@@ -529,6 +529,36 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#soslClauses.
 	VisitSoslClauses(ctx *SoslClausesContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#inSearchGroup.
+	VisitInSearchGroup(ctx *InSearchGroupContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#returningFieldSpecList.
+	VisitReturningFieldSpecList(ctx *ReturningFieldSpecListContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withDivisionAssign.
+	VisitWithDivisionAssign(ctx *WithDivisionAssignContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withDataCategory.
+	VisitWithDataCategory(ctx *WithDataCategoryContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withSnippet.
+	VisitWithSnippet(ctx *WithSnippetContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withNetworkIn.
+	VisitWithNetworkIn(ctx *WithNetworkInContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withNetworkAssign.
+	VisitWithNetworkAssign(ctx *WithNetworkAssignContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withPricebookIdAssign.
+	VisitWithPricebookIdAssign(ctx *WithPricebookIdAssignContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withMetadataAssign.
+	VisitWithMetadataAssign(ctx *WithMetadataAssignContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#updateListClause.
+	VisitUpdateListClause(ctx *UpdateListClauseContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#searchGroup.
 	VisitSearchGroup(ctx *SearchGroupContext) interface{}
 
@@ -537,6 +567,9 @@ type ApexParserVisitor interface {
 
 	// Visit a parse tree produced by ApexParser#fieldSpec.
 	VisitFieldSpec(ctx *FieldSpecContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#fieldSpecClauses.
+	VisitFieldSpecClauses(ctx *FieldSpecClausesContext) interface{}
 
 	// Visit a parse tree produced by ApexParser#fieldList.
 	VisitFieldList(ctx *FieldListContext) interface{}

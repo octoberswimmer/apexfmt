@@ -703,6 +703,46 @@ func (v *BaseApexParserVisitor) VisitSoslClauses(ctx *SoslClausesContext) interf
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitInSearchGroup(ctx *InSearchGroupContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitReturningFieldSpecList(ctx *ReturningFieldSpecListContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithDivisionAssign(ctx *WithDivisionAssignContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithDataCategory(ctx *WithDataCategoryContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithSnippet(ctx *WithSnippetContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithNetworkIn(ctx *WithNetworkInContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithNetworkAssign(ctx *WithNetworkAssignContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithPricebookIdAssign(ctx *WithPricebookIdAssignContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithMetadataAssign(ctx *WithMetadataAssignContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitUpdateListClause(ctx *UpdateListClauseContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitSearchGroup(ctx *SearchGroupContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -712,6 +752,10 @@ func (v *BaseApexParserVisitor) VisitFieldSpecList(ctx *FieldSpecListContext) in
 }
 
 func (v *BaseApexParserVisitor) VisitFieldSpec(ctx *FieldSpecContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitFieldSpecClauses(ctx *FieldSpecClausesContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

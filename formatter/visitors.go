@@ -551,7 +551,7 @@ func (v *Visitor) VisitMethodCall(ctx *parser.MethodCallContext) interface{} {
 }
 
 func (v *Visitor) VisitSoslPrimary(ctx *parser.SoslPrimaryContext) interface{} {
-	return fmt.Sprintf("TODO: IMPLEMENT SOSL PRIMARY")
+	return v.visitRule(ctx.SoslLiteral())
 }
 
 func (v *Visitor) VisitSoqlPrimary(ctx *parser.SoqlPrimaryContext) interface{} {
@@ -1199,4 +1199,116 @@ func (v *Visitor) VisitTypeName(ctx *parser.TypeNameContext) interface{} {
 
 func (v *Visitor) VisitTypeArguments(ctx *parser.TypeArgumentsContext) interface{} {
 	return fmt.Sprintf("<%s>", v.visitRule(ctx.TypeList()))
+}
+
+func (v *Visitor) VisitSoslLiteral(ctx *parser.SoslLiteralContext) interface{} {
+	if ctx.BoundExpression() != nil {
+		return fmt.Sprintf("[\n%s]",
+			indent(fmt.Sprintf("FIND\n%s%s", indent(v.visitRule(ctx.BoundExpression()).(string)), v.visitRule(ctx.SoslClauses()))),
+		)
+	}
+	return fmt.Sprintf("%s %s ]", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.SoslClauses()))
+}
+
+func (v *Visitor) VisitSoslClauses(ctx *parser.SoslClausesContext) interface{} {
+	var clauses strings.Builder
+	if i := ctx.InSearchGroup(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.ReturningFieldSpecList(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithDivisionAssign(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithDataCategory(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithSnippet(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithNetworkIn(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithNetworkAssign(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithPricebookIdAssign(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithMetadataAssign(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.LimitClause(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.UpdateListClause(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	return clauses.String()
+}
+
+func (v *Visitor) VisitInSearchGroup(ctx *parser.InSearchGroupContext) interface{} {
+	return fmt.Sprintf("IN %s", v.visitRule(ctx.SearchGroup()))
+}
+
+func (v *Visitor) VisitSearchGroup(ctx *parser.SearchGroupContext) interface{} {
+	return fmt.Sprintf("%s FIELDS", strings.ToUpper(ctx.GetChild(0).(antlr.TerminalNode).GetText()))
+}
+
+func (v *Visitor) VisitReturningFieldSpecList(ctx *parser.ReturningFieldSpecListContext) interface{} {
+	return fmt.Sprintf("RETURNING %s", v.visitRule(ctx.FieldSpecList()))
+}
+
+func (v *Visitor) VisitFieldSpecList(ctx *parser.FieldSpecListContext) interface{} {
+	list := []string{v.visitRule(ctx.FieldSpec()).(string)}
+	for _, f := range ctx.AllFieldSpecList() {
+		list = append(list, v.visitRule(f).(string))
+	}
+	return strings.Join(list, ",\n")
+}
+
+func (v *Visitor) VisitFieldSpec(ctx *parser.FieldSpecContext) interface{} {
+	if ctx.FieldSpecClauses() == nil {
+		return v.visitRule(ctx.SoslId())
+	}
+	return fmt.Sprintf("%s%s", v.visitRule(ctx.SoslId()), v.visitRule(ctx.FieldSpecClauses()))
+}
+
+func (v *Visitor) VisitFieldSpecClauses(ctx *parser.FieldSpecClausesContext) interface{} {
+	var clauses strings.Builder
+	clauses.WriteString(fmt.Sprintf("(\n%s", indent(v.visitRule(ctx.FieldList()).(string))))
+	if i := ctx.LogicalExpression(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\nWHERE\n%s", indent(v.visitRule(i).(string))))
+	}
+	if i := ctx.SoslId(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\nUSING LISTVIEW =  %s", v.visitRule(i)))
+	}
+	if i := ctx.FieldOrderList(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\nORDER BY %s", v.visitRule(i)))
+	}
+	if i := ctx.LimitClause(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.OffsetClause(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	clauses.WriteString(")")
+	return clauses.String()
+}
+
+func (v *Visitor) VisitFieldList(ctx *parser.FieldListContext) interface{} {
+	list := []string{v.visitRule(ctx.SoslId()).(string)}
+	for _, f := range ctx.AllFieldList() {
+		list = append(list, v.visitRule(f).(string))
+	}
+	return strings.Join(list, ",\n")
+}
+
+func (v *Visitor) VisitSoslId(ctx *parser.SoslIdContext) interface{} {
+	list := []string{v.visitRule(ctx.Id()).(string)}
+	for _, f := range ctx.AllSoslId() {
+		list = append(list, v.visitRule(f).(string))
+	}
+	return strings.Join(list, ".")
 }
