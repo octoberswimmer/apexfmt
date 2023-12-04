@@ -158,7 +158,7 @@ func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
 	for _, stmt := range ctx.AllStatement() {
 		statements = append(statements, v.visitRule(stmt).(string))
 	}
-	return fmt.Sprintf("{\n%s}", indent(strings.Join(statements, "\n")))
+	return fmt.Sprintf("{\n%s\n}", indent(strings.Join(statements, "\n")))
 }
 
 func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
@@ -545,7 +545,7 @@ func (v *Visitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interface{} {
 
 func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	var query strings.Builder
-	query.WriteString(fmt.Sprintf("SELECT\n%sFROM\n%s",
+	query.WriteString(fmt.Sprintf("SELECT\n%s\nFROM\n%s",
 		indent(v.visitRule(ctx.SelectList()).(string)),
 		indent(v.visitRule(ctx.FromNameList()).(string))))
 	if scope := ctx.UsingScope(); scope != nil {
@@ -1016,19 +1016,6 @@ func (v *Visitor) VisitFormalParameters(ctx *parser.FormalParametersContext) int
 	}
 	val := fmt.Sprintf("(%s)", strings.Join(params, ", "))
 	return val
-}
-
-func (v *Visitor) Modifiers(ctxs []parser.IModifierContext) string {
-	mods := []string{}
-	for _, m := range ctxs {
-		if m.Annotation() != nil {
-			mods = append(mods, fmt.Sprintf("%s\n", v.visitRule(m.Annotation())))
-		} else {
-			mods = append(mods, fmt.Sprintf("%s ", m.GetText()))
-		}
-	}
-	modifiers := strings.Join(mods, "")
-	return modifiers
 }
 
 func (v *Visitor) VisitAnnotation(ctx *parser.AnnotationContext) interface{} {
