@@ -482,6 +482,10 @@ func (v *Visitor) VisitExpressionList(ctx *parser.ExpressionListContext) interfa
 	for _, p := range ctx.AllExpression() {
 		expressions = append(expressions, v.visitRule(p).(string))
 	}
+	// TODO: Figure out rule(s) for wrapping
+	if len(expressions) > 3 {
+		return indent("\n" + strings.Join(expressions, ",\n"))
+	}
 	return strings.Join(expressions, ", ")
 }
 
