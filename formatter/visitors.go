@@ -752,7 +752,7 @@ func (v *Visitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) i
 		for _, cond := range ctx.AllConditionalExpression() {
 			conditions = append(conditions, v.visitRule(cond).(string))
 		}
-		return strings.Join(conditions, "OR\n")
+		return strings.Join(conditions, " OR\n")
 	case len(ctx.AllSOQLAND()) > 0:
 		conditions := []string{}
 		for _, cond := range ctx.AllConditionalExpression() {
