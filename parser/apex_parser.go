@@ -24929,22 +24929,6 @@ type IValueContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
-
-	// Getter signatures
-	NULL() antlr.TerminalNode
-	BooleanLiteral() antlr.TerminalNode
-	SignedNumber() ISignedNumberContext
-	StringLiteral() antlr.TerminalNode
-	DateLiteral() antlr.TerminalNode
-	DateTimeLiteral() antlr.TerminalNode
-	DateFormula() IDateFormulaContext
-	CurrencyValue() ICurrencyValueContext
-	LPAREN() antlr.TerminalNode
-	SubQuery() ISubQueryContext
-	RPAREN() antlr.TerminalNode
-	ValueList() IValueListContext
-	BoundExpression() IBoundExpressionContext
-
 	// IsValueContext differentiates from other interfaces.
 	IsValueContext()
 }
@@ -24981,43 +24965,101 @@ func NewValueContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *ValueContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ValueContext) NULL() antlr.TerminalNode {
-	return s.GetToken(ApexParserNULL, 0)
+func (s *ValueContext) CopyAll(ctx *ValueContext) {
+	s.CopyFrom(&ctx.BaseParserRuleContext)
 }
 
-func (s *ValueContext) BooleanLiteral() antlr.TerminalNode {
+func (s *ValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ValueContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+type BooleanLiteralValueContext struct {
+	ValueContext
+}
+
+func NewBooleanLiteralValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *BooleanLiteralValueContext {
+	var p = new(BooleanLiteralValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *BooleanLiteralValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *BooleanLiteralValueContext) BooleanLiteral() antlr.TerminalNode {
 	return s.GetToken(ApexParserBooleanLiteral, 0)
 }
 
-func (s *ValueContext) SignedNumber() ISignedNumberContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(ISignedNumberContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
+func (s *BooleanLiteralValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitBooleanLiteralValue(s)
 
-	if t == nil {
-		return nil
+	default:
+		return t.VisitChildren(s)
 	}
-
-	return t.(ISignedNumberContext)
 }
 
-func (s *ValueContext) StringLiteral() antlr.TerminalNode {
+type StringLiteralValueContext struct {
+	ValueContext
+}
+
+func NewStringLiteralValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *StringLiteralValueContext {
+	var p = new(StringLiteralValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *StringLiteralValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *StringLiteralValueContext) StringLiteral() antlr.TerminalNode {
 	return s.GetToken(ApexParserStringLiteral, 0)
 }
 
-func (s *ValueContext) DateLiteral() antlr.TerminalNode {
-	return s.GetToken(ApexParserDateLiteral, 0)
+func (s *StringLiteralValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitStringLiteralValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
 }
 
-func (s *ValueContext) DateTimeLiteral() antlr.TerminalNode {
-	return s.GetToken(ApexParserDateTimeLiteral, 0)
+type DateFormulaValueContext struct {
+	ValueContext
 }
 
-func (s *ValueContext) DateFormula() IDateFormulaContext {
+func NewDateFormulaValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *DateFormulaValueContext {
+	var p = new(DateFormulaValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *DateFormulaValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *DateFormulaValueContext) DateFormula() IDateFormulaContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IDateFormulaContext); ok {
@@ -25033,27 +25075,39 @@ func (s *ValueContext) DateFormula() IDateFormulaContext {
 	return t.(IDateFormulaContext)
 }
 
-func (s *ValueContext) CurrencyValue() ICurrencyValueContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(ICurrencyValueContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
+func (s *DateFormulaValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitDateFormulaValue(s)
 
-	if t == nil {
-		return nil
+	default:
+		return t.VisitChildren(s)
 	}
-
-	return t.(ICurrencyValueContext)
 }
 
-func (s *ValueContext) LPAREN() antlr.TerminalNode {
+type SubQueryValueContext struct {
+	ValueContext
+}
+
+func NewSubQueryValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SubQueryValueContext {
+	var p = new(SubQueryValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *SubQueryValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SubQueryValueContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(ApexParserLPAREN, 0)
 }
 
-func (s *ValueContext) SubQuery() ISubQueryContext {
+func (s *SubQueryValueContext) SubQuery() ISubQueryContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(ISubQueryContext); ok {
@@ -25069,11 +25123,39 @@ func (s *ValueContext) SubQuery() ISubQueryContext {
 	return t.(ISubQueryContext)
 }
 
-func (s *ValueContext) RPAREN() antlr.TerminalNode {
+func (s *SubQueryValueContext) RPAREN() antlr.TerminalNode {
 	return s.GetToken(ApexParserRPAREN, 0)
 }
 
-func (s *ValueContext) ValueList() IValueListContext {
+func (s *SubQueryValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitSubQueryValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type ValueListValueContext struct {
+	ValueContext
+}
+
+func NewValueListValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ValueListValueContext {
+	var p = new(ValueListValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *ValueListValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ValueListValueContext) ValueList() IValueListContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IValueListContext); ok {
@@ -25089,7 +25171,219 @@ func (s *ValueContext) ValueList() IValueListContext {
 	return t.(IValueListContext)
 }
 
-func (s *ValueContext) BoundExpression() IBoundExpressionContext {
+func (s *ValueListValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitValueListValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type CurrencyValueValueContext struct {
+	ValueContext
+}
+
+func NewCurrencyValueValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *CurrencyValueValueContext {
+	var p = new(CurrencyValueValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *CurrencyValueValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *CurrencyValueValueContext) CurrencyValue() ICurrencyValueContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ICurrencyValueContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ICurrencyValueContext)
+}
+
+func (s *CurrencyValueValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitCurrencyValueValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type SignedNumberValueContext struct {
+	ValueContext
+}
+
+func NewSignedNumberValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SignedNumberValueContext {
+	var p = new(SignedNumberValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *SignedNumberValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SignedNumberValueContext) SignedNumber() ISignedNumberContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISignedNumberContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISignedNumberContext)
+}
+
+func (s *SignedNumberValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitSignedNumberValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type DateLiteralValueContext struct {
+	ValueContext
+}
+
+func NewDateLiteralValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *DateLiteralValueContext {
+	var p = new(DateLiteralValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *DateLiteralValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *DateLiteralValueContext) DateLiteral() antlr.TerminalNode {
+	return s.GetToken(ApexParserDateLiteral, 0)
+}
+
+func (s *DateLiteralValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitDateLiteralValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type DateTimeLiteralValueContext struct {
+	ValueContext
+}
+
+func NewDateTimeLiteralValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *DateTimeLiteralValueContext {
+	var p = new(DateTimeLiteralValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *DateTimeLiteralValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *DateTimeLiteralValueContext) DateTimeLiteral() antlr.TerminalNode {
+	return s.GetToken(ApexParserDateTimeLiteral, 0)
+}
+
+func (s *DateTimeLiteralValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitDateTimeLiteralValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type NullValueContext struct {
+	ValueContext
+}
+
+func NewNullValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *NullValueContext {
+	var p = new(NullValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *NullValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *NullValueContext) NULL() antlr.TerminalNode {
+	return s.GetToken(ApexParserNULL, 0)
+}
+
+func (s *NullValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ApexParserVisitor:
+		return t.VisitNullValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type BoundExpressionValueContext struct {
+	ValueContext
+}
+
+func NewBoundExpressionValueContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *BoundExpressionValueContext {
+	var p = new(BoundExpressionValueContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *BoundExpressionValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *BoundExpressionValueContext) BoundExpression() IBoundExpressionContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IBoundExpressionContext); ok {
@@ -25105,18 +25399,10 @@ func (s *ValueContext) BoundExpression() IBoundExpressionContext {
 	return t.(IBoundExpressionContext)
 }
 
-func (s *ValueContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *ValueContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *ValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *BoundExpressionValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case ApexParserVisitor:
-		return t.VisitValue(s)
+		return t.VisitBoundExpressionValue(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -25134,6 +25420,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 
 	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 131, p.GetParserRuleContext()) {
 	case 1:
+		localctx = NewNullValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(1426)
@@ -25145,6 +25432,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 2:
+		localctx = NewBooleanLiteralValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(1427)
@@ -25156,6 +25444,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 3:
+		localctx = NewSignedNumberValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
 			p.SetState(1428)
@@ -25163,6 +25452,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 4:
+		localctx = NewStringLiteralValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
 			p.SetState(1429)
@@ -25174,6 +25464,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 5:
+		localctx = NewDateLiteralValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 5)
 		{
 			p.SetState(1430)
@@ -25185,6 +25476,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 6:
+		localctx = NewDateTimeLiteralValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 6)
 		{
 			p.SetState(1431)
@@ -25196,6 +25488,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 7:
+		localctx = NewDateFormulaValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 7)
 		{
 			p.SetState(1432)
@@ -25203,6 +25496,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 8:
+		localctx = NewCurrencyValueValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 8)
 		{
 			p.SetState(1433)
@@ -25210,6 +25504,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 9:
+		localctx = NewSubQueryValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 9)
 		{
 			p.SetState(1434)
@@ -25233,6 +25528,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 10:
+		localctx = NewValueListValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 10)
 		{
 			p.SetState(1438)
@@ -25240,6 +25536,7 @@ func (p *ApexParser) Value() (localctx IValueContext) {
 		}
 
 	case 11:
+		localctx = NewBoundExpressionValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 11)
 		{
 			p.SetState(1439)

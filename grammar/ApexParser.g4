@@ -659,17 +659,17 @@ comparisonOperator
     : ASSIGN | NOTEQUAL | LT | GT | LT ASSIGN | GT ASSIGN | LESSANDGREATER | LIKE | IN | NOT IN | INCLUDES | EXCLUDES;
 
 value
-    : NULL
-    | BooleanLiteral
-    | signedNumber
-    | StringLiteral
-    | DateLiteral
-    | DateTimeLiteral
-    | dateFormula
-    | currencyValue
-    | LPAREN subQuery RPAREN
-    | valueList
-    | boundExpression
+    : NULL                   # nullValue
+    | BooleanLiteral         # booleanLiteralValue
+    | signedNumber           # signedNumberValue
+    | StringLiteral          # stringLiteralValue
+    | DateLiteral            # dateLiteralValue
+    | DateTimeLiteral        # dateTimeLiteralValue
+    | dateFormula            # dateFormulaValue
+    | currencyValue          # currencyValueValue
+    | LPAREN subQuery RPAREN # subQueryValue
+    | valueList              # valueListValue
+    | boundExpression        # boundExpressionValue
     ;
 
 valueList

@@ -806,16 +806,48 @@ func (v *Visitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameterContex
 	return ctx.GetText()
 }
 
-func (v *Visitor) VisitValue(ctx *parser.ValueContext) interface{} {
-	if ctx.SubQuery() != nil {
-		return fmt.Sprintf("(%s)", v.visitRule(ctx.SubQuery()))
-	}
-	switch e := ctx.GetChild(0).(type) {
-	case antlr.TerminalNode:
-		return strings.ToLower(e.GetText())
-	default:
-		return v.visitRule(e.(antlr.RuleNode))
-	}
+func (v *Visitor) VisitNullValue(ctx *parser.NullValueContext) interface{} {
+	return "null"
+}
+
+func (v *Visitor) VisitBooleanLiteralValue(ctx *parser.BooleanLiteralValueContext) interface{} {
+	return strings.ToLower(ctx.GetText())
+}
+
+func (v *Visitor) VisitSignedNumberValue(ctx *parser.SignedNumberValueContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitStringLiteralValue(ctx *parser.StringLiteralValueContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitDateLiteralValue(ctx *parser.DateLiteralValueContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitDateTimeLiteralValue(ctx *parser.DateTimeLiteralValueContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitDateFormulaValue(ctx *parser.DateFormulaValueContext) interface{} {
+	return v.visitRule(ctx.DateFormula())
+}
+
+func (v *Visitor) VisitCurrencyValueValue(ctx *parser.CurrencyValueValueContext) interface{} {
+	return ctx.GetText()
+}
+
+func (v *Visitor) VisitSubQueryValue(ctx *parser.SubQueryValueContext) interface{} {
+	return fmt.Sprintf("(%s)", v.visitRule(ctx.SubQuery()))
+}
+
+func (v *Visitor) VisitValueListValue(ctx *parser.ValueListValueContext) interface{} {
+	return v.visitRule(ctx.ValueList())
+}
+
+func (v *Visitor) VisitBoundExpressionValue(ctx *parser.BoundExpressionValueContext) interface{} {
+	return v.visitRule(ctx.BoundExpression())
 }
 
 func (v *Visitor) VisitDateFormula(ctx *parser.DateFormulaContext) interface{} {

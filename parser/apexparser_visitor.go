@@ -424,8 +424,38 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#comparisonOperator.
 	VisitComparisonOperator(ctx *ComparisonOperatorContext) interface{}
 
-	// Visit a parse tree produced by ApexParser#value.
-	VisitValue(ctx *ValueContext) interface{}
+	// Visit a parse tree produced by ApexParser#nullValue.
+	VisitNullValue(ctx *NullValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#booleanLiteralValue.
+	VisitBooleanLiteralValue(ctx *BooleanLiteralValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#signedNumberValue.
+	VisitSignedNumberValue(ctx *SignedNumberValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#stringLiteralValue.
+	VisitStringLiteralValue(ctx *StringLiteralValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#dateLiteralValue.
+	VisitDateLiteralValue(ctx *DateLiteralValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#dateTimeLiteralValue.
+	VisitDateTimeLiteralValue(ctx *DateTimeLiteralValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#dateFormulaValue.
+	VisitDateFormulaValue(ctx *DateFormulaValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#currencyValueValue.
+	VisitCurrencyValueValue(ctx *CurrencyValueValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#subQueryValue.
+	VisitSubQueryValue(ctx *SubQueryValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#valueListValue.
+	VisitValueListValue(ctx *ValueListValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#boundExpressionValue.
+	VisitBoundExpressionValue(ctx *BoundExpressionValueContext) interface{}
 
 	// Visit a parse tree produced by ApexParser#valueList.
 	VisitValueList(ctx *ValueListContext) interface{}

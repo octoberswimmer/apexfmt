@@ -563,7 +563,47 @@ func (v *BaseApexParserVisitor) VisitComparisonOperator(ctx *ComparisonOperatorC
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseApexParserVisitor) VisitValue(ctx *ValueContext) interface{} {
+func (v *BaseApexParserVisitor) VisitNullValue(ctx *NullValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitBooleanLiteralValue(ctx *BooleanLiteralValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitSignedNumberValue(ctx *SignedNumberValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitStringLiteralValue(ctx *StringLiteralValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitDateLiteralValue(ctx *DateLiteralValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitDateTimeLiteralValue(ctx *DateTimeLiteralValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitDateFormulaValue(ctx *DateFormulaValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitCurrencyValueValue(ctx *CurrencyValueValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitSubQueryValue(ctx *SubQueryValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitValueListValue(ctx *ValueListValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitBoundExpressionValue(ctx *BoundExpressionValueContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
