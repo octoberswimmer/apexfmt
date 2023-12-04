@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/formatter"
@@ -26,22 +28,23 @@ var RootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		write, _ := cmd.Flags().GetBool("write")
 		for _, filename := range args {
-			src, err := readFile(filename)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Failed to read file: %s\n", err.Error())
-				os.Exit(1)
-			}
-			out, err := format(string(src))
+			formatter := NewFormatter(filename)
+			err := formatter.Format()
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Failed to format file %s: %s\n", filename, err.Error())
 				os.Exit(1)
 			}
 
 			if !write {
-				fmt.Println(out)
+				fmt.Println(formatter.Formatted())
 			}
-			if write && string(src) != out {
-				err = writeFile(filename, []byte(out))
+			changed, err := formatter.Changed()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to check file for changes %s: %s\n", filename, err.Error())
+				os.Exit(1)
+			}
+			if write && changed {
+				err = formatter.Write()
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Failed to write file %s: %s\n", filename, err.Error())
 					os.Exit(1)
@@ -63,20 +66,76 @@ func Execute() {
 	}
 }
 
-func format(src string) (string, error) {
-	input := antlr.NewInputStream(src)
+type errorListener struct {
+	*antlr.DefaultErrorListener
+	filename string
+}
+
+func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
+	_, _ = fmt.Fprintln(os.Stderr, e.filename+" line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+}
+
+type Formatter struct {
+	filename  string
+	source    []byte
+	formatted []byte
+}
+
+func NewFormatter(filename string) *Formatter {
+	return &Formatter{
+		filename: filename,
+	}
+}
+
+func (f *Formatter) Formatted() (string, error) {
+	if f.formatted == nil {
+		err := f.Format()
+		if err != nil {
+			return "", err
+		}
+	}
+	return string(f.formatted), nil
+}
+
+func (f *Formatter) Changed() (bool, error) {
+	if f.formatted == nil {
+		err := f.Format()
+		if err != nil {
+			return false, err
+		}
+	}
+	return !bytes.Equal(f.source, f.formatted), nil
+}
+
+func (f *Formatter) Format() error {
+	if f.source == nil {
+		src, err := readFile(f.filename)
+		if err != nil {
+			return fmt.Errorf("Failed to read file %s: %w", f.filename, err)
+		}
+		f.source = src
+	}
+	input := antlr.NewInputStream(string(f.source))
 	lexer := parser.NewApexLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	p := parser.NewApexParser(stream)
-	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	p.AddErrorListener(&errorListener{filename: f.filename})
 
 	v := formatter.NewVisitor(stream)
 	out, ok := p.CompilationUnit().Accept(v).(string)
 	if !ok {
-		return "", fmt.Errorf("Unexpected result parsing apex")
+		return fmt.Errorf("Unexpected result parsing apex")
 	}
-	return out, nil
+	f.formatted = []byte(out)
+	return nil
+}
+
+func (f *Formatter) Write() error {
+	if f.formatted == nil {
+		return fmt.Errorf("No formatted source found")
+	}
+	return writeFile(f.filename, f.formatted)
 }
 
 func readFile(filename string) ([]byte, error) {
