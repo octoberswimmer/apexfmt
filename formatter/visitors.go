@@ -579,7 +579,7 @@ func (v *Visitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 
 func (v *Visitor) VisitSubQuery(ctx *parser.SubQueryContext) interface{} {
 	var query strings.Builder
-	query.WriteString(fmt.Sprintf("SELECT\n%sFROM\n%s",
+	query.WriteString(fmt.Sprintf("SELECT\n%s\nFROM\n%s",
 		indent(v.visitRule(ctx.SubFieldList()).(string)),
 		indent(v.visitRule(ctx.FromNameList()).(string)),
 	))
@@ -778,6 +778,7 @@ func (v *Visitor) VisitConditionalExpression(ctx *parser.ConditionalExpressionCo
 func (v *Visitor) VisitFieldExpression(ctx *parser.FieldExpressionContext) interface{} {
 	switch {
 	case ctx.FieldName() != nil:
+		// TODO: Format IN/NOT IN
 		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.FieldName()), ctx.ComparisonOperator().GetText(), v.visitRule(ctx.Value()))
 	case ctx.SoqlFunction() != nil:
 		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.SoqlFunction()), ctx.ComparisonOperator().GetText(), v.visitRule(ctx.Value()))
