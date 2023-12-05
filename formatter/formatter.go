@@ -24,6 +24,7 @@ type errorListener struct {
 
 func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
 	_, _ = fmt.Fprintln(os.Stderr, e.filename+" line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+	os.Exit(1)
 }
 
 func NewFormatter(filename string) *Formatter {
@@ -65,6 +66,7 @@ func (f *Formatter) Format() error {
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	p := parser.NewApexParser(stream)
+	p.RemoveErrorListeners()
 	p.AddErrorListener(&errorListener{filename: f.filename})
 	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
 
