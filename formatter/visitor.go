@@ -36,7 +36,7 @@ func (v *Visitor) visitRule(node antlr.RuleNode) interface{} {
 		comments := []string{}
 		for _, c := range beforeComments {
 			if _, seen := v.commentsOutput[c.GetTokenIndex()]; !seen {
-				comments = append(comments, c.GetText())
+				comments = append(comments, removeLeadingTabs(c.GetText()))
 				v.commentsOutput[c.GetTokenIndex()] = struct{}{}
 			}
 		}
@@ -102,4 +102,22 @@ func indent(text string) string {
 	}
 
 	return indentedText.String()
+}
+
+func removeLeadingTabs(input string) string {
+	lines := strings.Split(input, "\n")
+
+	for i, line := range lines {
+		tabs := 0
+		for j := 0; j < len(line); j++ {
+			if line[j] == '\t' {
+				tabs++
+			} else {
+				break
+			}
+		}
+		lines[i] = line[tabs:]
+	}
+
+	return strings.Join(lines, "\n")
 }

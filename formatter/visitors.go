@@ -149,8 +149,12 @@ func (v *Visitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContex
 			propertyBlocks = append(propertyBlocks, v.visitRule(p).(string))
 		}
 	}
-	// TODO: collapse if empty getter and setter
-	return fmt.Sprintf("%s %s {\n%s\n}", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), indent(strings.Join(propertyBlocks, "\n")))
+	// Flatten empty getter/setter
+	if len(strings.Join(propertyBlocks, "")) == 8 {
+		return fmt.Sprintf("%s %s {%s}", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), strings.Join(propertyBlocks, " "))
+	}
+	sep := "\n"
+	return fmt.Sprintf("%s %s {%s%s%s}", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), sep, indent(strings.Join(propertyBlocks, sep)), sep)
 }
 
 func (v *Visitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
@@ -422,12 +426,20 @@ func (v *Visitor) VisitCondExpression(ctx *parser.CondExpressionContext) interfa
 
 func (v *Visitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContext) interface{} {
 	// TODO: Wrap long expressions
-	return fmt.Sprintf("%s && %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	sep := " "
+	if len(ctx.Expression(0).GetText()) > 60 {
+		sep = "\n\t"
+	}
+	return fmt.Sprintf("%s &&%s%s", v.visitRule(ctx.Expression(0)), sep, v.visitRule(ctx.Expression(1)))
 }
 
 func (v *Visitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext) interface{} {
 	// TODO: Wrap long expressions
-	return fmt.Sprintf("%s || %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	sep := " "
+	if len(ctx.Expression(0).GetText()) > 60 {
+		sep = "\n\t"
+	}
+	return fmt.Sprintf("%s ||%s%s", v.visitRule(ctx.Expression(0)), sep, v.visitRule(ctx.Expression(1)))
 }
 
 func (v *Visitor) VisitBitAndExpression(ctx *parser.BitAndExpressionContext) interface{} {
@@ -458,7 +470,11 @@ func (v *Visitor) VisitArth1Expression(ctx *parser.Arth1ExpressionContext) inter
 }
 
 func (v *Visitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext) interface{} {
-	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression(1)))
+	sep := " "
+	if len(ctx.Expression(0).GetText()) > 40 {
+		sep = "\n\t"
+	}
+	return fmt.Sprintf("%s %s%s%s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), sep, v.visitRule(ctx.Expression(1)))
 }
 
 func (v *Visitor) VisitNegExpression(ctx *parser.NegExpressionContext) interface{} {
@@ -515,9 +531,8 @@ func (v *Visitor) VisitExpressionList(ctx *parser.ExpressionListContext) interfa
 	for _, p := range ctx.AllExpression() {
 		expressions = append(expressions, v.visitRule(p).(string))
 	}
-	// TODO: Figure out rule(s) for wrapping
-	if len(expressions) > 3 {
-		return indent("\n" + strings.Join(expressions, ",\n"))
+	if len(ctx.GetText()) > 90 {
+		return strings.Join(expressions, ",\n")
 	}
 	return strings.Join(expressions, ", ")
 }
@@ -1037,6 +1052,9 @@ func (v *Visitor) VisitSetCreatorRest(ctx *parser.SetCreatorRestContext) interfa
 	for _, i := range ctx.AllExpression() {
 		expressions = append(expressions, v.visitRule(i).(string))
 	}
+	if len(ctx.GetText()) > 80 {
+		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(expressions, ",\n")))
+	}
 	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))
 }
 
@@ -1049,10 +1067,14 @@ func (v *Visitor) VisitArrayInitializer(ctx *parser.ArrayInitializerContext) int
 }
 
 func (v *Visitor) VisitArguments(ctx *parser.ArgumentsContext) interface{} {
-	if expressionList := ctx.ExpressionList(); expressionList != nil {
-		return fmt.Sprintf("(%s)", v.visitRule(expressionList))
+	expressionList := ctx.ExpressionList()
+	if expressionList == nil {
+		return "()"
 	}
-	return "()"
+	if len(expressionList.GetText()) > 40 {
+		return fmt.Sprintf("(\n%s\n)", indent(v.visitRule(expressionList).(string)))
+	}
+	return fmt.Sprintf("(%s)", v.visitRule(expressionList))
 }
 
 func (v *Visitor) VisitCmpExpression(ctx *parser.CmpExpressionContext) interface{} {
@@ -1077,7 +1099,11 @@ func (v *Visitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {
 	for _, p := range ctx.AllTypeRef() {
 		types = append(types, v.visitRule(p).(string))
 	}
-	return strings.Join(types, ", ")
+	sep := ", "
+	if len(ctx.GetText()) > 80 {
+		sep = ",\n"
+	}
+	return strings.Join(types, sep)
 }
 
 func (v *Visitor) VisitFormalParameters(ctx *parser.FormalParametersContext) interface{} {
