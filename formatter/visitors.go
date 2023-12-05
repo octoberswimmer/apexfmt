@@ -1040,6 +1040,9 @@ func (v *Visitor) VisitMapCreatorRest(ctx *parser.MapCreatorRestContext) interfa
 	for _, i := range ctx.AllMapCreatorRestPair() {
 		pairs = append(pairs, v.visitRule(i).(string))
 	}
+	if len(ctx.GetText()) > 80 {
+		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(pairs, ",\n")))
+	}
 	return fmt.Sprintf("{%s}", strings.Join(pairs, ", "))
 }
 
