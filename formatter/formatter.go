@@ -110,6 +110,9 @@ func writeFile(filename string, contents []byte) error {
 		return err
 	}
 	defer fout.Close()
+	if len(contents) > 0 && contents[len(contents)-1] != '\n' {
+		contents = append(contents, '\n')
+	}
 	n, err := fout.Write(contents)
 	if err == nil && int64(n) < size {
 		err = fout.Truncate(int64(n))
