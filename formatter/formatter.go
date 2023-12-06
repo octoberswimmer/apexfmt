@@ -70,7 +70,7 @@ func (f *Formatter) Format() error {
 	p.AddErrorListener(&errorListener{filename: f.filename})
 	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
 
-	v := NewVisitor(stream)
+	v := NewFormatVisitor(stream)
 	out, ok := v.visitRule(p.CompilationUnit()).(string)
 	if !ok {
 		return fmt.Errorf("Unexpected result parsing apex")
