@@ -335,17 +335,19 @@ func (v *Visitor) VisitForControl(ctx *parser.ForControlContext) interface{} {
 	if enhancedForControl := ctx.EnhancedForControl(); enhancedForControl != nil {
 		return v.visitRule(enhancedForControl)
 	}
-	parts := []string{}
+	var init strings.Builder
 	if forInit := ctx.ForInit(); forInit != nil {
-		parts = append(parts, v.visitRule(forInit).(string))
+		init.WriteString(v.visitRule(forInit).(string))
 	}
+	init.WriteString(";")
 	if expression := ctx.Expression(); expression != nil {
-		parts = append(parts, v.visitRule(expression).(string))
+		init.WriteString(fmt.Sprintf(" %s", v.visitRule(expression).(string)))
 	}
+	init.WriteString(";")
 	if forUpdate := ctx.ForUpdate(); forUpdate != nil {
-		parts = append(parts, v.visitRule(forUpdate).(string))
+		init.WriteString(fmt.Sprintf(" %s", v.visitRule(forUpdate).(string)))
 	}
-	return strings.Join(parts, "; ")
+	return init.String()
 }
 
 func (v *Visitor) VisitEnhancedForControl(ctx *parser.EnhancedForControlContext) interface{} {
