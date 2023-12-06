@@ -866,6 +866,13 @@ func (v *Visitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameterContex
 	return ctx.GetText()
 }
 
+func (v *Visitor) VisitDateFieldName(ctx *parser.DateFieldNameContext) interface{} {
+	if ctx.CONVERT_TIMEZONE() != nil {
+		return fmt.Sprintf("CONVERT_TIMEZONE(%s)", v.visitRule(ctx.FieldName()))
+	}
+	return v.visitRule(ctx.FieldName())
+}
+
 func (v *Visitor) VisitNullValue(ctx *parser.NullValueContext) interface{} {
 	return "null"
 }

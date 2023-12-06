@@ -223,11 +223,11 @@ N_FISCAL_YEARS_AGO       : N '_' F I S C A L '_' Y E A R S '_' A G O;
 
 // SOQL Date literal
 DateLiteral: Digit Digit Digit Digit '-' Digit Digit '-' Digit Digit;
-DateTimeLiteral: DateLiteral 't' Digit Digit ':' Digit Digit ':' Digit Digit ('z' | (('+' | '-') Digit+ ( ':' Digit+)? ));
+DateTimeLiteral: DateLiteral T Digit Digit ':' Digit Digit ':' Digit Digit (Z | (('+' | '-') Digit+ ( ':' Digit+)? ));
 
 // SOQL Currency literal
 // (NOTE: this is also a valid Identifier)
-IntegralCurrencyLiteral: [a-z] [a-z] [a-z] Digit+;
+IntegralCurrencyLiteral: [a-zA-Z] [a-zA-Z] [a-zA-Z] Digit+;
 
 // SOSL Keywords
 FIND             : F I N D;
