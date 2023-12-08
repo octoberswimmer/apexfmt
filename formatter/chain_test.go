@@ -21,6 +21,7 @@ func TestChain(t *testing.T) {
 		}{
 			{`Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Business').getRecordTypeId()`, 3},
 			{`Fixtures.Contact(account).put(Contact.RecordTypeId, Schema.SObjectType.Contact.getRecordTypeInfosByDeveloperName().get('Person').getRecordTypeId()).put(Contact.My_Lookup__c, newRecord[0].Id).save()`, 4},
+			{`Fixtures.InquiryFactory.inquiry(program1).standardInquiry().patient(patient1).save()`, 4},
 		}
 
 	for _, tt := range tests {

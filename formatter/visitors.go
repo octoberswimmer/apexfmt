@@ -531,9 +531,14 @@ func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) int
 			if depth == 0 {
 				depth = 1
 			}
-			switch ctx.Expression().(type) {
+			switch left := ctx.Expression().(type) {
 			case *parser.PrimaryExpressionContext:
 				log.Debug(fmt.Sprintf("NOT wrapping after between %q (%T)", expr, ctx.Expression()))
+			case *parser.DotExpressionContext:
+				if left.DotMethodCall() != nil {
+					log.Debug(fmt.Sprintf("%q is method call; safe to wrap before %q", expr, ctx.DotMethodCall().GetText()))
+					return expr.(string) + "\n" + v.indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
+				}
 			default:
 				log.Debug(fmt.Sprintf("Wrapping in between %q (%T) and %q", expr, ctx.Expression(), ctx.DotMethodCall().GetText()))
 				return expr.(string) + "\n" + v.indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)

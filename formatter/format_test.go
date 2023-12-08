@@ -124,8 +124,7 @@ func TestStatement(t *testing.T) {
 			{
 				`Psychological__c psyc = Fixtures.psychological(inq).put(Psychological__c.RecordTypeId, Schema.SObjectType.Psychological__c.getRecordTypeInfosByDeveloperName().get('ICD_10').getRecordTypeId()).put(Psychological__c.Diagnosis_Lookup__c, newDiagnosis[0].Id).save();`,
 				`Psychological__c psyc = Fixtures.psychological(inq)
-	.put(Psychological__c.RecordTypeId, Schema.SObjectType.Psychological__c
-		.getRecordTypeInfosByDeveloperName()
+	.put(Psychological__c.RecordTypeId, Schema.SObjectType.Psychological__c.getRecordTypeInfosByDeveloperName()
 		.get('ICD_10')
 		.getRecordTypeId())
 	.put(Psychological__c.Diagnosis_Lookup__c, newDiagnosis[0].Id)
@@ -149,6 +148,13 @@ func TestStatement(t *testing.T) {
 	cl_record.Last_Placement__c != Trigger.OldMap.get(cl_record.Id).Last_Placement__c))) {
 	x = 1;
 }`},
+			{
+				// Don't wrap at what might be an inner class
+				`CRC_Inquiry__c inquiry1 = Fixtures.InquiryFactory.inquiry(program1).standardInquiry().patient(patient1).save();`,
+				`CRC_Inquiry__c inquiry1 = Fixtures.InquiryFactory.inquiry(program1)
+	.standardInquiry()
+	.patient(patient1)
+	.save();`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
@@ -164,7 +170,7 @@ func TestStatement(t *testing.T) {
 			t.Errorf("Unexpected result parsing apex")
 		}
 		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%s;\ngot:\n%s\n", tt.output, out)
+			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
 		}
 	}
 
@@ -198,7 +204,7 @@ func TestCompilationUnit(t *testing.T) {
 			t.Errorf("Unexpected result parsing apex")
 		}
 		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%s;\ngot:\n%s\n", tt.output, out)
+			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
 		}
 	}
 }
@@ -240,7 +246,7 @@ func TestSOQL(t *testing.T) {
 			t.Errorf("Unexpected result parsing apex")
 		}
 		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%s;\ngot:\n%s\n", tt.output, out)
+			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
 		}
 	}
 }
