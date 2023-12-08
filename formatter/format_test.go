@@ -202,3 +202,45 @@ func TestCompilationUnit(t *testing.T) {
 		}
 	}
 }
+
+func TestSOQL(t *testing.T) {
+	if testing.Verbose() {
+		log.SetLevel(log.DebugLevel)
+
+	}
+	tests :=
+		[]struct {
+			input  string
+			output string
+		}{
+			{
+				`[SELECT Account.Name, count(Id) FROM Contact WHERE AccountId IN : accounts.keySet() GROUP BY Account.Name]`,
+				`[
+	SELECT
+		Account.Name,
+		COUNT(Id)
+	FROM
+		Contact
+	WHERE
+		AccountId IN :accounts.keySet()
+	GROUP BY Account.Name
+]`},
+		}
+	for _, tt := range tests {
+		input := antlr.NewInputStream(tt.input)
+		lexer := parser.NewApexLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+		p := parser.NewApexParser(stream)
+		p.RemoveErrorListeners()
+
+		v := NewFormatVisitor(stream)
+		out, ok := v.visitRule(p.SoqlLiteral()).(string)
+		if !ok {
+			t.Errorf("Unexpected result parsing apex")
+		}
+		if out != tt.output {
+			t.Errorf("unexpected format.  expected:\n%s;\ngot:\n%s\n", tt.output, out)
+		}
+	}
+}

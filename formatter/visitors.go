@@ -956,10 +956,10 @@ func (v *FormatVisitor) VisitComparisonOperator(ctx *parser.ComparisonOperatorCo
 func (v *FormatVisitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) interface{} {
 	param := ""
 	switch {
-	case ctx.COUNT() != nil:
-		return "COUNT()"
 	case ctx.FieldName() != nil:
 		param = v.visitRule(ctx.FieldName()).(string)
+	case ctx.COUNT() != nil:
+		return "COUNT()"
 	case ctx.DateFieldName() != nil:
 		param = v.visitRule(ctx.DateFieldName()).(string)
 	case ctx.SoqlFieldsParameter() != nil:
@@ -967,7 +967,7 @@ func (v *FormatVisitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) inter
 	default:
 		panic("Unexpected parameter type for soqlFunction")
 	}
-	return fmt.Sprintf("%s(%s)", ctx.GetChild(0).(antlr.TerminalNode).GetText(), param)
+	return fmt.Sprintf("%s(%s)", strings.ToUpper(ctx.GetChild(0).(antlr.TerminalNode).GetText()), param)
 }
 
 func (v *FormatVisitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameterContext) interface{} {
