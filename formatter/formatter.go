@@ -75,7 +75,7 @@ func (f *Formatter) Format() error {
 	if !ok {
 		return fmt.Errorf("Unexpected result parsing apex")
 	}
-	f.formatted = []byte(out)
+	f.formatted = append([]byte(out), '\n')
 	return nil
 }
 
@@ -112,9 +112,6 @@ func writeFile(filename string, contents []byte) error {
 		return err
 	}
 	defer fout.Close()
-	if len(contents) > 0 && contents[len(contents)-1] != '\n' {
-		contents = append(contents, '\n')
-	}
 	n, err := fout.Write(contents)
 	if err == nil && int64(n) < size {
 		err = fout.Truncate(int64(n))
