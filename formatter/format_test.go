@@ -155,6 +155,29 @@ func TestStatement(t *testing.T) {
 	.standardInquiry()
 	.patient(patient1)
 	.save();`},
+
+			{
+				`return 'lorem' + 'ipsum' + '\n' +
+					'lorem' + 'ipsum' + '\n' +
+					'lorem' + 'ipsum' + '\n' +
+					'lorem' + 'ipsum' + '\n' +
+					'lorem' + 'ipsum' + '\n' +
+					'lorem' + 'ipsum';
+					`,
+				`return 'lorem' + 'ipsum' + '\n' + 'lorem' +
+	'ipsum' +
+	'\n' +
+	'lorem' +
+	'ipsum' +
+	'\n' +
+	'lorem' +
+	'ipsum' +
+	'\n' +
+	'lorem' +
+	'ipsum' +
+	'\n' +
+	'lorem' +
+	'ipsum';`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

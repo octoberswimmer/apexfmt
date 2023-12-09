@@ -477,10 +477,14 @@ func (v *FormatVisitor) VisitArth1Expression(ctx *parser.Arth1ExpressionContext)
 
 func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext) interface{} {
 	sep := " "
-	if v.wrap {
-		log.Debug(fmt.Sprintf("visitor says to wrap %T in VisitArth2Expression", ctx.Expression(1)))
+	i := NewChainVisitor()
+	left := i.visitRule(ctx.Expression(0)).(int)
+	right := i.visitRule(ctx.Expression(1)).(int)
+	log.Debug(fmt.Sprintf("LEFT %d: %s ", left, ctx.Expression(0).GetText()))
+	log.Debug(fmt.Sprintf("RIGHT %d: %s ", right, ctx.Expression(1).GetText()))
+	wrap := v.wrap || left+right > 2
+	if wrap {
 		sep = "\n\t"
-		log.Debug("not wrapping individual expressions")
 		defer restoreWrap(unwrap(v))
 	}
 	return fmt.Sprintf("%s %s%s%s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), sep, v.visitRule(ctx.Expression(1)))

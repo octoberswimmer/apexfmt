@@ -138,3 +138,7 @@ func (v *ChainVisitor) VisitLogicalExpression(ctx *parser.LogicalExpressionConte
 func (v *ChainVisitor) VisitForClauses(ctx *parser.ForClausesContext) interface{} {
 	return len(ctx.AllForClause())
 }
+
+func (v *ChainVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext) interface{} {
+	return 1 + v.visitRule(ctx.Expression(0)).(int) + v.visitRule(ctx.Expression(1)).(int)
+}
