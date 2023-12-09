@@ -256,7 +256,7 @@ func (v *FormatVisitor) VisitSwitchStatement(ctx *parser.SwitchStatementContext)
 	for _, w := range ctx.AllWhenControl() {
 		when = append(when, v.visitRule(w).(string))
 	}
-	return fmt.Sprintf("switch on %s {\n%s}", v.visitRule(ctx.Expression()), v.indent(strings.Join(when, "\n")))
+	return fmt.Sprintf("switch on %s {\n%s\n}", v.visitRule(ctx.Expression()), v.indent(strings.Join(when, "\n")))
 }
 
 func (v *FormatVisitor) VisitWhenControl(ctx *parser.WhenControlContext) interface{} {
