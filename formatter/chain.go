@@ -132,7 +132,39 @@ func (v *ChainVisitor) VisitWhereClause(ctx *parser.WhereClauseContext) interfac
 }
 
 func (v *ChainVisitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) interface{} {
-	return len(ctx.AllSOQLOR()) + len(ctx.AllSOQLAND()) + 1
+	return len(ctx.AllSOQLOR()) + len(ctx.AllSOQLAND()) + v.visitRule(ctx.ConditionalExpression(0)).(int)
+}
+
+func (v *ChainVisitor) VisitConditionalExpression(ctx *parser.ConditionalExpressionContext) interface{} {
+	switch {
+	case ctx.LogicalExpression() != nil:
+		return fmt.Sprintf("(%s)", v.visitRule(ctx.LogicalExpression()))
+	case ctx.FieldExpression() != nil:
+		return v.visitRule(ctx.FieldExpression())
+	}
+	panic("Unexpected conditionalExpression")
+}
+
+func (v *ChainVisitor) VisitFieldExpression(ctx *parser.FieldExpressionContext) interface{} {
+	switch {
+	case ctx.FieldName() != nil:
+		switch ctx.ComparisonOperator().GetText() {
+		case "IN":
+			return 1 + v.visitRule(ctx.Value()).(int)
+		case "NOTIN":
+			return 1 + v.visitRule(ctx.Value()).(int)
+		default:
+			return 1
+		}
+	case ctx.SoqlFunction() != nil:
+		return 1 + v.visitRule(ctx.Value()).(int)
+	}
+	panic("Unexpected fieldExpression")
+}
+
+func (v *ChainVisitor) VisitSubQueryValue(ctx *parser.SubQueryValueContext) interface{} {
+	// estimate complexity; probably close enough
+	return 5
 }
 
 func (v *ChainVisitor) VisitForClauses(ctx *parser.ForClausesContext) interface{} {

@@ -254,6 +254,41 @@ func TestSOQL(t *testing.T) {
 		AccountId IN :accounts.keySet()
 	GROUP BY Account.Name
 ]`},
+			{
+				`[ SELECT
+           Id
+        FROM
+           Location__c
+        WHERE Id IN (
+           SELECT
+              Location__c
+           FROM
+              Clinic__c
+           WHERE
+              Clinic_Type__c IN ('Clinic', 'Clinic - Remote NP') AND
+              Status__c = 'Confirmed' AND
+              Location__c != null AND
+              Start__c = YESTERDAY
+        )
+     ]`,
+				`[
+	SELECT
+		Id
+	FROM
+		Location__c
+	WHERE
+		Id IN (
+			SELECT
+				Location__c
+			FROM
+				Clinic__c
+			WHERE
+				Clinic_Type__c IN ('Clinic', 'Clinic - Remote NP') AND
+				Status__c = 'Confirmed' AND
+				Location__c != null AND
+				Start__c = YESTERDAY
+		)
+]`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

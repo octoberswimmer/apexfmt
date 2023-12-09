@@ -1023,7 +1023,7 @@ func (v *FormatVisitor) VisitCurrencyValueValue(ctx *parser.CurrencyValueValueCo
 }
 
 func (v *FormatVisitor) VisitSubQueryValue(ctx *parser.SubQueryValueContext) interface{} {
-	return fmt.Sprintf("(%s)", v.visitRule(ctx.SubQuery()))
+	return fmt.Sprintf("(\n%s\n)", v.indent(v.visitRule(ctx.SubQuery()).(string)))
 }
 
 func (v *FormatVisitor) VisitValueListValue(ctx *parser.ValueListValueContext) interface{} {
@@ -1081,7 +1081,17 @@ func (v *FormatVisitor) VisitUsingScope(ctx *parser.UsingScopeContext) interface
 }
 
 func (v *FormatVisitor) VisitOrderByClause(ctx *parser.OrderByClauseContext) interface{} {
-	return fmt.Sprintf("ORDER BY\n%s", v.indent(v.visitRule(ctx.FieldOrderList()).(string)))
+	sep := " "
+	indent := 0
+	if v.wrap {
+		sep = "\n"
+		indent = 1
+	}
+	var clause strings.Builder
+	clause.WriteString("ORDER BY")
+	clause.WriteString(sep)
+	clause.WriteString(v.indentTo(v.visitRule(ctx.FieldOrderList()).(string), indent))
+	return clause.String()
 }
 
 func (v *FormatVisitor) VisitFieldOrderList(ctx *parser.FieldOrderListContext) interface{} {
