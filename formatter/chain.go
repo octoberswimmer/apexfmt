@@ -107,6 +107,10 @@ func (v *ChainVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	return score
 }
 
+func (v *ChainVisitor) VisitOrderByClause(ctx *parser.OrderByClauseContext) interface{} {
+	return len(ctx.FieldOrderList().AllFieldOrder())
+}
+
 func (v *ChainVisitor) VisitSelectList(ctx *parser.SelectListContext) interface{} {
 	score := 0
 	for _, p := range ctx.AllSelectEntry() {
