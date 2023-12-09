@@ -772,11 +772,15 @@ func (v *FormatVisitor) VisitFieldNameAlias(ctx *parser.FieldNameAliasContext) i
 }
 
 func (v *FormatVisitor) VisitSelectList(ctx *parser.SelectListContext) interface{} {
+	sep := ", "
+	if v.wrap {
+		sep = ",\n"
+	}
 	selectEntries := []string{}
 	for _, p := range ctx.AllSelectEntry() {
 		selectEntries = append(selectEntries, v.visitRule(p).(string))
 	}
-	return strings.Join(selectEntries, ",\n")
+	return strings.Join(selectEntries, sep)
 }
 
 func (v *FormatVisitor) VisitSubFieldList(ctx *parser.SubFieldListContext) interface{} {
