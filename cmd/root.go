@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/octoberswimmer/apexfmt/formatter"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +17,7 @@ func init() {
 	cobra.OnInitialize(globalConfig)
 	RootCmd.Flags().BoolP("write", "w", false, "write result to (source) file instead of stdout")
 	RootCmd.Flags().BoolP("list", "l", false, "list files whose formatting differs from apexfmt's")
+	RootCmd.Flags().BoolP("verbose", "v", false, "enable debug logging")
 }
 
 var RootCmd = &cobra.Command{
@@ -24,6 +26,10 @@ var RootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		write, _ := cmd.Flags().GetBool("write")
 		list, _ := cmd.Flags().GetBool("list")
+		verbose, _ := cmd.Flags().GetBool("verbose")
+		if verbose {
+			log.SetLevel(log.DebugLevel)
+		}
 		for _, filename := range args {
 			f := formatter.NewFormatter(filename)
 			err := f.Format()
