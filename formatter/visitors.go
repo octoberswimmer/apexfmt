@@ -423,7 +423,12 @@ func (v *FormatVisitor) VisitAssignExpression(ctx *parser.AssignExpressionContex
 }
 
 func (v *FormatVisitor) VisitCondExpression(ctx *parser.CondExpressionContext) interface{} {
-	return fmt.Sprintf("%s ? %s : %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)), v.visitRule(ctx.Expression(2)))
+	if len(ctx.Expression(0).GetText())+len(ctx.Expression(1).GetText())+len(ctx.Expression(2).GetText()) <= 60 {
+		return fmt.Sprintf("%s ? %s : %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)), v.visitRule(ctx.Expression(2)))
+	}
+	return fmt.Sprintf("%s ?\n%s :\n%s", v.visitRule(ctx.Expression(0)),
+		v.indent(v.visitRule(ctx.Expression(1)).(string)),
+		v.indent(v.visitRule(ctx.Expression(2)).(string)))
 }
 
 func (v *FormatVisitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContext) interface{} {
@@ -482,7 +487,8 @@ func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext)
 	right := i.visitRule(ctx.Expression(1)).(int)
 	log.Debug(fmt.Sprintf("LEFT %d: %s ", left, ctx.Expression(0).GetText()))
 	log.Debug(fmt.Sprintf("RIGHT %d: %s ", right, ctx.Expression(1).GetText()))
-	wrap := v.wrap || left+right > 2
+	log.Debug(fmt.Sprintf("TEXT %d: %s ", len(ctx.GetText()), ctx.GetText()))
+	wrap := v.wrap || left+right > 2 || len(ctx.GetText()) > 40
 	if wrap {
 		sep = "\n\t"
 		defer restoreWrap(unwrap(v))

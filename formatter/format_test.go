@@ -178,6 +178,18 @@ func TestStatement(t *testing.T) {
 	'\n' +
 	'lorem' +
 	'ipsum';`},
+
+			{
+				`Id originalGroupId = ql.SBQQ__RenewedSubscription__r.SBQQ__QuoteLine__r.SBQQ__Group__c != null ?  ql.SBQQ__RenewedSubscription__r.SBQQ__QuoteLine__r.SBQQ__Group__c : ql.SBQQ__UpgradedSubscription__r.SBQQ__QuoteLine__r.SBQQ__Group__c;`,
+				`Id originalGroupId = ql.SBQQ__RenewedSubscription__r.SBQQ__QuoteLine__r.SBQQ__Group__c != null ?
+	ql.SBQQ__RenewedSubscription__r.SBQQ__QuoteLine__r.SBQQ__Group__c :
+	ql.SBQQ__UpgradedSubscription__r.SBQQ__QuoteLine__r.SBQQ__Group__c;`},
+
+			{
+				`List<SBQQ__QuoteLineGroup__c> originalGroups = Database.query('SELECT ' + String.join(new List<String>(qlgfields.keySet()), ',') + ' FROM SBQQ__QuoteLineGroup__c WHERE Id IN :originalGroupIds');`,
+				`List<SBQQ__QuoteLineGroup__c> originalGroups = Database.query('SELECT ' +
+	String.join(new List<String>(qlgfields.keySet()), ',') +
+	' FROM SBQQ__QuoteLineGroup__c WHERE Id IN :originalGroupIds');`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
