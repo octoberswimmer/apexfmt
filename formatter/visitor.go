@@ -9,6 +9,11 @@ import (
 	"github.com/octoberswimmer/apexfmt/parser"
 )
 
+const (
+	WHITESPACE_CHANNEL = 2
+	COMMENTS_CHANNEL   = 3
+)
+
 type FormatVisitor struct {
 	tokens         *antlr.CommonTokenStream
 	commentsOutput map[int]struct{}
@@ -27,8 +32,11 @@ func NewFormatVisitor(tokens *antlr.CommonTokenStream) *FormatVisitor {
 
 func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 	start := node.(antlr.ParserRuleContext).GetStart()
-	beforeWhitespace := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 2)
-	beforeComments := v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), 3)
+	var beforeWhitespace, beforeComments []antlr.Token
+	if start != nil {
+		beforeWhitespace = v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), WHITESPACE_CHANNEL)
+		beforeComments = v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), COMMENTS_CHANNEL)
+	}
 	result := node.Accept(v)
 	if result == nil {
 		panic(fmt.Sprintf("MISSING VISIT FUNCTION FOR %T", node))
