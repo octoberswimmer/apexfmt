@@ -1199,7 +1199,7 @@ func (v *FormatVisitor) VisitSetCreatorRest(ctx *parser.SetCreatorRestContext) i
 	for _, i := range ctx.AllExpression() {
 		expressions = append(expressions, v.visitRule(i).(string))
 	}
-	if len(ctx.GetText()) > 80 {
+	if len(ctx.GetText()) > 50 {
 		return fmt.Sprintf("{\n%s\n}", v.indent(strings.Join(expressions, ",\n")))
 	}
 	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))

@@ -200,6 +200,13 @@ func TestStatement(t *testing.T) {
 				`List<SBQQ__QuoteLineGroup__c> originalGroups = Database.query('SELECT ' +
 	String.join(new List<String>(qlgfields.keySet()), ',') +
 	' FROM SBQQ__QuoteLineGroup__c WHERE Id IN :originalGroupIds');`},
+
+			{
+				`public static final List<Schema.SObjectField> MY_IMPORTANT_FIELDS = new List<Schema.SObjectField>{ My_Object__c.The_Field__c, My_Object__c.The_Better_Field__c };`,
+				`public static final List<Schema.SObjectField> MY_IMPORTANT_FIELDS = new List<Schema.SObjectField>{
+	My_Object__c.The_Field__c,
+	My_Object__c.The_Better_Field__c
+};`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
