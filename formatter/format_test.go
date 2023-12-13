@@ -313,6 +313,43 @@ func TestSOQL(t *testing.T) {
 				Start__c = YESTERDAY
 		)
 ]`},
+
+			{
+				`[
+	SELECT
+		Name
+	FROM
+		My_Object__c
+	WHERE
+		Type__c = 'Virtual' AND
+		(
+			Start__c = TODAY OR
+			Start__c = N_DAYS_AGO:7 OR
+			Start__c = N_DAYS_AGO:14 OR
+			Start__c = N_DAYS_AGO:21 OR
+			Start__c <= N_DAYS_AGO:28
+		) AND
+		Status__c = 'Confirmed'
+	ORDER BY
+		Start__c
+];`, `[
+	SELECT
+		Name
+	FROM
+		My_Object__c
+	WHERE
+		Type__c = 'Virtual' AND
+		(
+			Start__c = TODAY OR
+			Start__c = N_DAYS_AGO:7 OR
+			Start__c = N_DAYS_AGO:14 OR
+			Start__c = N_DAYS_AGO:21 OR
+			Start__c <= N_DAYS_AGO:28
+		) AND
+		Status__c = 'Confirmed'
+	ORDER BY
+		Start__c
+]`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

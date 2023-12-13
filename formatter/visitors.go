@@ -947,7 +947,7 @@ func (v *FormatVisitor) VisitLogicalExpression(ctx *parser.LogicalExpressionCont
 func (v *FormatVisitor) VisitConditionalExpression(ctx *parser.ConditionalExpressionContext) interface{} {
 	switch {
 	case ctx.LogicalExpression() != nil:
-		return fmt.Sprintf("(%s)", v.visitRule(ctx.LogicalExpression()))
+		return fmt.Sprintf("(\n%s\n)", v.indent(v.visitRule(ctx.LogicalExpression()).(string)))
 	case ctx.FieldExpression() != nil:
 		return v.visitRule(ctx.FieldExpression())
 	}
