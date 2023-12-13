@@ -1,6 +1,7 @@
 package formatter
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -8,6 +9,15 @@ import (
 
 	log "github.com/sirupsen/logrus"
 )
+
+type testErrorListener struct {
+	*antlr.DefaultErrorListener
+	t *testing.T
+}
+
+func (e *testErrorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
+	e.t.Error("Parse Error: line " + strconv.Itoa(line) + ":" + strconv.Itoa(column) + " " + msg)
+}
 
 func TestStatement(t *testing.T) {
 	if testing.Verbose() {
@@ -198,6 +208,7 @@ func TestStatement(t *testing.T) {
 
 		p := parser.NewApexParser(stream)
 		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
 
 		v := NewFormatVisitor(stream)
 		out, ok := v.visitRule(p.Statement()).(string)
@@ -232,6 +243,7 @@ func TestCompilationUnit(t *testing.T) {
 
 		p := parser.NewApexParser(stream)
 		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
 
 		v := NewFormatVisitor(stream)
 		out, ok := v.visitRule(p.CompilationUnit()).(string)
@@ -309,6 +321,7 @@ func TestSOQL(t *testing.T) {
 
 		p := parser.NewApexParser(stream)
 		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
 
 		v := NewFormatVisitor(stream)
 		out, ok := v.visitRule(p.SoqlLiteral()).(string)
