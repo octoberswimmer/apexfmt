@@ -1265,11 +1265,19 @@ func (v *FormatVisitor) VisitFormalParameters(ctx *parser.FormalParametersContex
 	if list == nil {
 		return "()"
 	}
+	wrap := v.wrap || (len(ctx.GetText()) > 40 && len(list.AllFormalParameter()) > 2) || len(ctx.GetText()) > 60
 	for _, p := range list.AllFormalParameter() {
-		params = append(params, v.visitRule(p).(string))
+		if wrap {
+			params = append(params, v.indent(v.visitRule(p).(string)))
+		} else {
+			params = append(params, v.visitRule(p).(string))
+		}
 	}
-	val := fmt.Sprintf("(%s)", strings.Join(params, ", "))
-	return val
+	if wrap {
+		return fmt.Sprintf("(\n%s\n)", strings.Join(params, ",\n"))
+	} else {
+		return fmt.Sprintf("(%s)", strings.Join(params, ", "))
+	}
 }
 
 func (v *FormatVisitor) VisitAnnotation(ctx *parser.AnnotationContext) interface{} {
