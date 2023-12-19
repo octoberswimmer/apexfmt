@@ -674,6 +674,11 @@ func (v *FormatVisitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interfa
 }
 
 func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
+	i := NewChainVisitor()
+	n := i.visitRule(ctx).(int)
+	if n > 3 {
+		defer restoreWrap(wrap(v))
+	}
 	sep := " "
 	indent := 0
 	if v.wrap {

@@ -13,8 +13,16 @@ import (
 
 type Formatter struct {
 	filename  string
+	reader    io.Reader
 	source    []byte
 	formatted []byte
+}
+
+func (f *Formatter) SourceName() string {
+	if f.filename != "" {
+		return f.filename
+	}
+	return "<stdin>"
 }
 
 type errorListener struct {
@@ -23,13 +31,22 @@ type errorListener struct {
 }
 
 func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
-	_, _ = fmt.Fprintln(os.Stderr, e.filename+" line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+	if e.filename == "" {
+		_, _ = fmt.Fprintln(os.Stderr, "line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+	} else {
+		_, _ = fmt.Fprintln(os.Stderr, e.filename+" line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+	}
 	os.Exit(1)
 }
 
-func NewFormatter(filename string) *Formatter {
+func NewFormatter(filename string, reader io.Reader) *Formatter {
+	if filename != "" {
+		return &Formatter{
+			filename: filename,
+		}
+	}
 	return &Formatter{
-		filename: filename,
+		reader: reader,
 	}
 }
 
@@ -55,9 +72,9 @@ func (f *Formatter) Changed() (bool, error) {
 
 func (f *Formatter) Format() error {
 	if f.source == nil {
-		src, err := readFile(f.filename)
+		src, err := readFile(f.filename, f.reader)
 		if err != nil {
-			return fmt.Errorf("Failed to read file %s: %w", f.filename, err)
+			return fmt.Errorf("Failed to read file %s: %w", f.SourceName(), err)
 		}
 		f.source = src
 	}
@@ -86,13 +103,17 @@ func (f *Formatter) Write() error {
 	return writeFile(f.filename, f.formatted)
 }
 
-func readFile(filename string) ([]byte, error) {
-	f, err := os.Open(filename)
-	if err != nil {
-		return nil, err
+func readFile(filename string, reader io.Reader) ([]byte, error) {
+	r := reader
+	if filename != "" {
+		f, err := os.Open(filename)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+		r = f
 	}
-	defer f.Close()
-	src, err := io.ReadAll(f)
+	src, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
 	}
