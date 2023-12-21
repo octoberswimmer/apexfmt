@@ -132,6 +132,23 @@ func TestStatement(t *testing.T) {
 };`},
 
 			{
+				`Opportunity o = new Opportunity(
+Name = 'My Opportunity',
+   AccountId = a.Id,
+   StageName = 'Contract Requested/verbal',
+   Amount = 1,
+   CloseDate = Date.today() + 10
+);`,
+				// VisitArguments
+				`Opportunity o = new Opportunity(
+	Name = 'My Opportunity',
+	AccountId = a.Id,
+	StageName = 'Contract Requested/verbal',
+	Amount = 1,
+	CloseDate = Date.today() + 10
+);`},
+
+			{
 				`Psychological__c psyc = Fixtures.psychological(inq).put(Psychological__c.RecordTypeId, Schema.SObjectType.Psychological__c.getRecordTypeInfosByDeveloperName().get('ICD_10').getRecordTypeId()).put(Psychological__c.Diagnosis_Lookup__c, newDiagnosis[0].Id).save();`,
 				`Psychological__c psyc = Fixtures.psychological(inq)
 	.put(Psychological__c.RecordTypeId, Schema.SObjectType.Psychological__c.getRecordTypeInfosByDeveloperName()

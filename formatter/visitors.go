@@ -582,6 +582,7 @@ func (v *FormatVisitor) VisitExpressionList(ctx *parser.ExpressionListContext) i
 		// We want to indent method argument expressions, but not new instance arguments
 		switch p.(type) {
 		case *parser.AssignExpressionContext:
+			defer restoreWrap(unwrap(v))
 			expressions = append(expressions, v.visitRule(p).(string))
 		default:
 			if wrap && i > 0 {
