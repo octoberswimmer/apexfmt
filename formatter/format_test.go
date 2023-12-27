@@ -374,6 +374,10 @@ func TestSOQL(t *testing.T) {
 	ORDER BY
 		Start__c
 ]`},
+			{
+				`[SELECT Id FROM ClinicalEncounter WHERE Id = :encounters[0].Id ALL ROWS]`,
+				`[SELECT Id FROM ClinicalEncounter WHERE Id = :encounters[0].Id ALL ROWS]`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

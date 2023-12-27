@@ -718,7 +718,7 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 		query.WriteString(sep)
 		query.WriteString(v.visitRule(offset).(string))
 	}
-	if ctx.OffsetClause() != nil {
+	if ctx.AllRowsClause() != nil {
 		query.WriteString(sep)
 		query.WriteString("ALL ROWS")
 	}
