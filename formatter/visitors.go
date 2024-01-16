@@ -1115,7 +1115,11 @@ func (v *FormatVisitor) VisitFieldOrderList(ctx *parser.FieldOrderListContext) i
 	for _, i := range ctx.AllFieldOrder() {
 		fields = append(fields, v.visitRule(i).(string))
 	}
-	return strings.Join(fields, ", ")
+	sep := ", "
+	if v.wrap {
+		sep = ",\n"
+	}
+	return strings.Join(fields, sep)
 }
 
 func (v *FormatVisitor) VisitFieldOrder(ctx *parser.FieldOrderContext) interface{} {

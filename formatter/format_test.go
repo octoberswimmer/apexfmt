@@ -378,6 +378,20 @@ func TestSOQL(t *testing.T) {
 				`[SELECT Id FROM ClinicalEncounter WHERE Id = :encounters[0].Id ALL ROWS]`,
 				`[SELECT Id FROM ClinicalEncounter WHERE Id = :encounters[0].Id ALL ROWS]`,
 			},
+			{
+				`[SELECT Id, SBQQ__Quote__c FROM SBQQ__QuoteLineGroup__c WHERE SBQQ__Quote__c IN :quoteIds ORDER BY SBQQ__Quote__c, SBQQ__Number__c]`,
+				`[
+	SELECT
+		Id,
+		SBQQ__Quote__c
+	FROM
+		SBQQ__QuoteLineGroup__c
+	WHERE
+		SBQQ__Quote__c IN :quoteIds
+	ORDER BY
+		SBQQ__Quote__c,
+		SBQQ__Number__c
+]`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
