@@ -30,6 +30,10 @@ func NewFormatVisitor(tokens *antlr.CommonTokenStream) *FormatVisitor {
 	}
 }
 
+func (v *FormatVisitor) VisitRule(node antlr.RuleNode) interface{} {
+	return v.visitRule(node)
+}
+
 func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 	start := node.(antlr.ParserRuleContext).GetStart()
 	var beforeWhitespace, beforeComments []antlr.Token
