@@ -1182,7 +1182,7 @@ func (v *FormatVisitor) VisitClassCreatorRest(ctx *parser.ClassCreatorRestContex
 
 func (v *FormatVisitor) VisitArrayCreatorRest(ctx *parser.ArrayCreatorRestContext) interface{} {
 	if expression := ctx.Expression(); expression != nil {
-		return fmt.Sprintf("[ %s ]", v.visitRule(expression))
+		return fmt.Sprintf("[%s]", v.visitRule(expression))
 	} else if arrayInitializer := ctx.ArrayInitializer(); arrayInitializer != nil {
 		return fmt.Sprintf("[]%s", v.visitRule(arrayInitializer))
 	}

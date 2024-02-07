@@ -224,6 +224,10 @@ Name = 'My Opportunity',
 	My_Object__c.The_Field__c,
 	My_Object__c.The_Better_Field__c
 };`},
+
+			{
+				`Error__c[] errorLogs = new Error__c[0];`,
+				`Error__c[] errorLogs = new Error__c[0];`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
