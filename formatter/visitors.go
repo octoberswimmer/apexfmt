@@ -163,6 +163,9 @@ func (v *FormatVisitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclaration
 }
 
 func (v *FormatVisitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
+	if len(ctx.GetText()) > 40 {
+		defer restoreWrap(wrap(v))
+	}
 	if ctx.Getter() != nil {
 		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.Getter()))
 	} else {
