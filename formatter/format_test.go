@@ -250,6 +250,48 @@ Name = 'My Opportunity',
 
 }
 
+func TestMemberDeclaration(t *testing.T) {
+	if testing.Verbose() {
+		log.SetLevel(log.DebugLevel)
+
+	}
+	tests :=
+		[]struct {
+			input  string
+			output string
+		}{
+			{
+				`Boolean hasCompleteAddress { get {
+  return !String.isBlank(this.upcomingClinic.Location__r.Location_Street_Address__c) && !String.isBlank(this.upcomingClinic.Location__r.Location_City__c) && !String.isBlank(this.upcomingClinic.Location__r.Location_State__c);
+}}`,
+				`Boolean hasCompleteAddress {
+	get {
+		return !String.isBlank(this.upcomingClinic.Location__r.Location_Street_Address__c) &&
+			!String.isBlank(this.upcomingClinic.Location__r.Location_City__c) &&
+			!String.isBlank(this.upcomingClinic.Location__r.Location_State__c);
+	}
+}`},
+		}
+	for _, tt := range tests {
+		input := antlr.NewInputStream(tt.input)
+		lexer := parser.NewApexLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+		p := parser.NewApexParser(stream)
+		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
+
+		v := NewFormatVisitor(stream)
+		out, ok := v.visitRule(p.MemberDeclaration()).(string)
+		if !ok {
+			t.Errorf("Unexpected result parsing apex")
+		}
+		if out != tt.output {
+			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
+		}
+	}
+}
+
 func TestCompilationUnit(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
