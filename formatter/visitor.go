@@ -37,7 +37,7 @@ func (v *FormatVisitor) VisitRule(node antlr.RuleNode) interface{} {
 func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 	start := node.(antlr.ParserRuleContext).GetStart()
 	var beforeWhitespace, beforeComments []antlr.Token
-	if start != nil {
+	if start != nil && len(v.tokens.GetAllTokens()) > 0 {
 		beforeWhitespace = v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), WHITESPACE_CHANNEL)
 		beforeComments = v.tokens.GetHiddenTokensToLeft(start.GetTokenIndex(), COMMENTS_CHANNEL)
 	}
