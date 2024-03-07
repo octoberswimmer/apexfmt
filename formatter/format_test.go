@@ -228,6 +228,9 @@ Name = 'My Opportunity',
 			{
 				`Error__c[] errorLogs = new Error__c[0];`,
 				`Error__c[] errorLogs = new Error__c[0];`},
+			{
+				`upsert myAccount External_Id__c;`,
+				`upsert myAccount External_Id__c;`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

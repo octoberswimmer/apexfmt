@@ -386,7 +386,11 @@ func (v *FormatVisitor) VisitUpdateStatement(ctx *parser.UpdateStatementContext)
 }
 
 func (v *FormatVisitor) VisitUpsertStatement(ctx *parser.UpsertStatementContext) interface{} {
-	return fmt.Sprintf("upsert %s;", v.visitRule(ctx.Expression()))
+	if q := ctx.QualifiedName(); q != nil {
+		return fmt.Sprintf("upsert %s %s;", v.visitRule(ctx.Expression()), v.visitRule(q))
+	} else {
+		return fmt.Sprintf("upsert %s;", v.visitRule(ctx.Expression()))
+	}
 }
 
 func (v *FormatVisitor) VisitMergeStatement(ctx *parser.MergeStatementContext) interface{} {
