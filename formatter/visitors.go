@@ -198,6 +198,9 @@ func (v *FormatVisitor) VisitBlock(ctx *parser.BlockContext) interface{} {
 	for _, stmt := range ctx.AllStatement() {
 		statements = append(statements, v.visitRule(stmt).(string))
 	}
+	if len(statements) == 0 {
+		return "{}"
+	}
 	return fmt.Sprintf("{\n%s\n}", v.indent(strings.Join(statements, "\n")))
 }
 

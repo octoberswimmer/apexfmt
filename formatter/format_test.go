@@ -308,6 +308,11 @@ func TestCompilationUnit(t *testing.T) {
 			{
 				`private class T1Exception extends Exception {}`,
 				`private class T1Exception extends Exception {}`},
+			{
+				`public class MyClass { public static void noop() {}}`,
+				`public class MyClass {
+	public static void noop() {}
+}`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
