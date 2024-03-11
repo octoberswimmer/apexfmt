@@ -97,3 +97,73 @@ System.debug('I am on a separate line!');`,
 	}
 
 }
+
+func TestTrailingComments(t *testing.T) {
+	if testing.Verbose() {
+		log.SetLevel(log.DebugLevel)
+
+	}
+	tests :=
+		[]struct {
+			input  string
+			output string
+		}{
+			{
+				`private class T1Exception extends Exception {} //test`,
+				`private class T1Exception extends Exception {} //test`,
+			},
+			{
+				`public class MyClass { public static void noop() {}
+	// Comment Inside Compilation Unit
+	// Line 2
+}`,
+				`public class MyClass {
+	public static void noop() {}
+	// Comment Inside Compilation Unit
+	// Line 2
+}`},
+			{
+				`public class MyClass { public static void noop() {}}
+// Comment Outside Compilation Unit Moved Inside
+// Line 2`,
+				`public class MyClass {
+	public static void noop() {}
+	// Comment Outside Compilation Unit Moved Inside
+	// Line 2
+}`},
+			{
+				`
+/* comment with whitespace before */
+private class T1Exception {}`,
+				`/* comment with whitespace before */
+private class T1Exception {}`,
+			},
+			{
+				`/* comment with whitespace after */
+
+private class T1Exception {}`,
+				`/* comment with whitespace after */
+
+private class T1Exception {}`,
+			},
+		}
+	for _, tt := range tests {
+		input := antlr.NewInputStream(tt.input)
+		lexer := parser.NewApexLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+		p := parser.NewApexParser(stream)
+		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
+
+		v := NewFormatVisitor(stream)
+		out, ok := v.visitRule(p.CompilationUnit()).(string)
+		if !ok {
+			t.Errorf("Unexpected result parsing apex")
+		}
+		out = removeExtraCommentIndentation(out)
+		if out != tt.output {
+			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+		}
+	}
+}
