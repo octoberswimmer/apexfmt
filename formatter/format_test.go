@@ -334,6 +334,50 @@ func TestCompilationUnit(t *testing.T) {
 	}
 }
 
+func TestEndOfFileComments(t *testing.T) {
+	if testing.Verbose() {
+		log.SetLevel(log.DebugLevel)
+
+	}
+	tests :=
+		[]struct {
+			input  string
+			output string
+		}{
+			{
+				`private class T1Exception extends Exception {} //test`,
+				`private class T1Exception extends Exception {}
+//test`},
+			{
+				`public class MyClass { public static void noop() {}}
+				//test comment
+				// oie`,
+				`public class MyClass {
+	public static void noop() {}
+}
+//test comment
+// oie`},
+		}
+	for _, tt := range tests {
+		input := antlr.NewInputStream(tt.input)
+		lexer := parser.NewApexLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+		p := parser.NewApexParser(stream)
+		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
+
+		v := NewFormatVisitor(stream)
+		out, ok := v.visitRule(p.CompilationUnit()).(string)
+		if !ok {
+			t.Errorf("Unexpected result parsing apex")
+		}
+		if out != tt.output {
+			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
+		}
+	}
+}
+
 func TestSOQL(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
