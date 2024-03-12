@@ -231,6 +231,12 @@ Name = 'My Opportunity',
 			{
 				`upsert myAccount External_Id__c;`,
 				`upsert myAccount External_Id__c;`},
+			{
+				`List<SObjectField> fs =Schema.getGlobalDescribe().get('MemberPlan').getDescribe().fields.getMap().values();`,
+				`List<SObjectField> fs = Schema.getGlobalDescribe()
+	.get('MemberPlan')
+	.getDescribe().fields.getMap()
+	.values();`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
@@ -273,6 +279,46 @@ func TestMemberDeclaration(t *testing.T) {
 			!String.isBlank(this.upcomingClinic.Location__r.Location_City__c) &&
 			!String.isBlank(this.upcomingClinic.Location__r.Location_State__c);
 	}
+}`},
+			{
+				`List<SObjectField> memberPlanFields {
+	get {
+		if (memberPlanFields == null) {
+			List<SObjectField> fs =Schema.getGlobalDescribe()
+				.get('MemberPlan')
+				.getDescribe().fields.getMap()
+				.values();
+			List<SObjectField> editable =new List<SObjectField>();
+
+			for (SObjectField f : fs) {
+				if (f != MemberPlan.LastViewedDate &&
+					f != MemberPlan.LastReferencedDate) {
+					editable.add(f);
+				}
+			}
+			memberPlanfields = editable;
+		}
+	}
+	set;
+}`, `List<SObjectField> memberPlanFields {
+	get {
+		if (memberPlanFields == null) {
+			List<SObjectField> fs = Schema.getGlobalDescribe()
+				.get('MemberPlan')
+				.getDescribe().fields.getMap()
+				.values();
+			List<SObjectField> editable = new List<SObjectField>();
+
+			for (SObjectField f : fs) {
+				if (f != MemberPlan.LastViewedDate &&
+					f != MemberPlan.LastReferencedDate) {
+					editable.add(f);
+				}
+			}
+			memberPlanfields = editable;
+		}
+	}
+	set;
 }`},
 		}
 	for _, tt := range tests {

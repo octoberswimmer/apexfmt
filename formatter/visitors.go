@@ -1376,7 +1376,7 @@ func (v *FormatVisitor) VisitVariableDeclarator(ctx *parser.VariableDeclaratorCo
 		return decl
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s =%s", decl, v.visitRule(ctx.Expression()))
+		return fmt.Sprintf("%s = %s", decl, v.visitRule(ctx.Expression()))
 	}
 	return fmt.Sprintf("%s = %s", decl, v.visitRule(ctx.Expression()))
 }
