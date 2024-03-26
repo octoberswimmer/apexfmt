@@ -463,6 +463,17 @@ func (v *FormatVisitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext)
 	return fmt.Sprintf("%s || %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }
 
+func (v *FormatVisitor) VisitCoalExpression(ctx *parser.CoalExpressionContext) interface{} {
+	i := NewChainVisitor()
+	if i.visitRule(ctx.Expression(0)).(int)+i.visitRule(ctx.Expression(1)).(int) > 2 {
+		defer restoreWrap(wrap(v))
+	}
+	if v.wrap {
+		return fmt.Sprintf("%s ??\n\t%s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	}
+	return fmt.Sprintf("%s ?? %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+}
+
 func (v *FormatVisitor) VisitBitAndExpression(ctx *parser.BitAndExpressionContext) interface{} {
 	return fmt.Sprintf("%s & %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }

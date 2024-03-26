@@ -503,6 +503,12 @@ func (s *BaseApexParserListener) EnterArth1Expression(ctx *Arth1ExpressionContex
 // ExitArth1Expression is called when production arth1Expression is exited.
 func (s *BaseApexParserListener) ExitArth1Expression(ctx *Arth1ExpressionContext) {}
 
+// EnterCoalExpression is called when production coalExpression is entered.
+func (s *BaseApexParserListener) EnterCoalExpression(ctx *CoalExpressionContext) {}
+
+// ExitCoalExpression is called when production coalExpression is exited.
+func (s *BaseApexParserListener) ExitCoalExpression(ctx *CoalExpressionContext) {}
+
 // EnterDotExpression is called when production dotExpression is entered.
 func (s *BaseApexParserListener) EnterDotExpression(ctx *DotExpressionContext) {}
 

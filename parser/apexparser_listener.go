@@ -244,6 +244,9 @@ type ApexParserListener interface {
 	// EnterArth1Expression is called when entering the arth1Expression production.
 	EnterArth1Expression(c *Arth1ExpressionContext)
 
+	// EnterCoalExpression is called when entering the coalExpression production.
+	EnterCoalExpression(c *CoalExpressionContext)
+
 	// EnterDotExpression is called when entering the dotExpression production.
 	EnterDotExpression(c *DotExpressionContext)
 
@@ -837,6 +840,9 @@ type ApexParserListener interface {
 
 	// ExitArth1Expression is called when exiting the arth1Expression production.
 	ExitArth1Expression(c *Arth1ExpressionContext)
+
+	// ExitCoalExpression is called when exiting the coalExpression production.
+	ExitCoalExpression(c *CoalExpressionContext)
 
 	// ExitDotExpression is called when exiting the dotExpression production.
 	ExitDotExpression(c *DotExpressionContext)

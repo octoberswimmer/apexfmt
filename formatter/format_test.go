@@ -237,6 +237,9 @@ Name = 'My Opportunity',
 	.get('MemberPlan')
 	.getDescribe().fields.getMap()
 	.values();`},
+			{
+				`Account a=[SELECT Id FROM Account WHERE Id = '001000000FAKEID']??defaultAccount;`,
+				`Account a = [SELECT Id FROM Account WHERE Id = '001000000FAKEID'] ?? defaultAccount;`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

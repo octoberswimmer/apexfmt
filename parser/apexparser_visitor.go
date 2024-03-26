@@ -244,6 +244,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#arth1Expression.
 	VisitArth1Expression(ctx *Arth1ExpressionContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#coalExpression.
+	VisitCoalExpression(ctx *CoalExpressionContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#dotExpression.
 	VisitDotExpression(ctx *DotExpressionContext) interface{}
 

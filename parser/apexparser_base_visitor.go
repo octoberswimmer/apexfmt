@@ -323,6 +323,10 @@ func (v *BaseApexParserVisitor) VisitArth1Expression(ctx *Arth1ExpressionContext
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitCoalExpression(ctx *CoalExpressionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitDotExpression(ctx *DotExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
