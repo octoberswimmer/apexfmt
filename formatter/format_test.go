@@ -240,6 +240,19 @@ Name = 'My Opportunity',
 			{
 				`Account a=[SELECT Id FROM Account WHERE Id = '001000000FAKEID']??defaultAccount;`,
 				`Account a = [SELECT Id FROM Account WHERE Id = '001000000FAKEID'] ?? defaultAccount;`},
+			{
+				`BatchScheduleManager manager = new BatchScheduleManager(
+OneDayDischargeFollowUp.class.getName(),
+OneDayDischargeFollowUp.batchJobName,
+OneDayDischargeFollowUp.twoHoursDelay,
+1
+);`,
+				`BatchScheduleManager manager = new BatchScheduleManager(
+	OneDayDischargeFollowUp.class.getName(),
+	OneDayDischargeFollowUp.batchJobName,
+	OneDayDischargeFollowUp.twoHoursDelay,
+	1
+);`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

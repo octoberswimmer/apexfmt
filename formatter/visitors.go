@@ -606,7 +606,7 @@ func (v *FormatVisitor) VisitExpressionList(ctx *parser.ExpressionListContext) i
 			defer restoreWrap(unwrap(v))
 			expressions = append(expressions, v.visitRule(p).(string))
 		default:
-			if wrap && i > 0 {
+			if wrap && i > 0 && !v.wrap {
 				expressions = append(expressions, v.indent(v.visitRule(p).(string)))
 			} else {
 				expressions = append(expressions, v.visitRule(p).(string))
