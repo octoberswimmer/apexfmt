@@ -253,6 +253,15 @@ OneDayDischargeFollowUp.twoHoursDelay,
 	OneDayDischargeFollowUp.twoHoursDelay,
 	1
 );`},
+			{
+				`while(true);`,
+				`while (true);`},
+			{
+				`for (Campaign campaign : results) resultList.add(campaign.Group__c);`,
+				`for (Campaign campaign : results) {
+	resultList.add(campaign.Group__c);
+}
+`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
@@ -269,7 +278,7 @@ OneDayDischargeFollowUp.twoHoursDelay,
 			t.Errorf("Unexpected result parsing apex")
 		}
 		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
+			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
 		}
 	}
 

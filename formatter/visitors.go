@@ -235,7 +235,7 @@ func (v *FormatVisitor) VisitIfStatement(ctx *parser.IfStatementContext) interfa
 }
 
 func (v *FormatVisitor) VisitWhileStatement(ctx *parser.WhileStatementContext) interface{} {
-	if s := ctx.Statement; s == nil {
+	if s := ctx.Statement(); s == nil {
 		return fmt.Sprintf("while %s;", v.visitRule(ctx.ParExpression()))
 	}
 	if block := ctx.Statement().Block(); block != nil {
@@ -250,7 +250,7 @@ func (v *FormatVisitor) VisitForStatement(ctx *parser.ForStatementContext) inter
 		if statement.Block() != nil {
 			return fmt.Sprintf("for (%s) %s", v.visitRule(ctx.ForControl()), v.visitRule(ctx.Statement()))
 		} else {
-			return fmt.Sprintf("for (%s) {\n%s}\n", v.visitRule(ctx.ForControl()), v.indent(v.visitRule(ctx.Statement()).(string)))
+			return fmt.Sprintf("for (%s) {\n%s\n}\n", v.visitRule(ctx.ForControl()), v.indent(v.visitRule(ctx.Statement()).(string)))
 		}
 	} else {
 		return fmt.Sprintf("for (%s);", v.visitRule(ctx.ForControl()))
