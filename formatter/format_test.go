@@ -257,6 +257,26 @@ OneDayDischargeFollowUp.twoHoursDelay,
 				`while(true);`,
 				`while (true);`},
 			{
+				`try { method(); } catch (FirstException e) { caught(); } catch (SecondException e) { caught(); }`,
+				`try {
+	method();
+} catch (FirstException e) {
+	caught();
+} catch (SecondException e) {
+	caught();
+}`,
+			},
+			{
+				`try { method(); } catch (FirstException e) { caught(); } finally { andThen(); }`,
+				`try {
+	method();
+} catch (FirstException e) {
+	caught();
+} finally {
+	andThen();
+}`,
+			},
+			{
 				`for (Campaign campaign : results) resultList.add(campaign.Group__c);`,
 				`for (Campaign campaign : results) {
 	resultList.add(campaign.Group__c);

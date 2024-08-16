@@ -302,9 +302,9 @@ func (v *FormatVisitor) VisitTryStatement(ctx *parser.TryStatementContext) inter
 		}
 		finally := ""
 		if f := ctx.FinallyBlock(); f != nil {
-			finally = fmt.Sprintf("\n%s", v.visitRule(f).(string))
+			finally = fmt.Sprintf(" %s", v.visitRule(f).(string))
 		}
-		return fmt.Sprintf("try %s %s%s", v.visitRule(ctx.Block()), strings.Join(catchClauses, "\n"), finally)
+		return fmt.Sprintf("try %s %s%s", v.visitRule(ctx.Block()), strings.Join(catchClauses, " "), finally)
 	} else {
 		return fmt.Sprintf("try %s %s", v.visitRule(ctx.Block()), v.visitRule(ctx.FinallyBlock()))
 	}
