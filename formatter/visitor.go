@@ -49,7 +49,10 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 		comments := []string{}
 		for _, c := range beforeComments {
 			if _, seen := v.commentsOutput[c.GetTokenIndex()]; !seen {
-				comments = append(comments, cleanWhitespace(c.GetText()))
+				// Mark the start and end of comments so we can remove indentation
+				// added to multi-line comments, preserving the whitespace within
+				// them.  See removeIndentationFromComment.
+				comments = append(comments, "\uFFFA"+c.GetText()+"\uFFFB")
 				v.commentsOutput[c.GetTokenIndex()] = struct{}{}
 			}
 		}
@@ -119,17 +122,6 @@ func (v *FormatVisitor) indentTo(text string, indents int) string {
 	}
 
 	return indentedText.String()
-}
-
-// Remove leading tabs
-func cleanWhitespace(input string) string {
-	lines := strings.Split(input, "\n")
-
-	for i, line := range lines {
-		lines[i] = strings.TrimRight(strings.TrimLeft(line, "\t"), " \t")
-	}
-
-	return strings.Join(lines, "\n")
 }
 
 func restoreWrap(v *FormatVisitor, reset bool) *FormatVisitor {
