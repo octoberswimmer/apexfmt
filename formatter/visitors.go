@@ -852,6 +852,8 @@ func (v *FormatVisitor) VisitSubFieldEntry(ctx *parser.SubFieldEntryContext) int
 		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
 	case ctx.SoqlFunction() != nil:
 		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), soqlId)
+	case ctx.SubQuery() != nil:
+		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), soqlId)
 	case ctx.TypeOf() != nil:
 		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
 	}
@@ -1101,9 +1103,9 @@ func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) int
 	}
 	switch {
 	case ctx.ROLLUP() != nil:
-		return fmt.Sprintf("GROUP BY ROLLUP (%s)", strings.Join(fieldNames, ", "))
+		return fmt.Sprintf("GROUP BY ROLLUP(%s)", strings.Join(fieldNames, ", "))
 	case ctx.CUBE() != nil:
-		return fmt.Sprintf("GROUP BY CUBE (%s)", strings.Join(fieldNames, ", "))
+		return fmt.Sprintf("GROUP BY CUBE(%s)", strings.Join(fieldNames, ", "))
 	default:
 		having := ""
 		if l := ctx.LogicalExpression(); l != nil {

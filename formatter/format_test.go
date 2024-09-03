@@ -537,6 +537,45 @@ func TestSOQL(t *testing.T) {
 		SBQQ__Quote__c,
 		SBQQ__Number__c
 ]`},
+			{
+				`[SELECT OBJ1__c O1, OBJ2__c O2, OBJ3__c O3, SUM(OBJ4__c) O4, GROUPING(OBJ1__c) O1Group, GROUPING(OBJ2__c) O2Group, GROUPING(OBJ3__c) O3Group FROM OBJ4__c GROUP BY ROLLUP(OBJ1__c, OBJ2__c, OBJ3__c)]`,
+				`[
+	SELECT
+		OBJ1__c O1,
+		OBJ2__c O2,
+		OBJ3__c O3,
+		SUM(OBJ4__c) O4,
+		GROUPING(OBJ1__c) O1Group,
+		GROUPING(OBJ2__c) O2Group,
+		GROUPING(OBJ3__c) O3Group
+	FROM
+		OBJ4__c
+	GROUP BY ROLLUP(OBJ1__c, OBJ2__c, OBJ3__c)
+]`},
+			{
+				`[SELECT Name, (SELECT Id, (SELECT Id, (SELECT Id, (SELECT Id FROM Child4 ) FROM Child3 ) FROM Child2 ) FROM Child1) FROM Parent]`,
+				`[
+	SELECT
+		Name,
+		(SELECT
+			Id,
+			(SELECT
+				Id,
+				(SELECT
+					Id,
+					(SELECT
+						Id
+					FROM
+						Child4)
+				FROM
+					Child3)
+			FROM
+				Child2)
+		FROM
+			Child1)
+	FROM
+		Parent
+]`},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

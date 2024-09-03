@@ -827,6 +827,18 @@ func (s *BaseApexParserListener) EnterDateFieldName(ctx *DateFieldNameContext) {
 // ExitDateFieldName is called when production dateFieldName is exited.
 func (s *BaseApexParserListener) ExitDateFieldName(ctx *DateFieldNameContext) {}
 
+// EnterLocationValue is called when production locationValue is entered.
+func (s *BaseApexParserListener) EnterLocationValue(ctx *LocationValueContext) {}
+
+// ExitLocationValue is called when production locationValue is exited.
+func (s *BaseApexParserListener) ExitLocationValue(ctx *LocationValueContext) {}
+
+// EnterCoordinateValue is called when production coordinateValue is entered.
+func (s *BaseApexParserListener) EnterCoordinateValue(ctx *CoordinateValueContext) {}
+
+// ExitCoordinateValue is called when production coordinateValue is exited.
+func (s *BaseApexParserListener) ExitCoordinateValue(ctx *CoordinateValueContext) {}
+
 // EnterTypeOf is called when production typeOf is entered.
 func (s *BaseApexParserListener) EnterTypeOf(ctx *TypeOfContext) {}
 

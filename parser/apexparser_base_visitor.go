@@ -539,6 +539,14 @@ func (v *BaseApexParserVisitor) VisitDateFieldName(ctx *DateFieldNameContext) in
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitLocationValue(ctx *LocationValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitCoordinateValue(ctx *CoordinateValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitTypeOf(ctx *TypeOfContext) interface{} {
 	return v.VisitChildren(ctx)
 }

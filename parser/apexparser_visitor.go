@@ -406,6 +406,12 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#dateFieldName.
 	VisitDateFieldName(ctx *DateFieldNameContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#locationValue.
+	VisitLocationValue(ctx *LocationValueContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#coordinateValue.
+	VisitCoordinateValue(ctx *CoordinateValueContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#typeOf.
 	VisitTypeOf(ctx *TypeOfContext) interface{}
 
