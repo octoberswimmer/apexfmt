@@ -53,7 +53,7 @@ triggerCase
 // entry point for Apex class files
 compilationUnit
     : typeDeclaration EOF
-	 | triggerUnit
+   | triggerUnit
     ;
 
 typeDeclaration
@@ -74,8 +74,8 @@ enumDeclaration
     ;
 
 enumConstants
- 	: id (COMMA id)*
-   	;
+  : id (COMMA id)*
+    ;
 
 interfaceDeclaration
     : INTERFACE id (EXTENDS typeList)? interfaceBody
@@ -251,7 +251,7 @@ trailingComma
 
 triggerBlock
     : LBRACE triggerStatement* RBRACE
-	 ;
+   ;
 
 triggerStatement
     : statement
@@ -535,8 +535,8 @@ mapCreatorRestPair
     ;
 
 setCreatorRest
-	: LBRACE expression (COMMA ( expression ))* RBRACE
-	;
+  : LBRACE expression (COMMA ( expression ))* RBRACE
+  ;
 
 arguments
     : LPAREN expressionList? RPAREN
@@ -599,8 +599,9 @@ subFieldList
 subFieldEntry
     : fieldName soqlId?
     | soqlFunction soqlId?
+   | LPAREN subQuery RPAREN soqlId?
     | typeOf
-	 ;
+   ;
 
 soqlFieldsParameter
     : ALL
@@ -631,11 +632,24 @@ soqlFunction
     | WEEK_IN_MONTH LPAREN dateFieldName RPAREN
     | WEEK_IN_YEAR LPAREN dateFieldName RPAREN
     | FIELDS LPAREN soqlFieldsParameter RPAREN
+    | DISTANCE LPAREN locationValue COMMA locationValue COMMA StringLiteral RPAREN
+    | GROUPING LPAREN fieldName RPAREN
     ;
 
  dateFieldName
     : CONVERT_TIMEZONE LPAREN fieldName RPAREN
     | fieldName
+    ;
+
+locationValue
+    : fieldName
+    | boundExpression
+    | GEOLOCATION LPAREN coordinateValue COMMA coordinateValue  RPAREN
+    ;
+
+coordinateValue
+    : signedNumber
+    | boundExpression
     ;
 
 typeOf
@@ -890,6 +904,7 @@ fieldSpecClauses
 
 fieldList
     : soslId (COMMA fieldList)*
+    | TOLABEL LPAREN soslId RPAREN
     ;
 
 updateList
@@ -981,6 +996,9 @@ id
     | VIEWSTAT
     | STANDARD
     | CUSTOM
+    | DISTANCE
+    | GEOLOCATION
+    | GROUPING
     // SOQL date functions
     | CALENDAR_MONTH
     | CALENDAR_QUARTER
@@ -1172,6 +1190,9 @@ anyId
     | VIEWSTAT
     | STANDARD
     | CUSTOM
+    | DISTANCE
+    | GEOLOCATION
+    | GROUPING
     // SOQL date functions
     | CALENDAR_MONTH
     | CALENDAR_QUARTER

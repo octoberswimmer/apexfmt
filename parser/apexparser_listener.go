@@ -406,6 +406,12 @@ type ApexParserListener interface {
 	// EnterDateFieldName is called when entering the dateFieldName production.
 	EnterDateFieldName(c *DateFieldNameContext)
 
+	// EnterLocationValue is called when entering the locationValue production.
+	EnterLocationValue(c *LocationValueContext)
+
+	// EnterCoordinateValue is called when entering the coordinateValue production.
+	EnterCoordinateValue(c *CoordinateValueContext)
+
 	// EnterTypeOf is called when entering the typeOf production.
 	EnterTypeOf(c *TypeOfContext)
 
@@ -1002,6 +1008,12 @@ type ApexParserListener interface {
 
 	// ExitDateFieldName is called when exiting the dateFieldName production.
 	ExitDateFieldName(c *DateFieldNameContext)
+
+	// ExitLocationValue is called when exiting the locationValue production.
+	ExitLocationValue(c *LocationValueContext)
+
+	// ExitCoordinateValue is called when exiting the coordinateValue production.
+	ExitCoordinateValue(c *CoordinateValueContext)
 
 	// ExitTypeOf is called when exiting the typeOf production.
 	ExitTypeOf(c *TypeOfContext)
