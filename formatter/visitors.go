@@ -542,6 +542,9 @@ func (v *FormatVisitor) VisitNewInstanceExpression(ctx *parser.NewInstanceExpres
 }
 
 func (v *FormatVisitor) VisitArrayExpression(ctx *parser.ArrayExpressionContext) interface{} {
+	if len(ctx.GetText()) < 20 {
+		defer restoreWrap(unwrap(v))
+	}
 	return fmt.Sprintf("%s[%s]", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }
 

@@ -282,6 +282,17 @@ OneDayDischargeFollowUp.twoHoursDelay,
 	resultList.add(campaign.Group__c);
 }
 `},
+			{
+				`Boolean stepDownOpportunity = recordQualifies &&
+	(i == 0 || ce.Inquiry__c != found[i - 1].Inquiry__c ||
+			(updatedTo.containsKey(found[i - 1].Id) ? !updatedTo.get(found[i - 1].Id) : !found[i - 1].Eligible_To_Change__c));`,
+				`Boolean stepDownOpportunity = recordQualifies &&
+	(i == 0 ||
+	ce.Inquiry__c != found[i - 1].Inquiry__c ||
+	(updatedTo.containsKey(found[i - 1].Id) ?
+	!updatedTo.get(found[i - 1].Id) :
+	!found[i - 1].Eligible_To_Change__c));`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
