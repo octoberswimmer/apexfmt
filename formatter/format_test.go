@@ -191,8 +191,7 @@ Name = 'My Opportunity',
 					'lorem' + 'ipsum' + '\n' +
 					'lorem' + 'ipsum';
 					`,
-				`return 'lorem' + 'ipsum' + '\n' + 'lorem' +
-	'ipsum' +
+				`return 'lorem' + 'ipsum' + '\n' + 'lorem' + 'ipsum' +
 	'\n' +
 	'lorem' +
 	'ipsum' +
@@ -292,6 +291,10 @@ OneDayDischargeFollowUp.twoHoursDelay,
 	(updatedTo.containsKey(found[i - 1].Id) ?
 	!updatedTo.get(found[i - 1].Id) :
 	!found[i - 1].Eligible_To_Change__c));`,
+			},
+			{
+				`inquiry.Admitted_Day__c = ('0' + dayOfWeek) + '-' + dayAbbreviation;`,
+				`inquiry.Admitted_Day__c = ('0' + dayOfWeek) + '-' + dayAbbreviation;`,
 			},
 		}
 	for _, tt := range tests {

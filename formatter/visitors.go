@@ -509,7 +509,7 @@ func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext)
 	log.Debug(fmt.Sprintf("LEFT %d: %s ", left, ctx.Expression(0).GetText()))
 	log.Debug(fmt.Sprintf("RIGHT %d: %s ", right, ctx.Expression(1).GetText()))
 	log.Debug(fmt.Sprintf("TEXT %d: %s ", len(ctx.GetText()), ctx.GetText()))
-	wrap := v.wrap || left+right > 2 || len(ctx.GetText()) > 40
+	wrap := v.wrap || (left+right > 2 && len(ctx.GetText()) > 40) || len(ctx.GetText()) > 60
 	if wrap {
 		sep = "\n\t"
 		defer restoreWrap(unwrap(v))
