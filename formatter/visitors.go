@@ -273,6 +273,8 @@ func (v *FormatVisitor) VisitWhenValue(ctx *parser.WhenValueContext) interface{}
 	switch {
 	case ctx.ELSE() != nil:
 		return "else"
+	case ctx.TypeRef() != nil:
+		return fmt.Sprintf("%s %s", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.Id(0)))
 	case len(ctx.AllId()) == 2:
 		return fmt.Sprintf("%s %s", v.visitRule(ctx.Id(0)), v.visitRule(ctx.Id(1)))
 	default:

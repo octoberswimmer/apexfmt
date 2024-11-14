@@ -296,6 +296,18 @@ OneDayDischargeFollowUp.twoHoursDelay,
 				`inquiry.Admitted_Day__c = ('0' + dayOfWeek) + '-' + dayAbbreviation;`,
 				`inquiry.Admitted_Day__c = ('0' + dayOfWeek) + '-' + dayAbbreviation;`,
 			},
+			{
+				`String a = 'Fran\u00E7ois';`,
+				`String a = 'Fran\u00E7ois';`,
+			},
+			{
+				`switch on Schema.Account.getSobjectType().newSObject() { when Schema.Account a { system.debug('doot'); } }`,
+				`switch on Schema.Account.getSobjectType().newSObject() {
+	when Schema.Account a {
+		system.debug('doot');
+	}
+}`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
