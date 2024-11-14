@@ -590,6 +590,29 @@ func TestSOQL(t *testing.T) {
 	FROM
 		Parent
 ]`},
+			{
+				`[ SELECT convertCurrency(Amount) FROM Opportunity ]`,
+				`[SELECT CONVERTCURRENCY(Amount) FROM Opportunity]`,
+			},
+			{
+				`[SELECT Amount, FORMAT(amount) Amt, convertCurrency(amount) convertedAmount,
+						 FORMAT(convertCurrency(amount)) convertedCurrency FROM Opportunity where Id = '006R00000024gDtIAI']`,
+				`[
+	SELECT
+		Amount,
+		FORMAT(amount) Amt,
+		CONVERTCURRENCY(amount) convertedAmount,
+		FORMAT(CONVERTCURRENCY(amount)) convertedCurrency
+	FROM
+		Opportunity
+	WHERE
+		Id = '006R00000024gDtIAI'
+]`,
+			},
+			{
+				`[SELECT FORMAT(MIN(closedate)) Amt FROM opportunity]`,
+				`[SELECT FORMAT(MIN(closedate)) Amt FROM opportunity]`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

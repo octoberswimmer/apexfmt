@@ -161,6 +161,7 @@ STANDARD          : S T A N D A R D;
 DISTANCE          : D I S T A N C E;
 GEOLOCATION       : G E O L O C A T I O N;
 GROUPING          : G R O U P I N G;
+CONVERT_CURRENCY  : C O N V E R T C U R R E N C Y;
 
 // SOQL Date functions
 CALENDAR_MONTH      : C A L E N D A R '_' M O N T H;

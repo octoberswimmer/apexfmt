@@ -1011,6 +1011,8 @@ func (v *FormatVisitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) inter
 		param = v.visitRule(ctx.FieldName()).(string)
 	case ctx.COUNT() != nil:
 		return "COUNT()"
+	case ctx.SoqlFunction() != nil:
+		param = v.visitRule(ctx.SoqlFunction()).(string)
 	case ctx.DateFieldName() != nil:
 		param = v.visitRule(ctx.DateFieldName()).(string)
 	case ctx.SoqlFieldsParameter() != nil:
