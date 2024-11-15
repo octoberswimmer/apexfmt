@@ -51,6 +51,12 @@ func TestComments(t *testing.T) {
 	*/
 	System.assertEquals(ref.Name, ref.Summary_Name__c);
 }`},
+			{
+				`/* preserve newline at end of this comment */
+System.debug('I am on a separate line!');`,
+				`/* preserve newline at end of this comment */
+System.debug('I am on a separate line!');`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

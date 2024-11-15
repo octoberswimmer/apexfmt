@@ -430,6 +430,22 @@ func TestCompilationUnit(t *testing.T) {
 				`public class MyClass {
 	public static void noop() {}
 }`},
+			{
+				`class TestClass {
+  public void callit() {
+    method1('foo', /* comment */ 'bar');
+  }
+
+  void method1(String param1, String param2){}
+}`,
+				`class TestClass {
+	public void callit() {
+		method1('foo', /* comment */ 'bar');
+	}
+
+	void method1(String param1, String param2) {}
+}`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

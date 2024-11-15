@@ -45,19 +45,31 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 	if result == nil {
 		panic(fmt.Sprintf("MISSING VISIT FUNCTION FOR %T", node))
 	}
+	commentsWithNewlines := commentsWithTrailingNewlines(beforeComments, beforeWhitespace)
 	if beforeComments != nil {
 		comments := []string{}
 		for _, c := range beforeComments {
-			if _, seen := v.commentsOutput[c.GetTokenIndex()]; !seen {
+			index := c.GetTokenIndex()
+			if _, seen := v.commentsOutput[index]; !seen {
 				// Mark the start and end of comments so we can remove indentation
 				// added to multi-line comments, preserving the whitespace within
 				// them.  See removeIndentationFromComment.
-				comments = append(comments, "\uFFFA"+c.GetText()+"\uFFFB")
-				v.commentsOutput[c.GetTokenIndex()] = struct{}{}
+				if _, exists := commentsWithNewlines[index]; exists {
+					comments = append(comments, "\uFFFA"+c.GetText()+"\uFFFB\n")
+				} else {
+					comments = append(comments, "\uFFFA"+c.GetText()+"\uFFFB")
+				}
+				v.commentsOutput[index] = struct{}{}
 			}
 		}
 		if len(comments) > 0 {
-			result = fmt.Sprintf("%s\n%s", strings.Join(comments, "\n"), result)
+			allComments := strings.Join(comments, "")
+			containsNewline := strings.Contains(allComments, "\n")
+			if !containsNewline {
+				result = fmt.Sprintf("%s %s", strings.TrimSuffix(strings.TrimPrefix(allComments, "\uFFFA"), "\uFFFB"), result)
+			} else {
+				result = fmt.Sprintf("%s%s", allComments, result)
+			}
 		}
 	}
 	if beforeWhitespace != nil {
@@ -139,4 +151,31 @@ func unwrap(v *FormatVisitor) (*FormatVisitor, bool) {
 	old := v.wrap
 	v.wrap = false
 	return v, old
+}
+
+// Find comments that have trailing newlines
+func commentsWithTrailingNewlines(comments []antlr.Token, whitespace []antlr.Token) map[int]struct{} {
+	result := make(map[int]struct{})
+
+	whitespaceMap := make(map[int]antlr.Token)
+	for _, ws := range whitespace {
+		whitespaceMap[ws.GetTokenIndex()] = ws
+	}
+
+	for _, comment := range comments {
+		commentIndex := comment.GetTokenIndex()
+
+		// Find the immediate next token index
+		nextTokenIndex := commentIndex + 1
+
+		// Check if the next token is whitespace
+		if ws, exists := whitespaceMap[nextTokenIndex]; exists {
+			// Check if the whitespace contains a newline
+			if strings.Contains(ws.GetText(), "\n") {
+				result[commentIndex] = struct{}{}
+			}
+		}
+	}
+
+	return result
 }
