@@ -449,7 +449,7 @@ func (v *FormatVisitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContex
 		defer restoreWrap(wrap(v))
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s &&\n\t%s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+		return fmt.Sprintf("%s &&\n%s", v.visitRule(ctx.Expression(0)), v.indent(v.visitRule(ctx.Expression(1)).(string)))
 	}
 	return fmt.Sprintf("%s && %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }
@@ -460,7 +460,7 @@ func (v *FormatVisitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext)
 		defer restoreWrap(wrap(v))
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s ||\n\t%s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+		return fmt.Sprintf("%s ||\n%s", v.visitRule(ctx.Expression(0)), v.indent(v.visitRule(ctx.Expression(1)).(string)))
 	}
 	return fmt.Sprintf("%s || %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }
@@ -471,7 +471,7 @@ func (v *FormatVisitor) VisitCoalExpression(ctx *parser.CoalExpressionContext) i
 		defer restoreWrap(wrap(v))
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s ??\n\t%s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+		return fmt.Sprintf("%s ??\n%s", v.visitRule(ctx.Expression(0)), v.indent(v.visitRule(ctx.Expression(1)).(string)))
 	}
 	return fmt.Sprintf("%s ?? %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
 }

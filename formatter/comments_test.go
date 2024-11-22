@@ -57,6 +57,24 @@ System.debug('I am on a separate line!');`,
 				`/* preserve newline at end of this comment */
 System.debug('I am on a separate line!');`,
 			},
+			{
+				`return String.isBlank(contact.MailingStreet) &&
+	String.isBlank(contact.MailingCity) &&
+	String.isBlank(contact.MailingState) &&
+	String.isBlank(contact.MailingPostalCode) &&
+	// Comment
+	(String.isBlank(contact.MailingCountry) ||
+	// Country default value
+	contact.MailingCountry == 'United States');`,
+				`return String.isBlank(contact.MailingStreet) &&
+	String.isBlank(contact.MailingCity) &&
+	String.isBlank(contact.MailingState) &&
+	String.isBlank(contact.MailingPostalCode) &&
+	// Comment
+	(String.isBlank(contact.MailingCountry) ||
+		// Country default value
+		contact.MailingCountry == 'United States');`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

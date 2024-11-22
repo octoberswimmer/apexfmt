@@ -171,8 +171,8 @@ Name = 'My Opportunity',
 					(Trigger.isInsert || (Trigger.isUpdate && cl_record.Last_Placement__c != Trigger.OldMap.get(cl_record.Id).Last_Placement__c))) {x=1;}`,
 				`if (cl_record.Last_Placement__c == true &&
 	(Trigger.isInsert ||
-	(Trigger.isUpdate &&
-	cl_record.Last_Placement__c != Trigger.OldMap.get(cl_record.Id).Last_Placement__c))) {
+		(Trigger.isUpdate &&
+			cl_record.Last_Placement__c != Trigger.OldMap.get(cl_record.Id).Last_Placement__c))) {
 	x = 1;
 }`},
 			{
@@ -287,10 +287,10 @@ OneDayDischargeFollowUp.twoHoursDelay,
 			(updatedTo.containsKey(found[i - 1].Id) ? !updatedTo.get(found[i - 1].Id) : !found[i - 1].Eligible_To_Change__c));`,
 				`Boolean stepDownOpportunity = recordQualifies &&
 	(i == 0 ||
-	ce.Inquiry__c != found[i - 1].Inquiry__c ||
-	(updatedTo.containsKey(found[i - 1].Id) ?
-	!updatedTo.get(found[i - 1].Id) :
-	!found[i - 1].Eligible_To_Change__c));`,
+		ce.Inquiry__c != found[i - 1].Inquiry__c ||
+		(updatedTo.containsKey(found[i - 1].Id) ?
+			!updatedTo.get(found[i - 1].Id) :
+			!found[i - 1].Eligible_To_Change__c));`,
 			},
 			{
 				`inquiry.Admitted_Day__c = ('0' + dayOfWeek) + '-' + dayAbbreviation;`,
