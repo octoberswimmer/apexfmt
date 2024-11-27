@@ -21,6 +21,15 @@ $ apexfmt -w sfdx/main/default/classes/*.cls sfdx/main/default/triggers/*.trigge
 
 apexfmt is included as a default formatter in [vim-autoformat](https://github.com/vim-autoformat/vim-autoformat/pull/394).
 
+Use the following settings to display parse errors and disable the default formatting if `apexfmt` fails:
+
+```
+let g:autoformat_verbosemode=1
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
+```
+
 # Demo
 
 Try out apexfmt in a browser at https://apexfmt.octoberswimmer.com/.
