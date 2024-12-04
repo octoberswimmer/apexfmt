@@ -10,15 +10,18 @@ import (
 )
 
 func (v *FormatVisitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext) interface{} {
+
+	result := ""
+
 	if trigger := ctx.TriggerUnit(); trigger != nil {
-		return v.visitRule(trigger)
+		result = v.visitRule(trigger).(string)
 	}
 	t := ctx.TypeDeclaration()
 	switch {
 	case t.ClassDeclaration() != nil:
-		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.ClassDeclaration()).(string))
+		result = fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.ClassDeclaration()).(string))
 	case t.InterfaceDeclaration() != nil:
-		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
+		result = fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
 	case t.EnumDeclaration() != nil:
 		enum := t.EnumDeclaration()
 		constants := []string{}
@@ -27,9 +30,30 @@ func (v *FormatVisitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext)
 				constants = append(constants, e.GetText())
 			}
 		}
-		return fmt.Sprintf("enum %s {%s}", v.visitRule(enum.Id()), strings.Join(constants, ", "))
+		result = fmt.Sprintf("enum %s {%s}", v.visitRule(enum.Id()), strings.Join(constants, ", "))
 	}
-	return ""
+
+	stop := ctx.GetStop()
+	if stop != nil {
+		eofComments := v.tokens.GetHiddenTokensToRight(stop.GetTokenIndex(), COMMENTS_CHANNEL)
+
+		if eofComments != nil {
+			comments := []string{}
+
+			for _, c := range eofComments {
+				if _, seen := v.commentsOutput[c.GetTokenIndex()]; !seen {
+					comments = append(comments, cleanWhitespace(c.GetText()))
+					v.commentsOutput[c.GetTokenIndex()] = struct{}{}
+				}
+			}
+
+			if len(comments) > 0 {
+				return (fmt.Sprintf("%s\n%s", result, strings.Join(comments, "\n")))
+			}
+		}
+	}
+
+	return result
 }
 
 func (v *FormatVisitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
