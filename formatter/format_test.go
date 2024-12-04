@@ -431,6 +431,19 @@ func TestCompilationUnit(t *testing.T) {
 	public static void noop() {}
 }`},
 			{
+				`public class MyClass {
+					@future (callout=true)
+					public static void noop() {}
+					@JsonAccess (serializable = 'samePackage'    deserializable = ’sameNamespace’)
+					public class Serializable{}
+				}`,
+				`public class MyClass {
+	@future(callout=true)
+	public static void noop() {}
+	@JsonAccess(serializable='samePackage' deserializable=’sameNamespace’)
+	public class Serializable {}
+}`},
+			{
 				`class TestClass {
   public void callit() {
     method1('foo', /* comment */ 'bar');

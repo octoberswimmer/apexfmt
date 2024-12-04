@@ -1351,7 +1351,7 @@ func (v *FormatVisitor) VisitDelimitedElementValuePair(ctx *parser.DelimitedElem
 }
 
 func (v *FormatVisitor) VisitElementValuePair(ctx *parser.ElementValuePairContext) interface{} {
-	return fmt.Sprintf("%s = %s", v.visitRule(ctx.Id()), v.visitRule(ctx.ElementValue()))
+	return fmt.Sprintf("%s=%s", v.visitRule(ctx.Id()), v.visitRule(ctx.ElementValue()))
 }
 
 func (v *FormatVisitor) VisitElementValue(ctx *parser.ElementValueContext) interface{} {
