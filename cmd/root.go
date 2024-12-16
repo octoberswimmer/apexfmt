@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime"
+	"sync"
 
 	"github.com/octoberswimmer/apexfmt/formatter"
 	log "github.com/sirupsen/logrus"
@@ -41,10 +43,12 @@ var RootCmd = &cobra.Command{
 		if verbose {
 			log.SetLevel(log.DebugLevel)
 		}
+
 		formatters := []*formatter.Formatter{}
 		for _, filename := range args {
 			formatters = append(formatters, formatter.NewFormatter(filename, nil))
 		}
+
 		if len(args) == 0 {
 			if write {
 				return fmt.Errorf("One or more files required for --write option")
@@ -54,43 +58,77 @@ var RootCmd = &cobra.Command{
 			}
 			formatters = append(formatters, formatter.NewFormatter("", os.Stdin))
 		}
-		for _, f := range formatters {
-			err := f.Format()
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Failed to format file %s: %s\n", f.SourceName(), err.Error())
-				os.Exit(1)
-			}
 
-			if list {
-				changed, err := f.Changed()
-				if err != nil {
-					fmt.Fprintf(os.Stderr, "Failed to check file for changes %s: %s\n", f.SourceName(), err.Error())
-					os.Exit(1)
-				}
-				if changed {
-					fmt.Println(f.SourceName())
-				}
-			} else if !write {
-				out, err := f.Formatted()
-				if err != nil {
-					fmt.Fprintf(os.Stderr, "Failed to get formatted source %s: %s\n", f.SourceName(), err.Error())
-					os.Exit(1)
-				}
-				fmt.Println(out)
-			}
-			changed, err := f.Changed()
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Failed to check file for changes %s: %s\n", f.SourceName(), err.Error())
-				os.Exit(1)
-			}
-			if write && changed {
-				err = f.Write()
-				if err != nil {
-					fmt.Fprintf(os.Stderr, "Failed to write file %s: %s\n", f.SourceName(), err.Error())
-					os.Exit(1)
-				}
-			}
+		var wg sync.WaitGroup
+		errors := make(chan error, len(formatters))
+		outputs := make(chan string, len(formatters))
+
+		semSize := runtime.GOMAXPROCS(0)
+		if !write && !list {
+			semSize = 1
 		}
+
+		sem := make(chan struct{}, semSize)
+
+		for _, f := range formatters {
+			wg.Add(1)
+			go func(f *formatter.Formatter) {
+				defer wg.Done()
+
+				sem <- struct{}{}
+				defer func() { <-sem }()
+
+				if err := f.Format(); err != nil {
+					errors <- fmt.Errorf("Failed to format file %s: %s", f.SourceName(), err)
+					return
+				}
+
+				if list {
+					changed, err := f.Changed()
+					if err != nil {
+						errors <- fmt.Errorf("Failed to check file for changes %s: %s", f.SourceName(), err)
+						return
+					}
+					if changed {
+						outputs <- f.SourceName()
+					}
+				} else if !write {
+					out, err := f.Formatted()
+					if err != nil {
+						errors <- fmt.Errorf("Failed to get formatted source %s: %s", f.SourceName(), err)
+						return
+					}
+					outputs <- out
+				} else {
+					changed, err := f.Changed()
+					if err != nil {
+						errors <- fmt.Errorf("Failed to check file for changes %s: %s", f.SourceName(), err)
+						return
+					}
+					if changed {
+						if err = f.Write(); err != nil {
+							errors <- fmt.Errorf("Failed to write file %s: %s", f.SourceName(), err)
+						}
+					}
+				}
+			}(f)
+		}
+
+		go func() {
+			wg.Wait()
+			close(errors)
+			close(outputs)
+		}()
+
+		for output := range outputs {
+			fmt.Println(output)
+		}
+
+		for err := range errors {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+
 		return nil
 	},
 	DisableFlagsInUseLine: true,
