@@ -607,6 +607,10 @@ func (v *BaseApexParserVisitor) VisitDateLiteralValue(ctx *DateLiteralValueConte
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitTimeLiteralValue(ctx *TimeLiteralValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitDateTimeLiteralValue(ctx *DateTimeLiteralValueContext) interface{} {
 	return v.VisitChildren(ctx)
 }

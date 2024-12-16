@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
@@ -56,10 +57,24 @@ func (f *SOQLFormatter) Format() error {
 	p.AddErrorListener(&errorListener{})
 
 	v := NewFormatVisitor(stream)
-	out, ok := v.visitRule(p.Query()).(string)
+	out, ok := v.visitRule(p.SoqlLiteral()).(string)
 	if !ok {
 		return fmt.Errorf("Unexpected result parsing apex")
 	}
-	f.formatted = append([]byte(out), '\n')
+	f.formatted = append([]byte(unindent(out)), '\n')
 	return nil
+}
+
+func unindent(input string) string {
+	input = strings.TrimPrefix(input, "[")
+	input = strings.TrimSuffix(input, "]")
+	input = strings.TrimSpace(input)
+
+	lines := strings.Split(input, "\n")
+
+	for i, line := range lines {
+		lines[i] = strings.TrimPrefix(line, "\t")
+	}
+
+	return strings.Join(lines, "\n")
 }

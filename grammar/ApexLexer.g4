@@ -227,7 +227,8 @@ N_FISCAL_YEARS_AGO       : N '_' F I S C A L '_' Y E A R S '_' A G O;
 
 // SOQL Date literal
 DateLiteral: Digit Digit Digit Digit '-' Digit Digit '-' Digit Digit;
-DateTimeLiteral: DateLiteral T Digit Digit ':' Digit Digit ':' Digit Digit (Z | (('+' | '-') Digit+ ( ':' Digit+)? ));
+TimeLiteral: Digit Digit ':' Digit Digit ':' Digit Digit ('.' Digit+ )? (Z | (('+' | '-') Digit+ ( ':' Digit+)? ));
+DateTimeLiteral: DateLiteral T TimeLiteral;
 
 // SOQL Currency literal
 // (NOTE: this is also a valid Identifier)

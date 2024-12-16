@@ -457,6 +457,9 @@ type ApexParserListener interface {
 	// EnterDateLiteralValue is called when entering the dateLiteralValue production.
 	EnterDateLiteralValue(c *DateLiteralValueContext)
 
+	// EnterTimeLiteralValue is called when entering the timeLiteralValue production.
+	EnterTimeLiteralValue(c *TimeLiteralValueContext)
+
 	// EnterDateTimeLiteralValue is called when entering the dateTimeLiteralValue production.
 	EnterDateTimeLiteralValue(c *DateTimeLiteralValueContext)
 
@@ -1059,6 +1062,9 @@ type ApexParserListener interface {
 
 	// ExitDateLiteralValue is called when exiting the dateLiteralValue production.
 	ExitDateLiteralValue(c *DateLiteralValueContext)
+
+	// ExitTimeLiteralValue is called when exiting the timeLiteralValue production.
+	ExitTimeLiteralValue(c *TimeLiteralValueContext)
 
 	// ExitDateTimeLiteralValue is called when exiting the dateTimeLiteralValue production.
 	ExitDateTimeLiteralValue(c *DateTimeLiteralValueContext)

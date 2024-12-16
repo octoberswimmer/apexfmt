@@ -457,6 +457,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#dateLiteralValue.
 	VisitDateLiteralValue(ctx *DateLiteralValueContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#timeLiteralValue.
+	VisitTimeLiteralValue(ctx *TimeLiteralValueContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#dateTimeLiteralValue.
 	VisitDateTimeLiteralValue(ctx *DateTimeLiteralValueContext) interface{}
 

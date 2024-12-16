@@ -929,6 +929,12 @@ func (s *BaseApexParserListener) EnterDateLiteralValue(ctx *DateLiteralValueCont
 // ExitDateLiteralValue is called when production dateLiteralValue is exited.
 func (s *BaseApexParserListener) ExitDateLiteralValue(ctx *DateLiteralValueContext) {}
 
+// EnterTimeLiteralValue is called when production timeLiteralValue is entered.
+func (s *BaseApexParserListener) EnterTimeLiteralValue(ctx *TimeLiteralValueContext) {}
+
+// ExitTimeLiteralValue is called when production timeLiteralValue is exited.
+func (s *BaseApexParserListener) ExitTimeLiteralValue(ctx *TimeLiteralValueContext) {}
+
 // EnterDateTimeLiteralValue is called when production dateTimeLiteralValue is entered.
 func (s *BaseApexParserListener) EnterDateTimeLiteralValue(ctx *DateTimeLiteralValueContext) {}
 

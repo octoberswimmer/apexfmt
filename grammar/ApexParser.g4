@@ -694,6 +694,7 @@ value
     | signedNumber           # signedNumberValue
     | StringLiteral          # stringLiteralValue
     | DateLiteral            # dateLiteralValue
+    | TimeLiteral            # timeLiteralValue
     | DateTimeLiteral        # dateTimeLiteralValue
     | dateFormula            # dateFormulaValue
     | currencyValue          # currencyValueValue

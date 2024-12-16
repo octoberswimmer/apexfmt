@@ -1064,6 +1064,10 @@ func (v *FormatVisitor) VisitDateTimeLiteralValue(ctx *parser.DateTimeLiteralVal
 	return ctx.GetText()
 }
 
+func (v *FormatVisitor) VisitTimeLiteralValue(ctx *parser.TimeLiteralValueContext) interface{} {
+	return ctx.GetText()
+}
+
 func (v *FormatVisitor) VisitDateFormulaValue(ctx *parser.DateFormulaValueContext) interface{} {
 	return v.visitRule(ctx.DateFormula())
 }
