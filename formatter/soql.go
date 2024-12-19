@@ -48,7 +48,7 @@ func (f *SOQLFormatter) Format() error {
 		}
 		f.source = src
 	}
-	input := antlr.NewInputStream(string(f.source))
+	input := antlr.NewInputStream(`[` + string(f.source) + `]`)
 	lexer := parser.NewApexLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
