@@ -76,7 +76,7 @@ func (f *Formatter) Format() error {
 	if f.source == nil {
 		src, err := readFile(f.filename, f.reader)
 		if err != nil {
-			return fmt.Errorf("Failed to read file %s: %w", f.SourceName(), err)
+			return fmt.Errorf("failed to read file %s: %w", f.SourceName(), err)
 		}
 		f.source = src
 	}
