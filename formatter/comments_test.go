@@ -146,6 +146,24 @@ private class T1Exception {}`,
 
 private class T1Exception {}`,
 			},
+			{
+				`class TestClass {
+	private void test() {
+		statement1();
+
+		// details about statement2
+		statement2();
+	}
+}`,
+				`class TestClass {
+	private void test() {
+		statement1();
+
+		// details about statement2
+		statement2();
+	}
+}`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

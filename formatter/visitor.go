@@ -109,11 +109,11 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 			// Mark the start and end of comments so we can remove indentation
 			// added to multi-line comments, preserving the whitespace within
 			// them.  See removeIndentationFromComment.
-			leading := ""
-			if _, exists := afterCommentsWithLeadingNewlines[index]; exists {
-				leading = "\n"
+			if n, exists := afterCommentsWithLeadingNewlines[index]; exists {
+				comments = append(comments, strings.Repeat("\n", n)+"\uFFFA"+c.GetText()+"\uFFFB")
+			} else {
+				comments = append(comments, "\uFFFA"+c.GetText()+"\uFFFB")
 			}
-			comments = append(comments, leading+"\uFFFA"+c.GetText()+"\uFFFB")
 			v.commentsOutput[index] = struct{}{}
 		}
 	}
@@ -222,8 +222,8 @@ func commentsWithTrailingNewlines(comments []antlr.Token, whitespace []antlr.Tok
 }
 
 // Find comments that have leading newlines
-func commentsWithLeadingNewlines(comments []antlr.Token, whitespace []antlr.Token) map[int]struct{} {
-	result := make(map[int]struct{})
+func commentsWithLeadingNewlines(comments []antlr.Token, whitespace []antlr.Token) map[int]int {
+	result := make(map[int]int)
 
 	whitespaceMap := make(map[int]antlr.Token)
 	for _, ws := range whitespace {
@@ -240,7 +240,7 @@ func commentsWithLeadingNewlines(comments []antlr.Token, whitespace []antlr.Toke
 		if ws, exists := whitespaceMap[prevTokenIndex]; exists {
 			// Check if the whitespace contains a newline
 			if strings.Contains(ws.GetText(), "\n") {
-				result[commentIndex] = struct{}{}
+				result[commentIndex] = len(strings.Split(ws.GetText(), "\n")) - 1
 			}
 		}
 	}
