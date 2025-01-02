@@ -466,18 +466,17 @@ fragment Z : [zZ];
 // Whitespace and comments
 //
 
-WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE_CHANNEL)
-    ;
-
 DOC_COMMENT
-    :   '/**' [\r\n] .*? '*/' -> channel(COMMENT_CHANNEL)
+    :  [ \t\r\n\u000C]* '/**' [\r\n] .*? '*/' [ \t\r\n\u000C]* -> channel(COMMENT_CHANNEL)
     ;
 
 COMMENT
-    :   '/*' .*? '*/' -> channel(COMMENT_CHANNEL)
+    :  [ \t\r\n\u000C]* '/*' .*? '*/' [ \t\r\n\u000C]* -> channel(COMMENT_CHANNEL)
     ;
 
 LINE_COMMENT
-    :   '//' ~[\r\n]* -> channel(COMMENT_CHANNEL)
+    :  [ \t\r\n\u000C]* '//' ~[\r\n]* [ \t\r\n\u000C]*-> channel(COMMENT_CHANNEL)
     ;
 
+WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE_CHANNEL)
+    ;

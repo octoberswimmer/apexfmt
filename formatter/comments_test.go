@@ -12,7 +12,6 @@ import (
 func TestComments(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
-
 	}
 	tests :=
 		[]struct {
@@ -115,27 +114,30 @@ func TestTrailingComments(t *testing.T) {
 			{
 				`public class MyClass { public static void noop() {}
 	// Comment Inside Compilation Unit
-	// Line 2
+	// Line 2 Inside Compilation Unit
 }`,
 				`public class MyClass {
 	public static void noop() {}
 	// Comment Inside Compilation Unit
-	// Line 2
+	// Line 2 Inside Compilation Unit
 }`},
 			{
 				`public class MyClass { public static void noop() {}}
-// Comment Outside Compilation Unit Moved Inside
-// Line 2`,
+// Comment Outside Compilation Unit Not Moved Inside
+// Line 2
+`,
 				`public class MyClass {
 	public static void noop() {}
-	// Comment Outside Compilation Unit Moved Inside
-	// Line 2
-}`},
+}
+// Comment Outside Compilation Unit Not Moved Inside
+// Line 2
+`},
 			{
 				`
 /* comment with whitespace before */
 private class T1Exception {}`,
-				`/* comment with whitespace before */
+				`
+/* comment with whitespace before */
 private class T1Exception {}`,
 			},
 			{
@@ -162,6 +164,18 @@ private class T1Exception {}`,
 		// details about statement2
 		statement2();
 	}
+}`,
+			},
+			{
+				`class TestClass {
+
+	// Blank line before comment
+	private Integer i;
+}`,
+				`class TestClass {
+
+	// Blank line before comment
+	private Integer i;
 }`,
 			},
 		}

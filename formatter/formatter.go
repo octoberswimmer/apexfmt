@@ -130,15 +130,33 @@ func removeIndentationFromComment(comment string) string {
 	modifiedComment := re.ReplaceAllString(commentBody, "\n")
 
 	// Return the modified comment, reattaching any text outside the comment block if necessary
-	return firstLine + modifiedComment
+	leadingTabPattern := regexp.MustCompile("^\t*")
+	unindented := leadingTabPattern.ReplaceAllString(firstLine, "") + modifiedComment
+	// Add leading tab
+	firstCharPattern := regexp.MustCompile(`(?s)^(\s*)(\S)`)
+	unindented = firstCharPattern.ReplaceAllString(unindented, "$1"+strings.Repeat("\t", leadingTabs)+"$2")
+
+	return unindented
 }
 
 // Comments are annotated in FormatVisitor.visitRule.  We preserve whitespace
 // within multi-line comments by removing the indentation added within the
 // comment.
 func removeExtraCommentIndentation(input string) string {
-	commentPattern := regexp.MustCompile(`(?s)\t*` + "\uFFFA" + `.*?` + "\uFFFB")
-	return commentPattern.ReplaceAllStringFunc(input, removeIndentationFromComment)
+	// Remove extra grammar-specific newlines added unaware of newline-preserving comments injected
+	newlinePrefixedMultilineComment := regexp.MustCompile("\n(\t*\uFFFA)")
+	input = newlinePrefixedMultilineComment.ReplaceAllString(input, "$1")
+
+	newlinePrefixedInlineComment := regexp.MustCompile("\n\t*\uFFF9\n")
+	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")
+
+	inlineCommentPattern := regexp.MustCompile(`(?s)` + "\uFFF9" + `(.*?)` + "\uFFFB")
+	input = inlineCommentPattern.ReplaceAllString(input, "$1")
+
+	multilineCommentPattern := regexp.MustCompile(`(?s)\t*` + "\uFFFA" + `.*?` + "\uFFFB")
+	unindented := multilineCommentPattern.ReplaceAllStringFunc(input, removeIndentationFromComment)
+
+	return unindented
 }
 
 func readFile(filename string, reader io.Reader) ([]byte, error) {

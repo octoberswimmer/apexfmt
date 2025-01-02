@@ -471,6 +471,98 @@ func TestCompilationUnit(t *testing.T) {
 	void method1(String param1, String param2) {}
 }`,
 			},
+			{
+				`public class MethodRecorder {
+	static {
+		reset();
+	}
+	/**
+	 * Doc string
+	 * line 2
+	 */
+	public static void m1() {
+	}
+}`,
+				`public class MethodRecorder {
+	static {
+		reset();
+	}
+	/**
+	 * Doc string
+	 * line 2
+	 */
+	public static void m1() {}
+}`,
+			},
+			{
+				`public class MethodRecorder {
+
+	/**
+	 * Doc string after newline
+	 * line 2
+	 */
+	public static void m2() {
+	}
+}`,
+				`public class MethodRecorder {
+
+	/**
+	 * Doc string after newline
+	 * line 2
+	 */
+	public static void m2() {}
+}`,
+			},
+			{
+				`public with sharing class Assert {
+class InvalidArgumentException extends Exception {}
+
+
+	private static void checkAssertion(Assertion e) {}
+
+private class Assertion {
+public String message;
+}
+			}`,
+				`public with sharing class Assert {
+	class InvalidArgumentException extends Exception {}
+
+	private static void checkAssertion(Assertion e) {}
+
+	private class Assertion {
+		public String message;
+	}
+}`,
+			},
+			{
+				`
+public class Top {
+	public class Inner {
+		private String doot;
+
+		public void doit() {
+			System.assert(true);
+		}
+	}
+
+	/* comment
+	 */
+	public String it;
+}`,
+				`public class Top {
+	public class Inner {
+		private String doot;
+
+		public void doit() {
+			System.assert(true);
+		}
+	}
+
+	/* comment
+	 */
+	public String it;
+}`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
@@ -486,8 +578,9 @@ func TestCompilationUnit(t *testing.T) {
 		if !ok {
 			t.Errorf("Unexpected result parsing apex")
 		}
+		out = removeExtraCommentIndentation(out)
 		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
+			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
 		}
 	}
 }

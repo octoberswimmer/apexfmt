@@ -91,8 +91,8 @@ func apexparserParserInit() {
 		"INC", "DEC", "ADD", "SUB", "MUL", "DIV", "BITAND", "BITOR", "CARET",
 		"MOD", "MAPTO", "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN", "DIV_ASSIGN",
 		"AND_ASSIGN", "OR_ASSIGN", "XOR_ASSIGN", "MOD_ASSIGN", "LSHIFT_ASSIGN",
-		"RSHIFT_ASSIGN", "URSHIFT_ASSIGN", "ATSIGN", "Identifier", "WS", "DOC_COMMENT",
-		"COMMENT", "LINE_COMMENT",
+		"RSHIFT_ASSIGN", "URSHIFT_ASSIGN", "ATSIGN", "Identifier", "DOC_COMMENT",
+		"COMMENT", "LINE_COMMENT", "WS",
 	}
 	staticData.RuleNames = []string{
 		"triggerUnit", "triggerCase", "compilationUnit", "typeDeclaration",
@@ -1401,10 +1401,10 @@ const (
 	ApexParserURSHIFT_ASSIGN          = 243
 	ApexParserATSIGN                  = 244
 	ApexParserIdentifier              = 245
-	ApexParserWS                      = 246
-	ApexParserDOC_COMMENT             = 247
-	ApexParserCOMMENT                 = 248
-	ApexParserLINE_COMMENT            = 249
+	ApexParserDOC_COMMENT             = 246
+	ApexParserCOMMENT                 = 247
+	ApexParserLINE_COMMENT            = 248
+	ApexParserWS                      = 249
 )
 
 // ApexParser rules.
