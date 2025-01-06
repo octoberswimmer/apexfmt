@@ -107,31 +107,18 @@ func indent(text string) string {
 	return indentTo(text, 1)
 }
 
-// SplitLeadingFFFAOrFFFBOrNewline splits the input data into tokens based on the following rules:
+// SplitLeadingFFFAOrFFFBOrNewline splits the input data like SplitLines, with
+// special handling for comments.
 //
-//  1. If a line starts with \ufffa or \ufffb (possibly preceded by whitespace),
-//     and the line contains only the delimiter, return the entire line as a separate token.
+// Multi-line comments delimited by \uFFFA and \uFFFB are handled as follows:
+// \uFFFA and \uFFFB should never have leading text other than whitespace.
 //
-//  2. If a line starts with \ufffa or \ufffb (possibly preceded by whitespace),
-//     and the line contains additional content after the delimiter,
-//     split the line into two tokens:
-//     - The delimiter (\ufffa or \ufffb) including any leading whitespace.
-//     - The remaining content.
+// \uFFFA can have trailing text.
 //
-//  3. If \ufffa or \ufffb appear anywhere else in a line,
-//     split the line into two tokens:
-//     - Content before the delimiter.
-//     - The delimiter and the remaining content.
+// \uFFFB cannot have trailing text.
 //
-//  4. Otherwise, split lines normally based on newline characters.
-//
-//  5. If \ufff9 and \ufffb appear in the same line (with \ufff9 < \ufffb),
-//     treat that line as a single token, preserving inline comment.
-//
-//  6. At EOF, return any remaining data as the final token.
-//
-// This function ensures that \ufffa, \ufffb, and inline \ufff9-\ufffb comments
-// are handled correctly based on their positions.
+// Inline comments delimited by \uFFF9 and \uFFFB should always be returned
+// unbroken.
 func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	// Define \ufffa and \ufffb
 	fffa := []byte("\ufffa")
@@ -153,7 +140,6 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 		if atEOF {
 			line := data
 
-			// --- Inline comment check (rule #5) ---
 			if hasInlineComment(line, inlineCommentStart, fffb) {
 				// Return the entire line as a single token
 				return len(data), data, nil
@@ -198,7 +184,7 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 	// ----------------------------------------------------------------
 	line := data[:newlineIdx]
 
-	// --- Inline comment check (rule #5) ---
+	// --- Inline comment check ---
 	// If line has \ufff9 and \ufffb in the correct order, keep it as one token.
 	if hasInlineComment(line, inlineCommentStart, fffb) {
 		return newlineIdx + 1, line, nil
