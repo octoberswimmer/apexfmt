@@ -12,7 +12,7 @@ import (
 
 func TestComments(t *testing.T) {
 	if testing.Verbose() {
-		log.SetLevel(log.DebugLevel)
+		log.SetLevel(log.TraceLevel)
 		log.SetFormatter(&log.TextFormatter{
 			DisableQuote: true,
 		})
@@ -78,6 +78,12 @@ System.debug('I am on a separate line!');`,
 		// Country default value
 		contact.MailingCountry == 'United States');`,
 			},
+			{
+				`// Test trailing whitespace 
+				go();`,
+				`// Test trailing whitespace
+go();`,
+			},
 		}
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
@@ -105,7 +111,7 @@ System.debug('I am on a separate line!');`,
 
 func TestTrailingComments(t *testing.T) {
 	if testing.Verbose() {
-		log.SetLevel(log.DebugLevel)
+		log.SetLevel(log.TraceLevel)
 		log.SetFormatter(&log.TextFormatter{
 			DisableQuote: true,
 		})
@@ -117,7 +123,7 @@ func TestTrailingComments(t *testing.T) {
 		}{
 			{
 				`private class T1Exception extends Exception {} //test`,
-				`private class T1Exception extends Exception {} //test`,
+				"private class T1Exception extends Exception {} //test\n",
 			},
 			{
 				`public class MyClass { public static void noop() {}
