@@ -3,10 +3,19 @@ package formatter
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func TestIndent(t *testing.T) {
+	if testing.Verbose() {
+		log.SetLevel(log.DebugLevel)
+		log.SetFormatter(&log.TextFormatter{
+			DisableQuote: true,
+		})
+	}
 	tests :=
 		[]struct {
 			input  string
@@ -34,12 +43,18 @@ func TestIndent(t *testing.T) {
 				"public class B {\n\t\ufffa\n\t/**\n\t\t\t */\n\ufffb\tpublic X(Y client) {}\n}",
 				"\tpublic class B {\n\t\t\ufffa\n\t\t/**\n\t\t\t\t */\ufffb\n\t\tpublic X(Y client) {}\n\t}",
 			},
+			{
+				"\ufffa\n// First Comment\n\n\ufffb\ufffa// Second Comment\n\ufffbgo();",
+				"\t\ufffa\n\t// First Comment\n\ufffb\n\t\ufffa// Second Comment\n\ufffb\n\tgo();",
+			},
 		}
-	for _, tt := range tests {
-		out := indent(tt.input)
-		if out != tt.output {
-			t.Errorf("unexpected indent format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
-		}
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			out := indent(tt.input)
+			if out != tt.output {
+				t.Errorf("unexpected indent format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+			}
+		})
 	}
 }
 
@@ -81,6 +96,12 @@ func TestRemoveIndentation(t *testing.T) {
 }
 
 func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
+	if testing.Verbose() {
+		log.SetLevel(log.DebugLevel)
+		log.SetFormatter(&log.TextFormatter{
+			DisableQuote: true,
+		})
+	}
 	testCases := []struct {
 		name     string
 		input    string
@@ -134,11 +155,10 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 		},
 		{
 			name:  "Delimiter with content on the same line",
-			input: "public class B {\n\t\ufffa some content\n}",
+			input: "public class B {\n\t\ufffa // some content\ufffb\n}",
 			expected: []string{
 				"public class B {",
-				"\t\ufffa",
-				" some content",
+				"\t\ufffa // some content\ufffb",
 				"}",
 			},
 		},
@@ -210,13 +230,11 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 			},
 		},
 		{
-			name:  "Delimiter in the middle of the line (should split)",
-			input: "public class B {\n\tpublic \ufffa X(Y client) {}\n}",
+			name:  "Delimiter in the middle of the line",
+			input: "public class B {\n\tpublic \ufff9 /* inline comment */ \ufffb X(Y client) {}\n}",
 			expected: []string{
 				"public class B {",
-				"\tpublic ",
-				"\ufffa",
-				" X(Y client) {}",
+				"\tpublic \ufff9 /* inline comment */ \ufffb X(Y client) {}",
 				"}",
 			},
 		},
@@ -278,6 +296,14 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 				"}",
 			},
 		},
+		{
+			name:  "Include content after \\ufffa",
+			input: "\ufffa// Second Comment\n\ufffbgo();",
+			expected: []string{
+				"\ufffa// Second Comment\n\ufffb",
+				"go();",
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -294,8 +320,8 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 			}
 			if len(tokens) != len(tc.expected) {
 				t.Errorf("Expected %d tokens, got %d", len(tc.expected), len(tokens))
-				t.Errorf("Expected tokens: %v", tc.expected)
-				t.Errorf("Got tokens: %v", tokens)
+				t.Errorf("Expected tokens: %+v", tc.expected)
+				t.Errorf("Got tokens: %+v", tokens)
 				return
 			}
 			for i, expected := range tc.expected {

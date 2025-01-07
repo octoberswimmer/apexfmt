@@ -1,6 +1,7 @@
 package formatter
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -12,6 +13,9 @@ import (
 func TestComments(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
+		log.SetFormatter(&log.TextFormatter{
+			DisableQuote: true,
+		})
 	}
 	tests :=
 		[]struct {
@@ -75,24 +79,26 @@ System.debug('I am on a separate line!');`,
 		contact.MailingCountry == 'United States');`,
 			},
 		}
-	for _, tt := range tests {
-		input := antlr.NewInputStream(tt.input)
-		lexer := parser.NewApexLexer(input)
-		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			input := antlr.NewInputStream(tt.input)
+			lexer := parser.NewApexLexer(input)
+			stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-		p := parser.NewApexParser(stream)
-		p.RemoveErrorListeners()
-		p.AddErrorListener(&testErrorListener{t: t})
+			p := parser.NewApexParser(stream)
+			p.RemoveErrorListeners()
+			p.AddErrorListener(&testErrorListener{t: t})
 
-		v := NewFormatVisitor(stream)
-		out, ok := v.visitRule(p.Statement()).(string)
-		if !ok {
-			t.Errorf("Unexpected result parsing apex")
-		}
-		out = removeExtraCommentIndentation(out)
-		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
-		}
+			v := NewFormatVisitor(stream)
+			out, ok := v.visitRule(p.Statement()).(string)
+			if !ok {
+				t.Errorf("Unexpected result parsing apex")
+			}
+			out = removeExtraCommentIndentation(out)
+			if out != tt.output {
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+			}
+		})
 	}
 
 }
@@ -100,7 +106,9 @@ System.debug('I am on a separate line!');`,
 func TestTrailingComments(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
-
+		log.SetFormatter(&log.TextFormatter{
+			DisableQuote: true,
+		})
 	}
 	tests :=
 		[]struct {
@@ -178,24 +186,42 @@ private class T1Exception {}`,
 	private Integer i;
 }`,
 			},
-		}
-	for _, tt := range tests {
-		input := antlr.NewInputStream(tt.input)
-		lexer := parser.NewApexLexer(input)
-		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+			{
+				`class TestClass {
+	public static void go() {
+	// First Comment
 
-		p := parser.NewApexParser(stream)
-		p.RemoveErrorListeners()
-		p.AddErrorListener(&testErrorListener{t: t})
+	// Second Comment
+go();}}`,
+				`class TestClass {
+	public static void go() {
+		// First Comment
 
-		v := NewFormatVisitor(stream)
-		out, ok := v.visitRule(p.CompilationUnit()).(string)
-		if !ok {
-			t.Errorf("Unexpected result parsing apex")
+		// Second Comment
+		go();
+	}
+}`,
+			},
 		}
-		out = removeExtraCommentIndentation(out)
-		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
-		}
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			input := antlr.NewInputStream(tt.input)
+			lexer := parser.NewApexLexer(input)
+			stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+			p := parser.NewApexParser(stream)
+			p.RemoveErrorListeners()
+			p.AddErrorListener(&testErrorListener{t: t})
+
+			v := NewFormatVisitor(stream)
+			out, ok := v.visitRule(p.CompilationUnit()).(string)
+			if !ok {
+				t.Errorf("Unexpected result parsing apex")
+			}
+			out = removeExtraCommentIndentation(out)
+			if out != tt.output {
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+			}
+		})
 	}
 }

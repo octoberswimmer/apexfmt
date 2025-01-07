@@ -120,7 +120,7 @@ func indent(text string) string {
 // Inline comments delimited by \uFFF9 and \uFFFB should always be returned
 // unbroken.
 func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	// Define \ufffa and \ufffb
+	log.Trace(fmt.Sprintf("SPLITTING: %q", string(data)))
 	fffa := []byte("\ufffa")
 	fffb := []byte("\ufffb")
 	inlineCommentStart := []byte("\ufff9")
@@ -137,47 +137,55 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 	// 1. NO NEWLINE FOUND BUT EOF => Return Last Line
 	// ----------------------------------------------------------------
 	if newlineIdx == -1 {
-		if atEOF {
-			line := data
-
-			if hasInlineComment(line, inlineCommentStart, fffb) {
-				// Return the entire line as a single token
-				return len(data), data, nil
-			}
-			// --------------------------------------
-
-			trimmed := bytes.TrimLeft(line, " \t")
-
-			// If line starts with \ufffa or \ufffb and contains only that delimiter
-			if bytes.HasPrefix(trimmed, fffa) || bytes.HasPrefix(trimmed, fffb) {
-				var delimiter []byte
-				if bytes.HasPrefix(trimmed, fffa) {
-					delimiter = fffa
-				} else {
-					delimiter = fffb
-				}
-
-				if bytes.Equal(trimmed, delimiter) {
-					// Line contains only the delimiter
-					return len(data), line, nil
-				}
-
-				// Line starts with the delimiter and has additional content
-				delimiterIdx := bytes.Index(line, delimiter)
-				if delimiterIdx != -1 {
-					// Include leading whitespace in delimiter token
-					delimiterEnd := delimiterIdx + len(delimiter)
-					return delimiterEnd, line[:delimiterEnd], nil
-				}
-			}
-
-			// Otherwise, no delimiters => return the entire line
-			return len(data), data, nil
+		log.Trace(fmt.Sprintf("NO NEWLINE IN: %q", string(data)))
+		if !atEOF {
+			// No newline, not at EOF => request more data
+			log.Trace(fmt.Sprintf("REQUESTING MORE DATA: %q", string(data)))
+			return 0, nil, nil
 		}
 
-		// No newline, not at EOF => request more data
-		return 0, nil, nil
+		log.Trace(fmt.Sprintf("AT EOF IN: %q", string(data)))
+		line := data
+
+		if hasInlineComment(line, inlineCommentStart, fffb) {
+			log.Trace(fmt.Sprintf("HAS INLINE COMMENT: %q", string(line)))
+			// Return the entire line as a single token
+			return len(data), data, nil
+		}
+		// --------------------------------------
+
+		trimmed := bytes.TrimLeft(line, " \t")
+
+		// If line starts with \ufffa or \ufffb and contains only that delimiter
+		if bytes.HasPrefix(trimmed, fffa) || bytes.HasPrefix(trimmed, fffb) {
+			var delimiter []byte
+			if bytes.HasPrefix(trimmed, fffa) {
+				delimiter = fffa
+			} else {
+				delimiter = fffb
+			}
+
+			if bytes.Equal(trimmed, delimiter) {
+				log.Trace(fmt.Sprintf("HAS ONLY DELIMITER: %q", string(line)))
+				// Line contains only the delimiter
+				return len(data), line, nil
+			}
+
+			// Line starts with the delimiter and has additional content
+			delimiterIdx := bytes.Index(line, delimiter)
+			if delimiterIdx != -1 {
+				// Include leading whitespace in delimiter token
+				delimiterEnd := delimiterIdx + len(delimiter)
+				log.Trace(fmt.Sprintf("DELIMITER+: %q", string(line[:delimiterEnd])))
+				return delimiterEnd, line[:delimiterEnd], nil
+			}
+		}
+
+		// Otherwise, no delimiters => return the entire line
+		log.Trace(fmt.Sprintf("NO DELIMITERS: %q", string(data)))
+		return len(data), data, nil
 	}
+	log.Trace(fmt.Sprintf("FOUND NEWLINE IN: %q", string(data)))
 
 	// ----------------------------------------------------------------
 	// 2. WE FOUND A NEWLINE => Extract the line
@@ -187,6 +195,7 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 	// --- Inline comment check ---
 	// If line has \ufff9 and \ufffb in the correct order, keep it as one token.
 	if hasInlineComment(line, inlineCommentStart, fffb) {
+		log.Trace(fmt.Sprintf("INLINE COMMENT: %q", string(data)))
 		return newlineIdx + 1, line, nil
 	}
 	// --------------------------------------
@@ -194,18 +203,15 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 	trimmed := bytes.TrimLeft(line, " \t")
 
 	// ----------------------------------------------------------------
-	// 2a. If line starts with \ufffa or \ufffb
+	// If line starts with \ufffb
 	// ----------------------------------------------------------------
-	if bytes.HasPrefix(trimmed, fffa) || bytes.HasPrefix(trimmed, fffb) {
+	if bytes.HasPrefix(trimmed, fffb) {
 		var delimiter []byte
-		if bytes.HasPrefix(trimmed, fffa) {
-			delimiter = fffa
-		} else {
-			delimiter = fffb
-		}
+		delimiter = fffb
 		delimiterLen := len(delimiter)
 
 		if bytes.Equal(trimmed, delimiter) {
+			log.Trace(fmt.Sprintf("HAS DELIMITER ONLY: %q", string(line)))
 			// Line contains only the delimiter
 			return newlineIdx + 1, line, nil
 		}
@@ -214,32 +220,68 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 		delimiterIdx := bytes.Index(line, delimiter)
 		if delimiterIdx != -1 {
 			delimiterEnd := delimiterIdx + delimiterLen
+			log.Trace(fmt.Sprintf("\\uFFFB+: %q", string(line[:delimiterEnd])))
 			return delimiterEnd, line[:delimiterEnd], nil
 		}
 	}
 
-	// ----------------------------------------------------------------
-	// 2b. Delimiter Elsewhere in the Line
-	// ----------------------------------------------------------------
 	fffaIdx := bytes.Index(line, fffa)
 	fffbIdx := bytes.Index(line, fffb)
 
-	firstIdx := -1
-	if fffaIdx != -1 && (fffbIdx == -1 || fffaIdx < fffbIdx) {
-		firstIdx = fffaIdx
-	}
-	if fffbIdx != -1 && (firstIdx == -1 || fffbIdx < fffaIdx) {
-		firstIdx = fffbIdx
+	// ----------------------------------------------------------------
+	// If line starts with \ufffa
+	// ----------------------------------------------------------------
+	if bytes.HasPrefix(trimmed, fffa) {
+		delimiter := fffa
+
+		if bytes.Equal(trimmed, delimiter) {
+			log.Trace(fmt.Sprintf("HAS DELIMITER ONLY: %q", string(line)))
+			// Line contains only the delimiter
+			return newlineIdx + 1, line, nil
+		}
+
+		if fffbIdx != -1 {
+			// \ufffb is before the newline
+			delimiterEnd := fffbIdx + len("\ufffb")
+			log.Trace(fmt.Sprintf("RETURNING UP TO \\uFFFB: %q", string(line[:delimiterEnd])))
+			// Advance past the newline after \uFFFB
+			return delimiterEnd + 1, line[:delimiterEnd], nil
+		}
+		if f := bytes.Index(data, fffb); f == newlineIdx+1 {
+			delimiterLen := len(fffb)
+			log.Trace(fmt.Sprintf("RETURNING UP TO NEWLINE WITH \\uFFFB: %q", string(data[:f+delimiterLen])))
+			return f + delimiterLen, data[:f+delimiterLen], nil
+		}
+
+		// Line starts with delimiter but has more content
+		delimiterIdx := bytes.Index(line, delimiter)
+		if delimiterIdx != -1 {
+			log.Trace(fmt.Sprintf("\\uFFFA+: %q", string(line)))
+			return newlineIdx + 1, line, nil
+		}
 	}
 
-	if firstIdx != -1 {
+	// ----------------------------------------------------------------
+	// Delimiter Elsewhere in the Line
+	// ----------------------------------------------------------------
+
+	if fffaIdx != -1 && (fffbIdx == -1 || fffaIdx < fffbIdx) {
 		// Split BEFORE the delimiter
-		return firstIdx, line[:firstIdx], nil
+		log.Trace(fmt.Sprintf("HAS \\uFFFA IN LINE: %q", string(line[:fffaIdx])))
+		return fffaIdx, line[:fffaIdx], nil
+	}
+	if fffbIdx != -1 && (fffaIdx == -1 || fffbIdx < fffaIdx) {
+		delimiterLen := len(fffb)
+		// Split AFTER the delimiter
+		log.Trace(fmt.Sprintf("HAS \\uFFFB IN LINE: %q", string(line[:fffbIdx+delimiterLen])))
+		// Advance past the newline after \uFFFB
+		return fffbIdx + delimiterLen + 1, line[:fffbIdx+delimiterLen], nil
 	}
 
 	// ----------------------------------------------------------------
 	// 2c. No Delimiters => Return Entire Line
 	// ----------------------------------------------------------------
+	log.Trace(fmt.Sprintf("NO DELIMITER: %q", string(line)))
 	return newlineIdx + 1, line, nil
 }
 
@@ -261,8 +303,9 @@ func indentTo(text string, indents int) string {
 	log.Debug(fmt.Sprintf("INDENTING: %q\n", text))
 
 	for scanner.Scan() {
-		log.Debug(fmt.Sprintf("INDENTING LINE: %q\n", scanner.Text()))
+		log.Trace(fmt.Sprintf("INDENTING LINE: %q\n", scanner.Text()))
 		if scanner.Text() == "\uFFFB" {
+			// indentedText.WriteString("\n")
 			indentedText.WriteString(scanner.Text())
 			continue
 		}
@@ -342,13 +385,13 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 				text = strings.TrimSpace(text)
 
 				text = fmt.Sprintf("%s%s%s", leading, text, trailing)
-				log.Debug(fmt.Sprintf("NORMALIZED COMMENT: %q\n", text))
+				log.Trace(fmt.Sprintf("NORMALIZED COMMENT: %q\n", text))
 				if containsNewline {
-					text = "\uFFFA" + text + "\uFFFB"
+					text = "\uFFFA" + text + "\uFFFB" + "\n"
 				} else {
 					text = "\uFFF9" + text + "\uFFFB"
 				}
-				log.Debug(fmt.Sprintf("WRAPPED COMMENT: %q\n\n", text))
+				log.Trace(fmt.Sprintf("WRAPPED COMMENT: %q\n\n", text))
 			} else if token.GetChannel() == WHITESPACE_CHANNEL && countNewlines(text) > 1 {
 				text = "\n" // Replace multiple blank lines with a single blank line
 			} else {

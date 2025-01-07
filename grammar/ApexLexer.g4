@@ -475,7 +475,7 @@ COMMENT
     ;
 
 LINE_COMMENT
-    :  [ \t\r\n\u000C]* '//' ~[\r\n]* [ \t\r\n\u000C]*-> channel(COMMENT_CHANNEL)
+    :  [ \t\r\n\u000C]* '//' ~[\r\n]* -> channel(COMMENT_CHANNEL)
     ;
 
 WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE_CHANNEL)

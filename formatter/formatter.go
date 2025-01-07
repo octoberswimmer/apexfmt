@@ -11,6 +11,7 @@ import (
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
+	log "github.com/sirupsen/logrus"
 )
 
 type Formatter struct {
@@ -106,6 +107,8 @@ func (f *Formatter) Write() error {
 	return writeFile(f.filename, f.formatted)
 }
 
+// removeIndentationFromComment removes extra tabs that were introduced during
+// formatting from a single multi-line comment.
 func removeIndentationFromComment(comment string) string {
 	// Find the position of the initial \uFFFA and the final \uFFFB
 	startIndex := strings.Index(comment, "\uFFFA")
@@ -139,17 +142,43 @@ func removeIndentationFromComment(comment string) string {
 	return unindented
 }
 
-// Comments are annotated in FormatVisitor.visitRule.  We preserve whitespace
-// within multi-line comments by removing the indentation added within the
-// comment.
+// removeExtraCommentIndentation cleans up the formatting of comments after the
+// formatter has run.
+//
+// This could probably be improved by rethinking the approach.  Preserving
+// comments is tricky.
+//
+// The antlr lexer pulls comments into a separate token stream so we don't need
+// to check for comments in every visit function.  Instead, we look for
+// comments, each represented as a single token, before the start of or after
+// the end of the current parser node.  Then we reinject the comments as we're
+// visiting each node.
+//
+// The visitor functions don't know about the comments so they introduce
+// whitespace around them when formatting and indenting the code.  We need to
+// ensure that the comments don't end up mangled.  We wrap the comments in
+// delimiters so we can easily identify the comments and clean up after
+// formatter runs.  This code cleans up the whitespace and removes the comment
+// delimiters.
 func removeExtraCommentIndentation(input string) string {
+	log.Trace(fmt.Sprintf("ADJUSTING  : %q", input))
 	// Remove extra grammar-specific newlines added unaware of newline-preserving comments injected
 	newlinePrefixedMultilineComment := regexp.MustCompile("[\n ]*(\t*\uFFFA)")
 	input = newlinePrefixedMultilineComment.ReplaceAllString(input, "$1")
+	log.Trace(fmt.Sprintf("ADJUSTED(1): %q", input))
 
 	// Remove extra grammar-specific space added unaware of newline-preserving comments injected
 	spacePaddedMultilineComment := regexp.MustCompile(`(` + "\uFFFB\n*\t*" + `) +`)
 	input = spacePaddedMultilineComment.ReplaceAllString(input, "$1")
+	log.Trace(fmt.Sprintf("ADJUSTED(2): %q", input))
+
+	// Remove extra indent-injected newlines
+	indentInjectedNewlines := regexp.MustCompile("\uFFFB\n+")
+	input = indentInjectedNewlines.ReplaceAllString(input, "\uFFFB\n")
+	log.Trace(fmt.Sprintf("ADJUSTED(3): %q", input))
+
+	input = strings.ReplaceAll(input, "\n\uFFFB\n", "\n\uFFFB")
+	log.Trace(fmt.Sprintf("ADJUSTED(4): %q", input))
 
 	newlinePrefixedInlineComment := regexp.MustCompile("\n\t*\uFFF9\n")
 	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")
@@ -161,6 +190,7 @@ func removeExtraCommentIndentation(input string) string {
 	// Restore formatting of indented multi-line comments
 	multilineCommentPattern := regexp.MustCompile(`(?s)\t*` + "\uFFFA" + `.*?` + "\uFFFB")
 	unindented := multilineCommentPattern.ReplaceAllStringFunc(input, removeIndentationFromComment)
+	log.Trace(fmt.Sprintf("UNINDENTED : %q", input))
 
 	return unindented
 }
