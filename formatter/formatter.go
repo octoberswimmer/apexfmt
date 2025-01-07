@@ -144,8 +144,12 @@ func removeIndentationFromComment(comment string) string {
 // comment.
 func removeExtraCommentIndentation(input string) string {
 	// Remove extra grammar-specific newlines added unaware of newline-preserving comments injected
-	newlinePrefixedMultilineComment := regexp.MustCompile("\n(\t*\uFFFA)")
+	newlinePrefixedMultilineComment := regexp.MustCompile("[\n ]*(\t*\uFFFA)")
 	input = newlinePrefixedMultilineComment.ReplaceAllString(input, "$1")
+
+	// Remove extra grammar-specific space added unaware of newline-preserving comments injected
+	spacePaddedMultilineComment := regexp.MustCompile(`(` + "\uFFFB\n*\t*" + `) +`)
+	input = spacePaddedMultilineComment.ReplaceAllString(input, "$1")
 
 	newlinePrefixedInlineComment := regexp.MustCompile("\n\t*\uFFF9\n")
 	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")

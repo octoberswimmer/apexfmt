@@ -338,8 +338,8 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 					trailing = " "
 				}
 				// Strip leading whitespace so the comment can be indented to the right location
-				text = strings.TrimSpace(text)
 				containsNewline := strings.Contains(text, "\n")
+				text = strings.TrimSpace(text)
 
 				text = fmt.Sprintf("%s%s%s", leading, text, trailing)
 				log.Debug(fmt.Sprintf("NORMALIZED COMMENT: %q\n", text))
@@ -353,7 +353,7 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 				text = "\n" // Replace multiple blank lines with a single blank line
 			} else {
 				// whitespace to ignore
-				text = ""
+				continue
 			}
 
 			tokenLines = append(tokenLines, text)

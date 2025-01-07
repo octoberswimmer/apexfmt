@@ -1,6 +1,7 @@
 package formatter
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 
@@ -22,7 +23,6 @@ func (e *testErrorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line,
 func TestStatement(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
-
 	}
 	tests :=
 		[]struct {
@@ -427,7 +427,9 @@ func TestMemberDeclaration(t *testing.T) {
 func TestCompilationUnit(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.DebugLevel)
-
+		log.SetFormatter(&log.TextFormatter{
+			DisableQuote: true,
+		})
 	}
 	tests :=
 		[]struct {
@@ -563,25 +565,48 @@ public class Top {
 	public String it;
 }`,
 			},
+			{
+				`class TestClass {
+   List<String> vals = new List<String>{ 
+   // test comment 1
+   'val1', 'val2', 
+   // test comment 2
+   'val3'
+   // test comment 3
+    };
+}`,
+				`class TestClass {
+	List<String> vals = new List<String>{
+	// test comment 1
+	'val1', 'val2',
+	// test comment 2
+	'val3'
+	// test comment 3
+	};
+}`,
+			},
 		}
-	for _, tt := range tests {
-		input := antlr.NewInputStream(tt.input)
-		lexer := parser.NewApexLexer(input)
-		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 
-		p := parser.NewApexParser(stream)
-		p.RemoveErrorListeners()
-		p.AddErrorListener(&testErrorListener{t: t})
+			input := antlr.NewInputStream(tt.input)
+			lexer := parser.NewApexLexer(input)
+			stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-		v := NewFormatVisitor(stream)
-		out, ok := v.visitRule(p.CompilationUnit()).(string)
-		if !ok {
-			t.Errorf("Unexpected result parsing apex")
-		}
-		out = removeExtraCommentIndentation(out)
-		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
-		}
+			p := parser.NewApexParser(stream)
+			p.RemoveErrorListeners()
+			p.AddErrorListener(&testErrorListener{t: t})
+
+			v := NewFormatVisitor(stream)
+			out, ok := v.visitRule(p.CompilationUnit()).(string)
+			if !ok {
+				t.Errorf("Unexpected result parsing apex")
+			}
+			out = removeExtraCommentIndentation(out)
+			if out != tt.output {
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+			}
+		})
 	}
 }
 
