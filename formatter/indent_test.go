@@ -46,7 +46,7 @@ func TestIndent(t *testing.T) {
 			},
 			{
 				"\ufffa\n// First Comment\n\n\ufffb\ufffa// Second Comment\n\ufffbgo();",
-				"\t\ufffa\n\t// First Comment\n\ufffb\n\t\ufffa// Second Comment\n\ufffb\n\tgo();",
+				"\t\ufffa\n\t// First Comment\n\n\ufffb\t\ufffa// Second Comment\n\ufffb\n\tgo();",
 			},
 			{
 				"\ufffa\n/*\n\t * Property getters\n\t **/\n\ufffb",
@@ -180,6 +180,7 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 				"/**",
 				"\t\t */",
 				"",
+				"",
 				"\ufffb",
 				"}",
 			},
@@ -311,6 +312,16 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 				"/*",
 				"\t * Property getters",
 				"\t **/",
+				"",
+				"\ufffb",
+			},
+		},
+		{
+			name:  "Preserve all newlines in comments",
+			input: "\t*/\n\n\ufffb",
+			expected: []string{
+				"\t*/",
+				"",
 				"",
 				"\ufffb",
 			},

@@ -41,8 +41,6 @@ const (
 	PositionAfter
 )
 
-var manyNewlines = regexp.MustCompile(`\n{3,}`)
-
 func NewFormatVisitor(tokens *antlr.CommonTokenStream) *FormatVisitor {
 	return &FormatVisitor{
 		tokens:         tokens,
@@ -77,6 +75,13 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 
 	_ = afterHiddenTokens
 	result = appendHiddenTokens(v, result, afterHiddenTokens, PositionAfter)
+
+	if result.(string) == "{}" {
+		inbetweenTokens := interleaveHiddenTokens(
+			getHiddenTokensBetween(v.tokens, start, stop),
+		)
+		result = fmt.Sprintf("%s}", appendHiddenTokens(v, "{", inbetweenTokens, PositionAfter))
+	}
 
 	return result
 }
@@ -274,15 +279,20 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 		delimiterLen := len(fffb)
 		// Split AFTER the delimiter
 		log.Trace(fmt.Sprintf("HAS \\uFFFB IN LINE: %q", string(line[:fffbIdx+delimiterLen])))
-		// Advance past the newline after \uFFFB
-		return fffbIdx + delimiterLen + 1, line[:fffbIdx+delimiterLen], nil
+		advance := 0
+		if bytes.IndexByte(line[:fffbIdx+delimiterLen], '\n') == 0 {
+			// Advance past the newline after \uFFFB
+			advance = 1
+		}
+		return fffbIdx + delimiterLen + advance, line[:fffbIdx+delimiterLen], nil
 	}
 
 	// ----------------------------------------------------------------
 	// 2c. No Delimiters => Return Entire Line
 	// ----------------------------------------------------------------
 	log.Trace(fmt.Sprintf("NO DELIMITER: %q", string(line)))
-	if len(line) > 0 && bytes.Index(data, fffb) == newlineIdx+1 {
+	var fffbFollowsNewlines = regexp.MustCompile(`(s?)^` + "\n+\uFFFB")
+	if len(line) > 0 && fffbFollowsNewlines.Match(data[newlineIdx:]) {
 		// \uFFFB follows newline.  We want to keep the newline by returning an
 		// extra empty line so we don't advance over the newline.
 		return newlineIdx, line, nil
@@ -308,22 +318,21 @@ func indentTo(text string, indents int) string {
 	log.Debug(fmt.Sprintf("INDENTING: %q\n", text))
 
 	for scanner.Scan() {
-		log.Trace(fmt.Sprintf("INDENTING LINE: %q\n", scanner.Text()))
-		if scanner.Text() == "\uFFFB" {
-			// indentedText.WriteString("\n")
-			indentedText.WriteString(scanner.Text())
+		t := scanner.Text()
+		log.Trace(fmt.Sprintf("INDENTING LINE: %q\n", t))
+		if t == "\uFFFB" {
+			indentedText.WriteString(t)
 			continue
 		}
 		if isFirstLine {
 			isFirstLine = false
-		} else {
+		} else if !strings.HasPrefix(t, "\uFFFA") && !strings.HasPrefix(t, "\uFFF9") {
 			indentedText.WriteString("\n")
 		}
 		if scanner.Text() == "" {
 			indentedText.WriteString(scanner.Text())
 			continue
 		}
-		t := scanner.Text()
 		t = strings.Repeat("\t", indents) + t
 		indentedText.WriteString(t)
 	}
@@ -375,8 +384,10 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 				trailingWhitespace := getTrailingWhitespace(text)
 				leading := ""
 				trailing := ""
-				if n := countNewlines(leadingWhitespace); n > 0 {
-					leading = strings.Repeat("\n", n)
+				if n := countNewlines(leadingWhitespace); n > 1 {
+					leading = strings.Repeat("\n", 2)
+				} else if countNewlines(leadingWhitespace) == 1 {
+					leading = "\n"
 				} else if len(leadingWhitespace) > 0 && position == PositionAfter {
 					leading = " "
 				}
@@ -396,7 +407,7 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 				if containsNewline {
 					text = "\uFFFA" + text + "\uFFFB" + "\n"
 				} else if lineComment {
-					text = "\uFFF9" + text + "\uFFFB" + "\n"
+					text = "\uFFF9" + text + "\n\uFFFB"
 				} else {
 					text = "\uFFF9" + text + "\uFFFB"
 				}
@@ -432,6 +443,38 @@ func countNewlines(text string) int {
 func getStartStop(node antlr.RuleNode) (start, stop antlr.Token) {
 	ctx := node.(antlr.ParserRuleContext)
 	return ctx.GetStart(), ctx.GetStop()
+}
+
+func getHiddenTokensBetween(tokens *antlr.CommonTokenStream, start, stop antlr.Token) ([]antlr.Token, []antlr.Token) {
+	if start == nil || stop == nil || len(tokens.GetAllTokens()) == 0 {
+		return nil, nil
+	}
+	after := tokens.GetHiddenTokensToRight(start.GetTokenIndex(), WHITESPACE_CHANNEL)
+	before := tokens.GetHiddenTokensToLeft(stop.GetTokenIndex(), WHITESPACE_CHANNEL)
+	inAfter := make(map[int]struct{})
+	for _, t := range after {
+		inAfter[t.GetTokenIndex()] = struct{}{}
+	}
+	whitespaceTokens := []antlr.Token{}
+	for _, t := range before {
+		if _, exists := inAfter[t.GetTokenIndex()]; exists {
+			whitespaceTokens = append(whitespaceTokens, t)
+		}
+	}
+
+	after = tokens.GetHiddenTokensToRight(start.GetTokenIndex(), COMMENTS_CHANNEL)
+	before = tokens.GetHiddenTokensToLeft(stop.GetTokenIndex(), COMMENTS_CHANNEL)
+	inAfter = make(map[int]struct{})
+	for _, t := range after {
+		inAfter[t.GetTokenIndex()] = struct{}{}
+	}
+	commentTokens := []antlr.Token{}
+	for _, t := range before {
+		if _, exists := inAfter[t.GetTokenIndex()]; exists {
+			commentTokens = append(commentTokens, t)
+		}
+	}
+	return whitespaceTokens, commentTokens
 }
 
 func getHiddenTokens(tokens *antlr.CommonTokenStream, token antlr.Token, direction HiddenTokenDirection) ([]antlr.Token, []antlr.Token) {

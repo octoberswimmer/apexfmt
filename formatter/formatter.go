@@ -180,6 +180,10 @@ func removeExtraCommentIndentation(input string) string {
 	input = strings.ReplaceAll(input, "\n\uFFFB\n", "\n\uFFFB")
 	log.Trace(fmt.Sprintf("ADJUSTED(4): %q", input))
 
+	doubleCapturedNewlines := regexp.MustCompile("\n(\ufffb\t*\ufffa\n)")
+	input = doubleCapturedNewlines.ReplaceAllString(input, "$1")
+	log.Trace(fmt.Sprintf("ADJUSTED(5): %q", input))
+
 	newlinePrefixedInlineComment := regexp.MustCompile("\n\t*\uFFF9\n")
 	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")
 

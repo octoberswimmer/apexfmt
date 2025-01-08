@@ -23,7 +23,7 @@ func (e *testErrorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line,
 
 func TestStatement(t *testing.T) {
 	if testing.Verbose() {
-		log.SetLevel(log.DebugLevel)
+		log.SetLevel(log.TraceLevel)
 	}
 	tests :=
 		[]struct {
@@ -321,24 +321,61 @@ OneDayDischargeFollowUp.twoHoursDelay,
 	}
 }`,
 			},
+			{
+				`go(a, // line comment in args
+b);`,
+				`go(a, // line comment in args
+b);`,
+			},
+			{
+				`Integer i = new doot(go(a, b)).then();`,
+				`Integer i = new doot(go(a, b)).then();`,
+			},
+			{
+				`System.runAs(user) {
+	Fixtures.MegaOrder mo = new Fixtures.MegaOrderFactory()
+		.setOrderFac(Fixtures.order()
+			.put(Order__c.Shipping_Destination__c, Fixtures.shippingDestination()
+				.save().Id)
+			.put(Order__c.Subtotal__c, 100) // We need any value here
+		).usingShipCompliant(true)
+		.save();
+}`,
+				`System.runAs(user) {
+	Fixtures.MegaOrder mo = new Fixtures.MegaOrderFactory()
+			.setOrderFac(Fixtures.order()
+				.put(Order__c.Shipping_Destination__c, Fixtures.shippingDestination()
+					.save().Id)
+				.put(Order__c.Subtotal__c, 100) // We need any value here
+			)
+			.usingShipCompliant(true)
+			.save();
+}`,
+			},
 		}
-	for _, tt := range tests {
-		input := antlr.NewInputStream(tt.input)
-		lexer := parser.NewApexLexer(input)
-		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	dmp := diffmatchpatch.New()
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 
-		p := parser.NewApexParser(stream)
-		p.RemoveErrorListeners()
-		p.AddErrorListener(&testErrorListener{t: t})
+			input := antlr.NewInputStream(tt.input)
+			lexer := parser.NewApexLexer(input)
+			stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-		v := NewFormatVisitor(stream)
-		out, ok := v.visitRule(p.Statement()).(string)
-		if !ok {
-			t.Errorf("Unexpected result parsing apex")
-		}
-		if out != tt.output {
-			t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
-		}
+			p := parser.NewApexParser(stream)
+			p.RemoveErrorListeners()
+			p.AddErrorListener(&testErrorListener{t: t})
+
+			v := NewFormatVisitor(stream)
+			out, ok := v.visitRule(p.Statement()).(string)
+			if !ok {
+				t.Errorf("Unexpected result parsing apex")
+			}
+			out = removeExtraCommentIndentation(out)
+			if out != tt.output {
+				diffs := dmp.DiffMain(tt.output, out, false)
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
+			}
+		})
 	}
 
 }
@@ -616,6 +653,88 @@ public class A {}`,
 	 **/
 	public String getSid() {
 		return this.getProperty(SID_PROPERTY);
+	}
+}`,
+			},
+			{
+				`class TestClass {
+   List<String> vals = new List<String>{ 
+	/* MULTI
+	*/
+
+   // test comment 2
+   'val3'
+    };
+}`,
+				`class TestClass {
+	List<String> vals = new List<String>{
+	/* MULTI
+	*/
+
+	// test comment 2
+	'val3' };
+}`,
+			},
+			{
+				`class TestClass {
+   List<String> vals = new List<String>{ 
+	/* MULTI
+	*/
+   // test comment 1
+
+   // test comment 2
+   'val3'
+    };
+}`,
+				`class TestClass {
+	List<String> vals = new List<String>{
+	/* MULTI
+	*/
+	// test comment 1
+
+	// test comment 2
+	'val3' };
+}`,
+			},
+			{
+				`class TestClass {
+	public void go() {
+	// Line Comment
+
+	/* MULTI
+	 *
+	*/
+	}
+}`,
+				`class TestClass {
+	public void go() {
+	// Line Comment
+
+	/* MULTI
+	 *
+	*/
+	}
+}`,
+			},
+			{
+				`public class TestClass {
+	public void go() {
+		// Line Comment
+
+		/* MULTI
+		 *
+		*/
+		return;
+	}
+}`,
+				`public class TestClass {
+	public void go() {
+		// Line Comment
+
+		/* MULTI
+		 *
+		*/
+		return;
 	}
 }`,
 			},
