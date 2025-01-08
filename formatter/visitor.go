@@ -378,18 +378,20 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 				// Strip leading whitespace so the comment can be indented to the right location
 				containsNewline := strings.Contains(text, "\n")
 				text = strings.TrimSpace(text)
-				toEndOfLine := strings.HasPrefix(text, "//")
+				lineComment := strings.HasPrefix(text, "//")
 
 				if n := countNewlines(trailingWhitespace); n > 0 {
 					trailing = strings.Repeat("\n", n)
-				} else if len(trailingWhitespace) > 0 && !toEndOfLine {
+				} else if len(trailingWhitespace) > 0 && !lineComment {
 					trailing = " "
 				}
 
 				text = fmt.Sprintf("%s%s%s", leading, text, trailing)
 				log.Trace(fmt.Sprintf("NORMALIZED COMMENT: %q\n", text))
-				if containsNewline || toEndOfLine {
+				if containsNewline {
 					text = "\uFFFA" + text + "\uFFFB" + "\n"
+				} else if lineComment {
+					text = "\uFFF9" + text + "\uFFFB" + "\n"
 				} else {
 					text = "\uFFF9" + text + "\uFFFB"
 				}

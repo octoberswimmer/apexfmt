@@ -84,6 +84,30 @@ System.debug('I am on a separate line!');`,
 				`// Test trailing whitespace
 go();`,
 			},
+			{
+				`if (true) {
+	if (true) {
+		go();
+	} // line comment
+}`,
+				`if (true) {
+	if (true) {
+		go();
+	} // line comment
+}`,
+			},
+			{
+				`if (true) {
+	if (true) {
+		go(); 			// line comment
+	}
+}`,
+				`if (true) {
+	if (true) {
+		go(); // line comment
+	}
+}`,
+			},
 		}
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
