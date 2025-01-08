@@ -7,6 +7,7 @@ import (
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
+	"github.com/sergi/go-diff/diffmatchpatch"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -594,7 +595,32 @@ public class A {
 @IsTest
 public class A {}`,
 			},
+			{
+				`class X {
+	/*
+	 * Property getters
+	 **/
+	/**
+	 * @return the sid
+	 **/
+	public String getSid() {
+		return this.getProperty(SID_PROPERTY);
+	}
+}`,
+				`class X {
+	/*
+	 * Property getters
+	 **/
+	/**
+	 * @return the sid
+	 **/
+	public String getSid() {
+		return this.getProperty(SID_PROPERTY);
+	}
+}`,
+			},
 		}
+	dmp := diffmatchpatch.New()
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 
@@ -613,7 +639,8 @@ public class A {}`,
 			}
 			out = removeExtraCommentIndentation(out)
 			if out != tt.output {
-				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+				diffs := dmp.DiffMain(tt.output, out, false)
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
 			}
 		})
 	}

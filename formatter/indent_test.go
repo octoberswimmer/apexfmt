@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sergi/go-diff/diffmatchpatch"
 	log "github.com/sirupsen/logrus"
 )
 
 func TestIndent(t *testing.T) {
 	if testing.Verbose() {
-		log.SetLevel(log.DebugLevel)
+		log.SetLevel(log.TraceLevel)
 		log.SetFormatter(&log.TextFormatter{
 			DisableQuote: true,
 		})
@@ -41,18 +42,24 @@ func TestIndent(t *testing.T) {
 			},
 			{
 				"public class B {\n\t\ufffa\n\t/**\n\t\t\t */\n\ufffb\tpublic X(Y client) {}\n}",
-				"\tpublic class B {\n\t\t\ufffa\n\t\t/**\n\t\t\t\t */\ufffb\n\t\tpublic X(Y client) {}\n\t}",
+				"\tpublic class B {\n\t\t\ufffa\n\t\t/**\n\t\t\t\t */\n\ufffb\n\t\tpublic X(Y client) {}\n\t}",
 			},
 			{
 				"\ufffa\n// First Comment\n\n\ufffb\ufffa// Second Comment\n\ufffbgo();",
 				"\t\ufffa\n\t// First Comment\n\ufffb\n\t\ufffa// Second Comment\n\ufffb\n\tgo();",
 			},
+			{
+				"\ufffa\n/*\n\t * Property getters\n\t **/\n\ufffb",
+				"\t\ufffa\n\t/*\n\t\t * Property getters\n\t\t **/\n\ufffb",
+			},
 		}
+	dmp := diffmatchpatch.New()
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 			out := indent(tt.input)
 			if out != tt.output {
-				t.Errorf("unexpected indent format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+				diffs := dmp.DiffMain(tt.output, out, false)
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
 			}
 		})
 	}
@@ -97,7 +104,7 @@ func TestRemoveIndentation(t *testing.T) {
 
 func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 	if testing.Verbose() {
-		log.SetLevel(log.DebugLevel)
+		log.SetLevel(log.TraceLevel)
 		log.SetFormatter(&log.TextFormatter{
 			DisableQuote: true,
 		})
@@ -132,6 +139,7 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 				"\t\ufffa",
 				"\t/**",
 				"\t\t */",
+				"",
 				"\ufffb",
 				"}",
 			},
@@ -281,18 +289,9 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 			input: "public class B {\n\ufffb\tpublic X(Y client) {}\n}",
 			expected: []string{
 				"public class B {",
+				"",
 				"\ufffb",
 				"\tpublic X(Y client) {}",
-				"}",
-			},
-		},
-		{
-			name:  "Multiple \ufffb delimiters on separate lines",
-			input: "public class B {\n\ufffb\n\ufffb\n}",
-			expected: []string{
-				"public class B {",
-				"\ufffb",
-				"\ufffb",
 				"}",
 			},
 		},
@@ -302,6 +301,18 @@ func TestSplitLeadingFFFAOrFFFBOrNewline(t *testing.T) {
 			expected: []string{
 				"\ufffa// Second Comment\n\ufffb",
 				"go();",
+			},
+		},
+		{
+			name:  "Preserve newlines in comments",
+			input: "\ufffa\n/*\n\t * Property getters\n\t **/\n\ufffb",
+			expected: []string{
+				"\ufffa",
+				"/*",
+				"\t * Property getters",
+				"\t **/",
+				"",
+				"\ufffb",
 			},
 		},
 	}

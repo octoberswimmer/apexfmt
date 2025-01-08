@@ -6,6 +6,7 @@ import (
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
+	"github.com/sergi/go-diff/diffmatchpatch"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -108,7 +109,26 @@ go();`,
 	}
 }`,
 			},
+			{
+				`
+/**
+* comment 1
+*/
+/*
+ * comment 2
+ */
+go();`,
+				`
+/**
+* comment 1
+*/
+/*
+ * comment 2
+ */
+go();`,
+			},
 		}
+	dmp := diffmatchpatch.New()
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 			input := antlr.NewInputStream(tt.input)
@@ -126,7 +146,8 @@ go();`,
 			}
 			out = removeExtraCommentIndentation(out)
 			if out != tt.output {
-				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+				diffs := dmp.DiffMain(tt.output, out, false)
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
 			}
 		})
 	}
@@ -233,6 +254,7 @@ go();}}`,
 }`,
 			},
 		}
+	dmp := diffmatchpatch.New()
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 			input := antlr.NewInputStream(tt.input)
@@ -250,7 +272,8 @@ go();}}`,
 			}
 			out = removeExtraCommentIndentation(out)
 			if out != tt.output {
-				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\n", tt.output, out)
+				diffs := dmp.DiffMain(tt.output, out, false)
+				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
 			}
 		})
 	}

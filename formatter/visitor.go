@@ -282,6 +282,11 @@ func SplitLeadingFFFAOrFFFBOrNewline(data []byte, atEOF bool) (advance int, toke
 	// 2c. No Delimiters => Return Entire Line
 	// ----------------------------------------------------------------
 	log.Trace(fmt.Sprintf("NO DELIMITER: %q", string(line)))
+	if len(line) > 0 && bytes.Index(data, fffb) == newlineIdx+1 {
+		// \uFFFB follows newline.  We want to keep the newline by returning an
+		// extra empty line so we don't advance over the newline.
+		return newlineIdx, line, nil
+	}
 	return newlineIdx + 1, line, nil
 }
 
