@@ -124,6 +124,9 @@ func (v *ChainVisitor) VisitSelectEntry(ctx *parser.SelectEntryContext) interfac
 		// estimate complexity; probably close enough
 		return 5
 	}
+	if ctx.TypeOf() != nil {
+		return 3
+	}
 	return 1
 }
 

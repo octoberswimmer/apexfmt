@@ -352,6 +352,32 @@ b);`,
 			.save();
 }`,
 			},
+			{
+				`return Database.getQueryLocator(
+   [
+      SELECT
+         TYPEOF What
+            WHEN Account_Profile__c THEN Account__c, Marketing_Team__c
+         END
+      FROM Event
+      WHERE WhatId IN :this.oldAccountProfileIds
+   ]
+);`,
+				`return Database.getQueryLocator([
+	SELECT
+		TYPEOF What
+		WHEN
+			Account_Profile__c
+		THEN
+			Account__c,
+			Marketing_Team__c
+		END
+	FROM
+		Event
+	WHERE
+		WhatId IN :this.oldAccountProfileIds
+]);`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {
