@@ -24,6 +24,9 @@ func (e *testErrorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line,
 func TestStatement(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.TraceLevel)
+		log.SetFormatter(&log.TextFormatter{
+			DisableQuote: true,
+		})
 	}
 	tests :=
 		[]struct {
@@ -377,6 +380,18 @@ b);`,
 	WHERE
 		WhatId IN :this.oldAccountProfileIds
 ]);`,
+			},
+			{
+				`Account a = new Account(
+Name = 'Acme',
+Type = 'Something', // a comment
+BillingPostalCode = '90210'
+);`,
+				`Account a = new Account(
+	Name = 'Acme',
+	Type = 'Something', // a comment
+	BillingPostalCode = '90210'
+);`,
 			},
 		}
 	dmp := diffmatchpatch.New()
