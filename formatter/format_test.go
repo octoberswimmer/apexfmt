@@ -779,6 +779,13 @@ public class A {}`,
 	}
 }`,
 			},
+			{
+				`public class TestClass {
+
+
+}`,
+				`public class TestClass {}`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {

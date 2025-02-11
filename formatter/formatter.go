@@ -196,6 +196,10 @@ func removeExtraCommentIndentation(input string) string {
 	inlineCommentPattern := regexp.MustCompile(`(?s)` + "\uFFF9" + `(.*?)` + "\uFFFB")
 	input = inlineCommentPattern.ReplaceAllString(input, "$1")
 
+	// Remove newlines in braces
+	whitespaceInBraces := regexp.MustCompile(`(?s){\n+}`)
+	input = whitespaceInBraces.ReplaceAllString(input, "{}")
+
 	// Restore formatting of indented multi-line comments
 	multilineCommentPattern := regexp.MustCompile(`(?s)\t*` + "\uFFFA" + `.*?` + "\uFFFB")
 	unindented := multilineCommentPattern.ReplaceAllStringFunc(input, removeIndentationFromComment)
