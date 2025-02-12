@@ -786,6 +786,33 @@ public class A {}`,
 }`,
 				`public class TestClass {}`,
 			},
+			{
+				` public class TestClass {
+	public static void getInquiryMarketingOwners(Set<Id> inqIds,/**first**/
+		Map<Id, Set<Id>> mapInqIdMarketingOwnerIds, /**second**/
+		Set<Id> inquiryMarketingOwnerIds /**third**/) {
+}
+}`,
+				`public class TestClass {
+	public static void getInquiryMarketingOwners(
+		Set<Id> inqIds,/**first**/
+		Map<Id, Set<Id>> mapInqIdMarketingOwnerIds, /**second**/
+		Set<Id> inquiryMarketingOwnerIds /**third**/
+	) {}
+}`,
+			},
+			{
+				`public class TestClass {
+	public static void myTest(Set<Id> ids) { // end of line comment
+		List<Id> moreIds = new List<Id>();
+	}
+}`,
+				`public class TestClass {
+	public static void myTest(Set<Id> ids) { // end of line comment
+		List<Id> moreIds = new List<Id>();
+	}
+}`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {

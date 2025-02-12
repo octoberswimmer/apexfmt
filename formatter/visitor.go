@@ -388,7 +388,7 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 					leading = strings.Repeat("\n", 2)
 				} else if countNewlines(leadingWhitespace) == 1 {
 					leading = "\n"
-				} else if len(leadingWhitespace) > 0 && position == PositionAfter {
+				} else if len(leadingWhitespace) > 0 {
 					leading = " "
 				}
 				// Strip leading whitespace so the comment can be indented to the right location

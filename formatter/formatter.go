@@ -163,34 +163,42 @@ func removeIndentationFromComment(comment string) string {
 func removeExtraCommentIndentation(input string) string {
 	log.Trace(fmt.Sprintf("ADJUSTING  : %q", input))
 	// Remove extra grammar-specific newlines added unaware of newline-preserving comments injected
-	newlinePrefixedMultilineComment := regexp.MustCompile("[\n ]*(\t*\uFFFA)")
+	newlinePrefixedMultilineComment := regexp.MustCompile("[\n ]*(\t*[\uFFFA\uFFF9])")
 	input = newlinePrefixedMultilineComment.ReplaceAllString(input, "$1")
 	log.Trace(fmt.Sprintf("ADJUSTED(1): %q", input))
+
+	indentedInlineComment := regexp.MustCompile("([^\n\uFFFB])\t+\uFFFA([^\n])")
+	input = indentedInlineComment.ReplaceAllString(input, "$1\uFFFA$2")
+	log.Trace(fmt.Sprintf("ADJUSTED(2): %q", input))
 
 	// Remove extra grammar-specific space added unaware of newline-preserving comments injected
 	spacePaddedMultilineComment := regexp.MustCompile(`(` + "\uFFFB\n*\t*" + `) +`)
 	input = spacePaddedMultilineComment.ReplaceAllString(input, "$1")
-	log.Trace(fmt.Sprintf("ADJUSTED(2): %q", input))
+	log.Trace(fmt.Sprintf("ADJUSTED(3): %q", input))
 
 	// Remove extra indent-injected newlines
 	indentInjectedNewlines := regexp.MustCompile("\uFFFB\n+")
 	input = indentInjectedNewlines.ReplaceAllString(input, "\uFFFB\n")
-	log.Trace(fmt.Sprintf("ADJUSTED(3): %q", input))
-
-	input = strings.ReplaceAll(input, "\n\uFFFB\n", "\n\uFFFB")
 	log.Trace(fmt.Sprintf("ADJUSTED(4): %q", input))
 
-	doubleCapturedNewlines := regexp.MustCompile("\n(\ufffb\t*\ufffa\n)")
-	input = doubleCapturedNewlines.ReplaceAllString(input, "$1")
+	input = strings.ReplaceAll(input, "\n\uFFFB\n", "\n\uFFFB")
 	log.Trace(fmt.Sprintf("ADJUSTED(5): %q", input))
+
+	doubleCapturedNewlines := regexp.MustCompile("\n(\uFFFB\t*\uFFFA\n)")
+	input = doubleCapturedNewlines.ReplaceAllString(input, "$1")
+	log.Trace(fmt.Sprintf("ADJUSTED(6): %q", input))
 
 	newlinePrefixedInlineComment := regexp.MustCompile("\n\t*\uFFF9\n")
 	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")
-	log.Trace(fmt.Sprintf("ADJUSTED(6): %q", input))
-
-	tabPrefixedInlineComment := regexp.MustCompile(`([\w,]+)` + "\t+\uFFF9")
-	input = tabPrefixedInlineComment.ReplaceAllString(input, "$1 \uFFF9")
 	log.Trace(fmt.Sprintf("ADJUSTED(7): %q", input))
+
+	tabPrefixedInlineComment := regexp.MustCompile(`([\w,{]+)` + "\t+\uFFF9")
+	input = tabPrefixedInlineComment.ReplaceAllString(input, "$1\uFFF9")
+	log.Trace(fmt.Sprintf("ADJUSTED(8): %q", input))
+
+	extraSpace := regexp.MustCompile(" \uFFF9 ")
+	input = extraSpace.ReplaceAllString(input, "\uFFF9 ")
+	log.Trace(fmt.Sprintf("ADJUSTED(9): %q", input))
 
 	// Remove inline comment delimeters
 	inlineCommentPattern := regexp.MustCompile(`(?s)` + "\uFFF9" + `(.*?)` + "\uFFFB")
