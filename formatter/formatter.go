@@ -196,8 +196,7 @@ func removeExtraCommentIndentation(input string) string {
 	input = tabPrefixedInlineComment.ReplaceAllString(input, "$1\uFFF9")
 	log.Trace(fmt.Sprintf("ADJUSTED(8): %q", input))
 
-	extraSpace := regexp.MustCompile(" \uFFF9 ")
-	input = extraSpace.ReplaceAllString(input, "\uFFF9 ")
+	input = strings.ReplaceAll(input, " \uFFF9 ", "\uFFF9 ")
 	log.Trace(fmt.Sprintf("ADJUSTED(9): %q", input))
 
 	// Remove inline comment delimeters
