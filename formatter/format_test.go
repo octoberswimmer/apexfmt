@@ -813,6 +813,10 @@ public class A {}`,
 	}
 }`,
 			},
+			{
+				`public enum Required {NOT_REQUIRED, REQUIRED}`,
+				`public enum Required {NOT_REQUIRED, REQUIRED}`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {

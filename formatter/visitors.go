@@ -27,7 +27,7 @@ func (v *FormatVisitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext)
 				constants = append(constants, e.GetText())
 			}
 		}
-		return fmt.Sprintf("enum %s {%s}", v.visitRule(enum.Id()), strings.Join(constants, ", "))
+		return fmt.Sprintf("%senum %s {%s}", v.Modifiers(t.AllModifier()), v.visitRule(enum.Id()), strings.Join(constants, ", "))
 	}
 	return ""
 }
