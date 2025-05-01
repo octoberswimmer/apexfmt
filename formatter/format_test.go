@@ -815,7 +815,39 @@ public class A {}`,
 			},
 			{
 				`public enum Required {NOT_REQUIRED, REQUIRED}`,
-				`public enum Required {NOT_REQUIRED, REQUIRED}`,
+				`public enum Required { NOT_REQUIRED, REQUIRED }`,
+			},
+			{
+				`public enum Required {
+	// Comment 1
+	NOT_REQUIRED,
+	// Comment 2
+	REQUIRED
+}`,
+				`public enum Required {
+	// Comment 1
+	NOT_REQUIRED,
+	// Comment 2
+	REQUIRED
+}`,
+			},
+			{
+				`public class TestClass {
+	public enum Required {
+		// Comment 1
+		NOT_REQUIRED,
+		// Comment 2
+		REQUIRED
+	}
+}`,
+				`public class TestClass {
+	public enum Required {
+		// Comment 1
+		NOT_REQUIRED,
+		// Comment 2
+		REQUIRED
+	}
+}`,
 			},
 		}
 	dmp := diffmatchpatch.New()

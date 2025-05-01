@@ -20,14 +20,7 @@ func (v *FormatVisitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext)
 	case t.InterfaceDeclaration() != nil:
 		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
 	case t.EnumDeclaration() != nil:
-		enum := t.EnumDeclaration()
-		constants := []string{}
-		if enum.EnumConstants() != nil {
-			for _, e := range enum.EnumConstants().AllId() {
-				constants = append(constants, e.GetText())
-			}
-		}
-		return fmt.Sprintf("%senum %s {%s}", v.Modifiers(t.AllModifier()), v.visitRule(enum.Id()), strings.Join(constants, ", "))
+		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.EnumDeclaration()).(string))
 	}
 	return ""
 }
@@ -72,17 +65,26 @@ func (v *FormatVisitor) VisitTriggerCase(ctx *parser.TriggerCaseContext) interfa
 }
 
 func (v *FormatVisitor) VisitEnumDeclaration(ctx *parser.EnumDeclarationContext) interface{} {
-	enumConstants := ""
-	if ctx.EnumConstants() != nil {
-		enumConstants = v.visitRule(ctx.EnumConstants()).(string)
+	if ctx.EnumConstants() == nil {
+		return fmt.Sprintf("enum %s {}", v.visitRule(ctx.Id()).(string))
+	}
+	enumConstants := v.visitRule(ctx.EnumConstants()).(string)
+	if strings.Contains(enumConstants, "\n") {
+		return fmt.Sprintf("enum %s {\n%s\n}", v.visitRule(ctx.Id()), indent(enumConstants))
+	}
+	if v.wrap {
+		return fmt.Sprintf("enum %s {\n%s\n}", v.visitRule(ctx.Id()), indent(enumConstants))
 	}
 	return fmt.Sprintf("enum %s { %s }", v.visitRule(ctx.Id()), enumConstants)
 }
 
 func (v *FormatVisitor) VisitEnumConstants(ctx *parser.EnumConstantsContext) interface{} {
 	ids := []string{}
-	for _, t := range ctx.AllId() {
-		ids = append(ids, t.GetText())
+	for _, i := range ctx.AllId() {
+		ids = append(ids, v.visitRule(i).(string))
+	}
+	if v.wrap {
+		return indent(strings.Join(ids, ",\n"))
 	}
 	return strings.Join(ids, ", ")
 }
