@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/antlr4-go/antlr/v4"
+	"github.com/cwarden/go-diff/diffmatchpatch"
 	"github.com/octoberswimmer/apexfmt/parser"
-	"github.com/sergi/go-diff/diffmatchpatch"
 
 	log "github.com/sirupsen/logrus"
 )

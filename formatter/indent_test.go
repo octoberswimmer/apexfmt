@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/sergi/go-diff/diffmatchpatch"
+	"github.com/cwarden/go-diff/diffmatchpatch"
 	log "github.com/sirupsen/logrus"
 )
 

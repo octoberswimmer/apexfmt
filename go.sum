@@ -2,8 +2,8 @@ github.com/antlr4-go/antlr/v4 v4.13.0 h1:lxCg3LAv+EUK6t1i0y1V6/SLeUi0eKEKdhQAlS8
 github.com/antlr4-go/antlr/v4 v4.13.0/go.mod h1:pfChB/xh/Unjila75QW7+VU4TSnWnnk9UTnmpPaOR2g=
 github.com/cpuguy83/go-md2man/v2 v2.0.3 h1:qMCsGGgs+MAzDFyp9LpAe1Lqy/fY/qCovCm0qnXZOBM=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
-github.com/cwarden/go-diff v0.0.0-20250108131129-65165c5bf578 h1:ZkWyM46IipYbAPQ1M32DnmUCq4V6avn0d/zt/z+REcI=
-github.com/cwarden/go-diff v0.0.0-20250108131129-65165c5bf578/go.mod h1:A0bzQcvG0E7Rwjx0REVgAGH58e96+X0MeOfepqsbeW4=
+github.com/cwarden/go-diff v0.0.0-20250521184254-5510bcb7896d h1:Q/HXFIZho/mwjvZBTrXEGw23qyPd+wKT64c9V3U7NWk=
+github.com/cwarden/go-diff v0.0.0-20250521184254-5510bcb7896d/go.mod h1:bN8BUpJGCFJzCX7iX5iCg84MdRPrTWMDkVs/vRDMZ14=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

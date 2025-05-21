@@ -4,12 +4,10 @@ go 1.21.4
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.0
-	github.com/sergi/go-diff v1.3.1
+	github.com/cwarden/go-diff v0.0.0-20250521184254-5510bcb7896d
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
 )
-
-replace github.com/sergi/go-diff => github.com/cwarden/go-diff v0.0.0-20250108131129-65165c5bf578
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.3 // indirect
