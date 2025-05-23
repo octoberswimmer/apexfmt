@@ -11,7 +11,6 @@ import (
 
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/octoberswimmer/apexfmt/parser"
-	log "github.com/sirupsen/logrus"
 )
 
 type Formatter struct {
@@ -142,77 +141,59 @@ func removeIndentationFromComment(comment string) string {
 	return unindented
 }
 
+var (
+	newlinePrefixedMultilineComment = regexp.MustCompile("[\n ]*(\t*[\uFFFA\uFFF9])")
+	indentedInlineComment           = regexp.MustCompile("([^\n\uFFFB])\t+\uFFFA([^\n])")
+	spacePaddedMultilineComment     = regexp.MustCompile(`(` + "\uFFFB\n*\t*" + `) +`)
+	indentInjectedNewlines          = regexp.MustCompile("\uFFFB\n+")
+	doubleCapturedNewlines          = regexp.MustCompile("\n(\uFFFB\t*\uFFFA\n)")
+	newlinePrefixedInlineComment    = regexp.MustCompile("\n\t*\uFFF9\n")
+	tabPrefixedInlineComment        = regexp.MustCompile(`([\w,{]+)` + "\t+\uFFF9")
+	inlineCommentPattern            = regexp.MustCompile(`(?s)` + "\uFFF9" + `(.*?)` + "\uFFFB")
+	whitespaceInBraces              = regexp.MustCompile(`(?s){\n+}`)
+	multilineCommentPattern         = regexp.MustCompile(`(?s)\t*` + "\uFFFA" + `.*?` + "\uFFFB")
+)
+
 // removeExtraCommentIndentation cleans up the formatting of comments after the
 // formatter has run.
 //
-// This could probably be improved by rethinking the approach.  Preserving
-// comments is tricky.
-//
 // The antlr lexer pulls comments into a separate token stream so we don't need
-// to check for comments in every visit function.  Instead, we look for
+// to check for comments in every visit function. Instead, we look for
 // comments, each represented as a single token, before the start of or after
-// the end of the current parser node.  Then we reinject the comments as we're
+// the end of the current parser node. Then we reinject the comments as we're
 // visiting each node.
 //
 // The visitor functions don't know about the comments so they introduce
-// whitespace around them when formatting and indenting the code.  We need to
-// ensure that the comments don't end up mangled.  We wrap the comments in
+// whitespace around them when formatting and indenting the code. We need to
+// ensure that the comments don't end up mangled. We wrap the comments in
 // delimiters so we can easily identify the comments and clean up after
-// formatter runs.  This code cleans up the whitespace and removes the comment
+// formatter runs. This code cleans up the whitespace and removes the comment
 // delimiters.
 func removeExtraCommentIndentation(input string) string {
-	log.Trace(fmt.Sprintf("ADJUSTING  : %q", input))
-	// Remove extra grammar-specific newlines added unaware of newline-preserving comments injected
-	newlinePrefixedMultilineComment := regexp.MustCompile("[\n ]*(\t*[\uFFFA\uFFF9])")
+	// Apply regex transformations in sequence using pre-compiled patterns
 	input = newlinePrefixedMultilineComment.ReplaceAllString(input, "$1")
-	log.Trace(fmt.Sprintf("ADJUSTED(1): %q", input))
-
-	indentedInlineComment := regexp.MustCompile("([^\n\uFFFB])\t+\uFFFA([^\n])")
 	input = indentedInlineComment.ReplaceAllString(input, "$1\uFFFA$2")
-	log.Trace(fmt.Sprintf("ADJUSTED(2): %q", input))
-
-	// Remove extra grammar-specific space added unaware of newline-preserving comments injected
-	spacePaddedMultilineComment := regexp.MustCompile(`(` + "\uFFFB\n*\t*" + `) +`)
 	input = spacePaddedMultilineComment.ReplaceAllString(input, "$1")
-	log.Trace(fmt.Sprintf("ADJUSTED(3): %q", input))
-
-	// Remove extra indent-injected newlines
-	indentInjectedNewlines := regexp.MustCompile("\uFFFB\n+")
 	input = indentInjectedNewlines.ReplaceAllString(input, "\uFFFB\n")
-	log.Trace(fmt.Sprintf("ADJUSTED(4): %q", input))
 
+	// Simple string replacements are faster than regex for exact matches
 	input = strings.ReplaceAll(input, "\n\uFFFB\n", "\n\uFFFB")
-	log.Trace(fmt.Sprintf("ADJUSTED(5): %q", input))
 
-	doubleCapturedNewlines := regexp.MustCompile("\n(\uFFFB\t*\uFFFA\n)")
 	input = doubleCapturedNewlines.ReplaceAllString(input, "$1")
-	log.Trace(fmt.Sprintf("ADJUSTED(6): %q", input))
-
-	newlinePrefixedInlineComment := regexp.MustCompile("\n\t*\uFFF9\n")
 	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")
-	log.Trace(fmt.Sprintf("ADJUSTED(7): %q", input))
-
-	tabPrefixedInlineComment := regexp.MustCompile(`([\w,{]+)` + "\t+\uFFF9")
 	input = tabPrefixedInlineComment.ReplaceAllString(input, "$1\uFFF9")
-	log.Trace(fmt.Sprintf("ADJUSTED(8): %q", input))
 
+	// Simple string replacement
 	input = strings.ReplaceAll(input, " \uFFF9 ", "\uFFF9 ")
-	log.Trace(fmt.Sprintf("ADJUSTED(9): %q", input))
 
-	// Remove inline comment delimeters
-	inlineCommentPattern := regexp.MustCompile(`(?s)` + "\uFFF9" + `(.*?)` + "\uFFFB")
+	// Remove inline comment delimiters
 	input = inlineCommentPattern.ReplaceAllString(input, "$1")
 
 	// Remove newlines in braces
-	whitespaceInBraces := regexp.MustCompile(`(?s){\n+}`)
 	input = whitespaceInBraces.ReplaceAllString(input, "{}")
 
 	// Restore formatting of indented multi-line comments
-	multilineCommentPattern := regexp.MustCompile(`(?s)\t*` + "\uFFFA" + `.*?` + "\uFFFB")
-	unindented := multilineCommentPattern.ReplaceAllStringFunc(input, removeIndentationFromComment)
-	log.Trace(fmt.Sprintf("UNINDENTED : %q", input))
-
-	return unindented
+	return multilineCommentPattern.ReplaceAllStringFunc(input, removeIndentationFromComment)
 }
 
 func readFile(filename string, reader io.Reader) ([]byte, error) {
