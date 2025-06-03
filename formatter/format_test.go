@@ -272,6 +272,27 @@ OneDayDischargeFollowUp.twoHoursDelay,
 				`while(true);`,
 				`while (true);`},
 			{
+				`do statement(); while(condition);`,
+				`do {
+	statement();
+} while (condition);`,
+			},
+			{
+				`do {
+if (true) {
+statement();
+statement2();
+}
+}
+while(condition);`,
+				`do {
+	if (true) {
+		statement();
+		statement2();
+	}
+} while (condition);`,
+			},
+			{
 				`try { method(); } catch (FirstException e) { caught(); } catch (SecondException e) { caught(); }`,
 				`try {
 	method();

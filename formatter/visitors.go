@@ -247,6 +247,14 @@ func (v *FormatVisitor) VisitWhileStatement(ctx *parser.WhileStatementContext) i
 	}
 }
 
+func (v *FormatVisitor) VisitDoWhileStatement(ctx *parser.DoWhileStatementContext) interface{} {
+	if block := ctx.Statement().Block(); block != nil {
+		return fmt.Sprintf("do %s while %s;", v.visitRule(ctx.Statement()), v.visitRule(ctx.ParExpression()))
+	} else {
+		return fmt.Sprintf("do {\n%s\n} while %s;", indent(v.visitRule(ctx.Statement()).(string)), v.visitRule(ctx.ParExpression()))
+	}
+}
+
 func (v *FormatVisitor) VisitForStatement(ctx *parser.ForStatementContext) interface{} {
 	if statement := ctx.Statement(); statement != nil {
 		if statement.Block() != nil {
