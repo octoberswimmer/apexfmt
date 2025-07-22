@@ -95,6 +95,7 @@ func (f *Formatter) Format() error {
 		return fmt.Errorf("Unexpected result parsing apex")
 	}
 	out = removeExtraCommentIndentation(out)
+	out = strings.TrimRight(out, " \t\n")
 	f.formatted = append([]byte(out), '\n')
 	return nil
 }

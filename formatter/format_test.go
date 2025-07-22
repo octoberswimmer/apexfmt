@@ -896,3 +896,81 @@ public class A {}`,
 		})
 	}
 }
+
+func TestFormatterRemovesTrailingWhitespace(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  string
+		output string
+	}{
+		{
+			name: "removes_trailing_newlines",
+			input: `public class Test {
+	// Line comment
+	public void method() {
+		System.debug('test');
+	}
+}
+
+
+`,
+			output: `public class Test {
+	// Line comment
+	public void method() {
+		System.debug('test');
+	}
+}
+`,
+		},
+		{
+			name: "removes_trailing_spaces_and_tabs",
+			input: `public class Test {
+	public void method() {}
+}  	  
+`,
+			output: `public class Test {
+	public void method() {}
+}
+`,
+		},
+		{
+			name: "preserves_single_trailing_newline",
+			input: `public class Test {
+	public void method() {}
+}
+`,
+			output: `public class Test {
+	public void method() {}
+}
+`,
+		},
+		{
+			name: "adds_trailing_newline_if_missing",
+			input: `public class Test {
+	public void method() {}
+}`,
+			output: `public class Test {
+	public void method() {}
+}
+`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			formatter := &Formatter{
+				source: []byte(tt.input),
+			}
+			err := formatter.Format()
+			if err != nil {
+				t.Fatalf("Format() error = %v", err)
+			}
+			got := string(formatter.formatted)
+			if got != tt.output {
+				dmp := diffmatchpatch.New()
+				diffs := dmp.DiffMain(tt.output, got, false)
+				t.Errorf("unexpected format.\nexpected:\n%q\ngot:\n%q\ndiff:\n%s", tt.output, got, dmp.DiffPrettyText(diffs))
+			}
+		})
+	}
+}
