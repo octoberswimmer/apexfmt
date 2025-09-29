@@ -28,7 +28,21 @@ func TestSOQL(t *testing.T) {
 		Contact
 	WHERE
 		AccountId IN :accounts.keySet()
-	GROUP BY Account.Name
+	GROUP BY
+		Account.Name
+]`},
+			{
+				`[SELECT Account.Name, count(Id) FROM Contact GROUP BY Account.Name HAVING COUNT(Id) > 10]`,
+				`[
+	SELECT
+		Account.Name,
+		COUNT(Id)
+	FROM
+		Contact
+	GROUP BY
+		Account.Name
+	HAVING
+		COUNT(Id) > 10
 ]`},
 			{
 				`[ SELECT

@@ -66,6 +66,12 @@ func Test_soql_formatter_returns_error_on_invalid_syntax(t *testing.T) {
 			filename: "complex.soql",
 			wantErr:  false,
 		},
+		{
+			name:     "Valid SOQL with GROUP BY and HAVING",
+			input:    "SELECT StageName, COUNT(Id) cnt FROM opportunity GROUP BY StageName HAVING COUNT(Id) > 1",
+			filename: "test.soql",
+			wantErr:  false,
+		},
 	}
 
 	for _, tt := range tests {
@@ -137,5 +143,28 @@ func Test_soql_formatter_methods_with_valid_input(t *testing.T) {
 	// Should be properly formatted
 	if !strings.Contains(formatted, "SELECT") {
 		t.Error("Expected formatted output to contain SELECT")
+	}
+}
+
+func Test_soql_formatter_formats_having_clause(t *testing.T) {
+	input := "SELECT StageName, COUNT(Id) cnt FROM opportunity GROUP BY StageName HAVING COUNT(Id) > 1"
+
+	f := NewSOQLFormatter()
+	f.SetSource(input)
+
+	formatted, err := f.Formatted()
+	if err != nil {
+		t.Errorf("Expected no error, got: %v", err)
+		return
+	}
+
+	// Should contain HAVING on its own line
+	if !strings.Contains(formatted, "HAVING\n") {
+		t.Errorf("Expected formatted output to have HAVING on its own line, got: %s", formatted)
+	}
+
+	// Should contain GROUP BY on its own line
+	if !strings.Contains(formatted, "GROUP BY\n") {
+		t.Errorf("Expected formatted output to have GROUP BY on its own line, got: %s", formatted)
 	}
 }

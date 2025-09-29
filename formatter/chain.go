@@ -107,6 +107,14 @@ func (v *ChainVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	return score
 }
 
+func (v *ChainVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) interface{} {
+	score := 1
+	if ctx.LogicalExpression() != nil {
+		score += v.visitRule(ctx.LogicalExpression()).(int)
+	}
+	return score
+}
+
 func (v *ChainVisitor) VisitOrderByClause(ctx *parser.OrderByClauseContext) interface{} {
 	return len(ctx.FieldOrderList().AllFieldOrder())
 }

@@ -1126,17 +1126,29 @@ func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) int
 	for _, i := range ctx.AllFieldName() {
 		fieldNames = append(fieldNames, v.visitRule(i).(string))
 	}
+	sep := " "
+	indent := 0
+	if v.wrap {
+		sep = "\n"
+		indent = 1
+	}
 	switch {
 	case ctx.ROLLUP() != nil:
 		return fmt.Sprintf("GROUP BY ROLLUP(%s)", strings.Join(fieldNames, ", "))
 	case ctx.CUBE() != nil:
 		return fmt.Sprintf("GROUP BY CUBE(%s)", strings.Join(fieldNames, ", "))
 	default:
-		having := ""
+		var clause strings.Builder
+		clause.WriteString("GROUP BY")
+		clause.WriteString(sep)
+		clause.WriteString(indentTo(v.visitRule(ctx.SelectList()).(string), indent))
 		if l := ctx.LogicalExpression(); l != nil {
-			having = fmt.Sprintf("HAVING %s", v.visitRule(l))
+			clause.WriteString(sep)
+			clause.WriteString("HAVING")
+			clause.WriteString(sep)
+			clause.WriteString(indentTo(v.visitRule(l).(string), indent))
 		}
-		return fmt.Sprintf("GROUP BY %s%s", v.visitRule(ctx.SelectList()), having)
+		return clause.String()
 	}
 }
 
