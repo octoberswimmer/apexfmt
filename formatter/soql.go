@@ -14,10 +14,21 @@ import (
 type SOQLFormatter struct {
 	source    []byte
 	formatted []byte
+	filename  string
 }
 
 func NewSOQLFormatter() *SOQLFormatter {
 	return &SOQLFormatter{}
+}
+
+// SetSource sets the SOQL source to format
+func (f *SOQLFormatter) SetSource(source string) {
+	f.source = []byte(source)
+}
+
+// SetFilename sets the filename for error reporting
+func (f *SOQLFormatter) SetFilename(filename string) {
+	f.filename = filename
 }
 
 func (f *SOQLFormatter) Formatted() (string, error) {
@@ -54,10 +65,17 @@ func (f *SOQLFormatter) Format() error {
 
 	p := parser.NewApexParser(stream)
 	p.RemoveErrorListeners()
-	p.AddErrorListener(&errorListener{})
+	errListener := &errorListener{filename: f.filename}
+	p.AddErrorListener(errListener)
 
 	v := NewFormatVisitor(stream)
 	out, ok := v.visitRule(p.SoqlLiteral()).(string)
+
+	// Check if there were any syntax errors
+	if errListener.HasErrors() {
+		return errListener.GetError()
+	}
+
 	if !ok {
 		return fmt.Errorf("Unexpected result parsing apex")
 	}

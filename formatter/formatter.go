@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -29,16 +28,34 @@ func (f *Formatter) SourceName() string {
 
 type errorListener struct {
 	*antlr.DefaultErrorListener
-	filename string
+	filename       string
+	errors         []string
+	suppressStderr bool
 }
 
 func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
+	var errMsg string
 	if e.filename == "" {
-		_, _ = fmt.Fprintln(os.Stderr, "line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+		errMsg = fmt.Sprintf("line %d:%d %s", line, column, msg)
 	} else {
-		_, _ = fmt.Fprintln(os.Stderr, e.filename+" line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg)
+		errMsg = fmt.Sprintf("%s: line %d:%d %s", e.filename, line, column, msg)
 	}
-	os.Exit(1)
+	e.errors = append(e.errors, errMsg)
+	// Still print to stderr for backwards compatibility, but don't exit
+	if !e.suppressStderr {
+		fmt.Fprintln(os.Stderr, errMsg)
+	}
+}
+
+func (e *errorListener) HasErrors() bool {
+	return len(e.errors) > 0
+}
+
+func (e *errorListener) GetError() error {
+	if len(e.errors) == 0 {
+		return nil
+	}
+	return fmt.Errorf(strings.Join(e.errors, "\n"))
 }
 
 func NewFormatter(filename string, reader io.Reader) *Formatter {
@@ -86,11 +103,18 @@ func (f *Formatter) Format() error {
 
 	p := parser.NewApexParser(stream)
 	p.RemoveErrorListeners()
-	p.AddErrorListener(&errorListener{filename: f.filename})
+	errListener := &errorListener{filename: f.filename}
+	p.AddErrorListener(errListener)
 	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
 
 	v := NewFormatVisitor(stream)
 	out, ok := v.visitRule(p.CompilationUnit()).(string)
+
+	// Check if there were any syntax errors
+	if errListener.HasErrors() {
+		return errListener.GetError()
+	}
+
 	if !ok {
 		return fmt.Errorf("Unexpected result parsing apex")
 	}
