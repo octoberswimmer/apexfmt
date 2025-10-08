@@ -196,6 +196,39 @@ func TestSOQL(t *testing.T) {
 				`[SELECT FORMAT(MIN(closedate)) Amt FROM opportunity]`,
 				`[SELECT FORMAT(MIN(closedate)) Amt FROM opportunity]`,
 			},
+			{
+				`[SELECT Name, DISTANCE(BillingAddress, GEOLOCATION(37.7749, -122.4194), 'mi') dist FROM Account]`,
+				`[SELECT Name, DISTANCE(BillingAddress, GEOLOCATION(37.7749, -122.4194), 'mi') dist FROM Account]`,
+			},
+			{
+				`[SELECT Name FROM Account WHERE DISTANCE(BillingAddress, GEOLOCATION(37.7749, -122.4194), 'mi') < 100]`,
+				`[SELECT Name FROM Account WHERE DISTANCE(BillingAddress, GEOLOCATION(37.7749, -122.4194), 'mi') < 100]`,
+			},
+			{
+				`[SELECT Name, Id, DISTANCE(ShippingAddress, GEOLOCATION(32.7157, -117.1611), 'km') dist FROM Account ORDER BY DISTANCE(ShippingAddress, GEOLOCATION(32.7157, -117.1611), 'km')]`,
+				`[
+	SELECT
+		Name,
+		Id,
+		DISTANCE(ShippingAddress, GEOLOCATION(32.7157, -117.1611), 'km') dist
+	FROM
+		Account
+	ORDER BY
+		DISTANCE(ShippingAddress, GEOLOCATION(32.7157, -117.1611), 'km')
+]`,
+			},
+			{
+				`[SELECT Name, DISTANCE(BillingAddress, GEOLOCATION(:lat, :lng), 'mi') dist FROM Account WHERE Id = :accountId]`,
+				`[
+	SELECT
+		Name,
+		DISTANCE(BillingAddress, GEOLOCATION(:lat, :lng), 'mi') dist
+	FROM
+		Account
+	WHERE
+		Id = :accountId
+]`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

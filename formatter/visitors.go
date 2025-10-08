@@ -1033,6 +1033,12 @@ func (v *FormatVisitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) inter
 		param = v.visitRule(ctx.DateFieldName()).(string)
 	case ctx.SoqlFieldsParameter() != nil:
 		param = v.visitRule(ctx.SoqlFieldsParameter()).(string)
+	case ctx.DISTANCE() != nil:
+		locationValues := ctx.AllLocationValue()
+		loc1 := v.visitRule(locationValues[0]).(string)
+		loc2 := v.visitRule(locationValues[1]).(string)
+		unit := ctx.StringLiteral().GetText()
+		return fmt.Sprintf("DISTANCE(%s, %s, %s)", loc1, loc2, unit)
 	default:
 		panic("Unexpected parameter type for soqlFunction")
 	}
@@ -1048,6 +1054,34 @@ func (v *FormatVisitor) VisitDateFieldName(ctx *parser.DateFieldNameContext) int
 		return fmt.Sprintf("CONVERT_TIMEZONE(%s)", v.visitRule(ctx.FieldName()))
 	}
 	return v.visitRule(ctx.FieldName())
+}
+
+func (v *FormatVisitor) VisitLocationValue(ctx *parser.LocationValueContext) interface{} {
+	switch {
+	case ctx.FieldName() != nil:
+		return v.visitRule(ctx.FieldName()).(string)
+	case ctx.BoundExpression() != nil:
+		return v.visitRule(ctx.BoundExpression()).(string)
+	case ctx.GEOLOCATION() != nil:
+		coords := []string{}
+		for _, coord := range ctx.AllCoordinateValue() {
+			coords = append(coords, v.visitRule(coord).(string))
+		}
+		return fmt.Sprintf("GEOLOCATION(%s, %s)", coords[0], coords[1])
+	default:
+		panic("Unexpected location value type")
+	}
+}
+
+func (v *FormatVisitor) VisitCoordinateValue(ctx *parser.CoordinateValueContext) interface{} {
+	switch {
+	case ctx.SignedNumber() != nil:
+		return v.visitRule(ctx.SignedNumber()).(string)
+	case ctx.BoundExpression() != nil:
+		return v.visitRule(ctx.BoundExpression()).(string)
+	default:
+		panic("Unexpected coordinate value type")
+	}
 }
 
 func (v *FormatVisitor) VisitNullValue(ctx *parser.NullValueContext) interface{} {
