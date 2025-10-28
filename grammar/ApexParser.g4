@@ -717,6 +717,8 @@ signedNumber
 withClause
     : WITH DATA CATEGORY filteringExpression
     | WITH SECURITY_ENFORCED
+    | WITH USER_MODE
+    | WITH SYSTEM_MODE
     | WITH logicalExpression;
 
 filteringExpression
@@ -840,6 +842,7 @@ soslClauses
       withNetworkAssign?
       withPricebookIdAssign?
       withMetadataAssign?
+      withModeClause?
       limitClause?
       updateListClause?
     ;
@@ -878,6 +881,11 @@ withPricebookIdAssign
 
 withMetadataAssign
     : WITH METADATA ASSIGN StringLiteral
+    ;
+
+withModeClause
+    : WITH USER_MODE
+    | WITH SYSTEM_MODE
     ;
 
 updateListClause

@@ -229,6 +229,14 @@ func TestSOQL(t *testing.T) {
 		Id = :accountId
 ]`,
 			},
+			{
+				`[SELECT Name FROM Account WITH USER_MODE]`,
+				`[SELECT Name FROM Account WITH USER_MODE]`,
+			},
+			{
+				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
+				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
@@ -241,6 +249,49 @@ func TestSOQL(t *testing.T) {
 
 		v := NewFormatVisitor(stream)
 		out, ok := v.visitRule(p.SoqlLiteral()).(string)
+		if !ok {
+			t.Errorf("Unexpected result parsing apex")
+		}
+		if out != tt.output {
+			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
+		}
+	}
+}
+
+func TestSOSLWithModeClause(t *testing.T) {
+	tests :=
+		[]struct {
+			input  string
+			output string
+		}{
+			{
+				`[FIND 'Acme' RETURNING Account(Name) WITH USER_MODE]`,
+				`[FIND 'Acme'
+RETURNING Account(
+	Name)
+WITH USER_MODE]`,
+			},
+			{
+				`[FIND 'Acme' IN ALL FIELDS RETURNING Account(Name) WITH SYSTEM_MODE]`,
+				`[FIND 'Acme'
+IN ALL FIELDS
+RETURNING Account(
+	Name)
+WITH SYSTEM_MODE]`,
+			},
+		}
+
+	for _, tt := range tests {
+		input := antlr.NewInputStream(tt.input)
+		lexer := parser.NewApexLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+		p := parser.NewApexParser(stream)
+		p.RemoveErrorListeners()
+		p.AddErrorListener(&testErrorListener{t: t})
+
+		v := NewFormatVisitor(stream)
+		out, ok := v.visitRule(p.SoslLiteral()).(string)
 		if !ok {
 			t.Errorf("Unexpected result parsing apex")
 		}

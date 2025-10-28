@@ -577,6 +577,9 @@ type ApexParserListener interface {
 	// EnterWithMetadataAssign is called when entering the withMetadataAssign production.
 	EnterWithMetadataAssign(c *WithMetadataAssignContext)
 
+	// EnterWithModeClause is called when entering the withModeClause production.
+	EnterWithModeClause(c *WithModeClauseContext)
+
 	// EnterUpdateListClause is called when entering the updateListClause production.
 	EnterUpdateListClause(c *UpdateListClauseContext)
 
@@ -1182,6 +1185,9 @@ type ApexParserListener interface {
 
 	// ExitWithMetadataAssign is called when exiting the withMetadataAssign production.
 	ExitWithMetadataAssign(c *WithMetadataAssignContext)
+
+	// ExitWithModeClause is called when exiting the withModeClause production.
+	ExitWithModeClause(c *WithModeClauseContext)
 
 	// ExitUpdateListClause is called when exiting the updateListClause production.
 	ExitUpdateListClause(c *UpdateListClauseContext)

@@ -100,6 +100,8 @@ WHEN         : W H E N;
 WHILE        : W H I L E;
 WITH         : W I T H;
 WITHOUT      : W I T H O U T;
+USER_MODE    : U S E R '_' M O D E;
+SYSTEM_MODE  : S Y S T E M '_' M O D E;
 
 // Apex generic types, Set is defined above for properties
 LIST          : L I S T;

@@ -742,6 +742,10 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 		query.WriteString(sep)
 		query.WriteString(v.visitRule(where).(string))
 	}
+	if withClause := ctx.WithClause(); withClause != nil {
+		query.WriteString(sep)
+		query.WriteString(v.visitRule(withClause).(string))
+	}
 	if groupBy := ctx.GroupByClause(); groupBy != nil {
 		query.WriteString(sep)
 		query.WriteString(v.visitRule(groupBy).(string))
@@ -940,6 +944,31 @@ func (v *FormatVisitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface
 	clause.WriteString(sep)
 	clause.WriteString(indentTo(v.visitRule(ctx.FieldNameList()).(string), indent))
 	return clause.String()
+}
+
+func (v *FormatVisitor) VisitWithClause(ctx *parser.WithClauseContext) interface{} {
+	if logical := ctx.LogicalExpression(); logical != nil {
+		sep := " "
+		indent := 0
+		if v.wrap {
+			sep = "\n"
+			indent = 1
+		}
+		return fmt.Sprintf("WITH%s%s", sep, indentTo(v.visitRule(logical).(string), indent))
+	}
+	if ctx.FilteringExpression() != nil {
+		return fmt.Sprintf("WITH DATA CATEGORY %s", v.visitRule(ctx.FilteringExpression()))
+	}
+	if ctx.SECURITY_ENFORCED() != nil {
+		return "WITH SECURITY_ENFORCED"
+	}
+	if ctx.USER_MODE() != nil {
+		return "WITH USER_MODE"
+	}
+	if ctx.SYSTEM_MODE() != nil {
+		return "WITH SYSTEM_MODE"
+	}
+	return "WITH"
 }
 
 func (v *FormatVisitor) VisitWhereClause(ctx *parser.WhereClauseContext) interface{} {
@@ -1517,7 +1546,7 @@ func (v *FormatVisitor) VisitSoslLiteral(ctx *parser.SoslLiteralContext) interfa
 			indent(fmt.Sprintf("FIND\n%s%s", indent(v.visitRule(ctx.BoundExpression()).(string)), v.visitRule(ctx.SoslClauses()))),
 		)
 	}
-	return fmt.Sprintf("%s %s ]", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.SoslClauses()))
+	return fmt.Sprintf("%s%s]", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.SoslClauses()))
 }
 
 func (v *FormatVisitor) VisitSoslClauses(ctx *parser.SoslClausesContext) interface{} {
@@ -1547,6 +1576,9 @@ func (v *FormatVisitor) VisitSoslClauses(ctx *parser.SoslClausesContext) interfa
 		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
 	}
 	if i := ctx.WithMetadataAssign(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithModeClause(); i != nil {
 		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
 	}
 	if i := ctx.LimitClause(); i != nil {
@@ -1583,6 +1615,13 @@ func (v *FormatVisitor) VisitFieldSpec(ctx *parser.FieldSpecContext) interface{}
 		return v.visitRule(ctx.SoslId())
 	}
 	return fmt.Sprintf("%s%s", v.visitRule(ctx.SoslId()), v.visitRule(ctx.FieldSpecClauses()))
+}
+
+func (v *FormatVisitor) VisitWithModeClause(ctx *parser.WithModeClauseContext) interface{} {
+	if ctx.USER_MODE() != nil {
+		return "WITH USER_MODE"
+	}
+	return "WITH SYSTEM_MODE"
 }
 
 func (v *FormatVisitor) VisitFieldSpecClauses(ctx *parser.FieldSpecClausesContext) interface{} {

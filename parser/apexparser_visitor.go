@@ -577,6 +577,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#withMetadataAssign.
 	VisitWithMetadataAssign(ctx *WithMetadataAssignContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#withModeClause.
+	VisitWithModeClause(ctx *WithModeClauseContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#updateListClause.
 	VisitUpdateListClause(ctx *UpdateListClauseContext) interface{}
 

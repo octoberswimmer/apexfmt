@@ -767,6 +767,10 @@ func (v *BaseApexParserVisitor) VisitWithMetadataAssign(ctx *WithMetadataAssignC
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitWithModeClause(ctx *WithModeClauseContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitUpdateListClause(ctx *UpdateListClauseContext) interface{} {
 	return v.VisitChildren(ctx)
 }

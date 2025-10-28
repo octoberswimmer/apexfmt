@@ -1169,6 +1169,12 @@ func (s *BaseApexParserListener) EnterWithMetadataAssign(ctx *WithMetadataAssign
 // ExitWithMetadataAssign is called when production withMetadataAssign is exited.
 func (s *BaseApexParserListener) ExitWithMetadataAssign(ctx *WithMetadataAssignContext) {}
 
+// EnterWithModeClause is called when production withModeClause is entered.
+func (s *BaseApexParserListener) EnterWithModeClause(ctx *WithModeClauseContext) {}
+
+// ExitWithModeClause is called when production withModeClause is exited.
+func (s *BaseApexParserListener) ExitWithModeClause(ctx *WithModeClauseContext) {}
+
 // EnterUpdateListClause is called when production updateListClause is entered.
 func (s *BaseApexParserListener) EnterUpdateListClause(ctx *UpdateListClauseContext) {}
 
