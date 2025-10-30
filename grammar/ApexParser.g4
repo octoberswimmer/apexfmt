@@ -1002,6 +1002,8 @@ id
     | BELOW
     | ABOVE_OR_BELOW
     | SECURITY_ENFORCED
+    | USER_MODE
+    | SYSTEM_MODE
     | REFERENCE
     | CUBE
     | FORMAT
@@ -1197,6 +1199,8 @@ anyId
     | BELOW
     | ABOVE_OR_BELOW
     | SECURITY_ENFORCED
+    | USER_MODE
+    | SYSTEM_MODE
     | REFERENCE
     | CUBE
     | FORMAT

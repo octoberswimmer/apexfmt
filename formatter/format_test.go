@@ -870,6 +870,24 @@ public class A {}`,
 	}
 }`,
 			},
+			{
+				`public class TestClass {
+	public enum DataAccess { LEGACY, USER_MODE, SYSTEM_MODE }
+	public TestClass(DataAccess mode) {
+		if (mode == DataAccess.SYSTEM_MODE) {
+			System.debug('System mode');
+		}
+	}
+}`,
+				`public class TestClass {
+	public enum DataAccess { LEGACY, USER_MODE, SYSTEM_MODE }
+	public TestClass(DataAccess mode) {
+		if (mode == DataAccess.SYSTEM_MODE) {
+			System.debug('System mode');
+		}
+	}
+}`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {
