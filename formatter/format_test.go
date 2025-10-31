@@ -65,6 +65,19 @@ func TestStatement(t *testing.T) {
 			},
 
 			{
+				`System.assertEquals(12, leftShift << 2, 'left shift should multiply by powers of two');`,
+				`System.assertEquals(12, leftShift << 2, 'left shift should multiply by powers of two');`,
+			},
+			{
+				`System.assertEquals(-4, rightShift >> 2, 'signed right shift should preserve sign bit');`,
+				`System.assertEquals(-4, rightShift >> 2, 'signed right shift should preserve sign bit');`,
+			},
+			{
+				`System.assertEquals(2147483647, unsignedShift >>> 1, 'unsigned right shift should fill with zeros');`,
+				`System.assertEquals(2147483647, unsignedShift >>> 1, 'unsigned right shift should fill with zeros');`,
+			},
+
+			{
 				`RecordType referralType = [ SELECT Id FROM RecordType WHERE SobjectType = 'Contact' AND DeveloperName = 'Referral_Contact' ];`,
 				`RecordType referralType = [
 	SELECT

@@ -503,14 +503,15 @@ func (v *FormatVisitor) VisitBitNotExpression(ctx *parser.BitNotExpressionContex
 }
 
 func (v *FormatVisitor) VisitBitExpression(ctx *parser.BitExpressionContext) interface{} {
-	ops := []string{}
-	for _, o := range ctx.AllGT() {
-		ops = append(ops, o.GetText())
+	operators := []string{}
+	for i := 1; i < ctx.GetChildCount()-1; i++ {
+		if token, ok := ctx.GetChild(i).(antlr.TerminalNode); ok {
+			operators = append(operators, token.GetText())
+		}
 	}
-	for _, o := range ctx.AllLT() {
-		ops = append(ops, o.GetText())
-	}
-	return strings.Join(ops, "")
+	left := v.visitRule(ctx.Expression(0)).(string)
+	right := v.visitRule(ctx.Expression(1)).(string)
+	return fmt.Sprintf("%s %s %s", left, strings.Join(operators, ""), right)
 }
 
 func (v *FormatVisitor) VisitArth1Expression(ctx *parser.Arth1ExpressionContext) interface{} {
