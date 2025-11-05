@@ -377,74 +377,74 @@ func apexparserParserInit() {
 		0, 216, 220, 2, 0, 208, 208, 235, 245, 2, 0, 207, 207, 213, 213, 1, 0,
 		224, 225, 2, 0, 90, 90, 109, 110, 2, 0, 193, 193, 195, 195, 1, 0, 99, 102,
 		1, 0, 84, 85, 1, 0, 87, 88, 3, 0, 46, 46, 92, 92, 104, 104, 2, 0, 90, 90,
-		178, 181, 1, 0, 107, 108, 12, 0, 2, 3, 16, 16, 20, 20, 22, 22, 34, 35,
-		38, 38, 42, 43, 51, 51, 53, 56, 59, 172, 176, 190, 247, 247, 5, 0, 1, 32,
-		34, 48, 50, 172, 176, 190, 247, 247, 2225, 0, 328, 1, 0, 0, 0, 2, 345,
-		1, 0, 0, 0, 4, 352, 1, 0, 0, 0, 6, 375, 1, 0, 0, 0, 8, 377, 1, 0, 0, 0,
-		10, 389, 1, 0, 0, 0, 12, 397, 1, 0, 0, 0, 14, 405, 1, 0, 0, 0, 16, 413,
-		1, 0, 0, 0, 18, 421, 1, 0, 0, 0, 20, 430, 1, 0, 0, 0, 22, 451, 1, 0, 0,
-		0, 24, 472, 1, 0, 0, 0, 26, 481, 1, 0, 0, 0, 28, 485, 1, 0, 0, 0, 30, 493,
-		1, 0, 0, 0, 32, 497, 1, 0, 0, 0, 34, 501, 1, 0, 0, 0, 36, 515, 1, 0, 0,
-		0, 38, 526, 1, 0, 0, 0, 40, 534, 1, 0, 0, 0, 42, 539, 1, 0, 0, 0, 44, 555,
-		1, 0, 0, 0, 46, 569, 1, 0, 0, 0, 48, 588, 1, 0, 0, 0, 50, 590, 1, 0, 0,
-		0, 52, 594, 1, 0, 0, 0, 54, 600, 1, 0, 0, 0, 56, 611, 1, 0, 0, 0, 58, 617,
-		1, 0, 0, 0, 60, 625, 1, 0, 0, 0, 62, 627, 1, 0, 0, 0, 64, 637, 1, 0, 0,
-		0, 66, 645, 1, 0, 0, 0, 68, 649, 1, 0, 0, 0, 70, 656, 1, 0, 0, 0, 72, 658,
-		1, 0, 0, 0, 74, 674, 1, 0, 0, 0, 76, 676, 1, 0, 0, 0, 78, 687, 1, 0, 0,
-		0, 80, 689, 1, 0, 0, 0, 82, 698, 1, 0, 0, 0, 84, 704, 1, 0, 0, 0, 86, 730,
-		1, 0, 0, 0, 88, 735, 1, 0, 0, 0, 90, 740, 1, 0, 0, 0, 92, 747, 1, 0, 0,
-		0, 94, 758, 1, 0, 0, 0, 96, 777, 1, 0, 0, 0, 98, 791, 1, 0, 0, 0, 100,
-		793, 1, 0, 0, 0, 102, 801, 1, 0, 0, 0, 104, 807, 1, 0, 0, 0, 106, 813,
-		1, 0, 0, 0, 108, 826, 1, 0, 0, 0, 110, 832, 1, 0, 0, 0, 112, 836, 1, 0,
-		0, 0, 114, 839, 1, 0, 0, 0, 116, 842, 1, 0, 0, 0, 118, 846, 1, 0, 0, 0,
-		120, 850, 1, 0, 0, 0, 122, 854, 1, 0, 0, 0, 124, 858, 1, 0, 0, 0, 126,
-		865, 1, 0, 0, 0, 128, 870, 1, 0, 0, 0, 130, 878, 1, 0, 0, 0, 132, 884,
-		1, 0, 0, 0, 134, 891, 1, 0, 0, 0, 136, 896, 1, 0, 0, 0, 138, 901, 1, 0,
-		0, 0, 140, 914, 1, 0, 0, 0, 142, 929, 1, 0, 0, 0, 144, 933, 1, 0, 0, 0,
-		146, 935, 1, 0, 0, 0, 148, 940, 1, 0, 0, 0, 150, 942, 1, 0, 0, 0, 152,
-		946, 1, 0, 0, 0, 154, 972, 1, 0, 0, 0, 156, 1058, 1, 0, 0, 0, 158, 1079,
-		1, 0, 0, 0, 160, 1081, 1, 0, 0, 0, 162, 1088, 1, 0, 0, 0, 164, 1096, 1,
-		0, 0, 0, 166, 1104, 1, 0, 0, 0, 168, 1111, 1, 0, 0, 0, 170, 1114, 1, 0,
-		0, 0, 172, 1125, 1, 0, 0, 0, 174, 1127, 1, 0, 0, 0, 176, 1138, 1, 0, 0,
-		0, 178, 1142, 1, 0, 0, 0, 180, 1153, 1, 0, 0, 0, 182, 1159, 1, 0, 0, 0,
-		184, 1163, 1, 0, 0, 0, 186, 1196, 1, 0, 0, 0, 188, 1214, 1, 0, 0, 0, 190,
-		1237, 1, 0, 0, 0, 192, 1239, 1, 0, 0, 0, 194, 1247, 1, 0, 0, 0, 196, 1255,
-		1, 0, 0, 0, 198, 1259, 1, 0, 0, 0, 200, 1282, 1, 0, 0, 0, 202, 1284, 1,
-		0, 0, 0, 204, 1421, 1, 0, 0, 0, 206, 1429, 1, 0, 0, 0, 208, 1440, 1, 0,
-		0, 0, 210, 1444, 1, 0, 0, 0, 212, 1446, 1, 0, 0, 0, 214, 1458, 1, 0, 0,
-		0, 216, 1463, 1, 0, 0, 0, 218, 1466, 1, 0, 0, 0, 220, 1474, 1, 0, 0, 0,
-		222, 1478, 1, 0, 0, 0, 224, 1499, 1, 0, 0, 0, 226, 1506, 1, 0, 0, 0, 228,
-		1516, 1, 0, 0, 0, 230, 1533, 1, 0, 0, 0, 232, 1550, 1, 0, 0, 0, 234, 1552,
-		1, 0, 0, 0, 236, 1563, 1, 0, 0, 0, 238, 1571, 1, 0, 0, 0, 240, 1587, 1,
-		0, 0, 0, 242, 1589, 1, 0, 0, 0, 244, 1597, 1, 0, 0, 0, 246, 1613, 1, 0,
-		0, 0, 248, 1615, 1, 0, 0, 0, 250, 1652, 1, 0, 0, 0, 252, 1654, 1, 0, 0,
-		0, 254, 1658, 1, 0, 0, 0, 256, 1682, 1, 0, 0, 0, 258, 1688, 1, 0, 0, 0,
-		260, 1694, 1, 0, 0, 0, 262, 1696, 1, 0, 0, 0, 264, 1702, 1, 0, 0, 0, 266,
-		1705, 1, 0, 0, 0, 268, 1708, 1, 0, 0, 0, 270, 1797, 1, 0, 0, 0, 272, 1800,
-		1, 0, 0, 0, 274, 1804, 1, 0, 0, 0, 276, 1816, 1, 0, 0, 0, 278, 1818, 1,
-		0, 0, 0, 280, 1823, 1, 0, 0, 0, 282, 1858, 1, 0, 0, 0, 284, 1861, 1, 0,
-		0, 0, 286, 1864, 1, 0, 0, 0, 288, 1869, 1, 0, 0, 0, 290, 1874, 1, 0, 0,
-		0, 292, 1883, 1, 0, 0, 0, 294, 1890, 1, 0, 0, 0, 296, 1895, 1, 0, 0, 0,
-		298, 1900, 1, 0, 0, 0, 300, 1909, 1, 0, 0, 0, 302, 1911, 1, 0, 0, 0, 304,
-		1914, 1, 0, 0, 0, 306, 1917, 1, 0, 0, 0, 308, 1925, 1, 0, 0, 0, 310, 1929,
-		1, 0, 0, 0, 312, 1980, 1, 0, 0, 0, 314, 1982, 1, 0, 0, 0, 316, 1987, 1,
-		0, 0, 0, 318, 1989, 1, 0, 0, 0, 320, 1994, 1, 0, 0, 0, 322, 2002, 1, 0,
-		0, 0, 324, 2011, 1, 0, 0, 0, 326, 2013, 1, 0, 0, 0, 328, 329, 5, 43, 0,
-		0, 329, 330, 3, 322, 161, 0, 330, 331, 5, 27, 0, 0, 331, 332, 3, 322, 161,
-		0, 332, 333, 5, 199, 0, 0, 333, 338, 3, 2, 1, 0, 334, 335, 5, 206, 0, 0,
-		335, 337, 3, 2, 1, 0, 336, 334, 1, 0, 0, 0, 337, 340, 1, 0, 0, 0, 338,
-		336, 1, 0, 0, 0, 338, 339, 1, 0, 0, 0, 339, 341, 1, 0, 0, 0, 340, 338,
-		1, 0, 0, 0, 341, 342, 5, 200, 0, 0, 342, 343, 3, 76, 38, 0, 343, 344, 5,
-		0, 0, 1, 344, 1, 1, 0, 0, 0, 345, 346, 7, 0, 0, 0, 346, 347, 7, 1, 0, 0,
-		347, 3, 1, 0, 0, 0, 348, 349, 3, 6, 3, 0, 349, 350, 5, 0, 0, 1, 350, 353,
-		1, 0, 0, 0, 351, 353, 3, 0, 0, 0, 352, 348, 1, 0, 0, 0, 352, 351, 1, 0,
-		0, 0, 353, 5, 1, 0, 0, 0, 354, 356, 3, 24, 12, 0, 355, 354, 1, 0, 0, 0,
-		356, 359, 1, 0, 0, 0, 357, 355, 1, 0, 0, 0, 357, 358, 1, 0, 0, 0, 358,
-		360, 1, 0, 0, 0, 359, 357, 1, 0, 0, 0, 360, 376, 3, 8, 4, 0, 361, 363,
-		3, 24, 12, 0, 362, 361, 1, 0, 0, 0, 363, 366, 1, 0, 0, 0, 364, 362, 1,
-		0, 0, 0, 364, 365, 1, 0, 0, 0, 365, 367, 1, 0, 0, 0, 366, 364, 1, 0, 0,
-		0, 367, 376, 3, 10, 5, 0, 368, 370, 3, 24, 12, 0, 369, 368, 1, 0, 0, 0,
-		370, 373, 1, 0, 0, 0, 371, 369, 1, 0, 0, 0, 371, 372, 1, 0, 0, 0, 372,
+		178, 181, 1, 0, 107, 108, 13, 0, 2, 3, 16, 16, 20, 20, 22, 22, 34, 35,
+		38, 38, 42, 43, 49, 49, 51, 51, 53, 56, 59, 172, 176, 190, 247, 247, 5,
+		0, 1, 32, 34, 48, 50, 172, 176, 190, 247, 247, 2225, 0, 328, 1, 0, 0, 0,
+		2, 345, 1, 0, 0, 0, 4, 352, 1, 0, 0, 0, 6, 375, 1, 0, 0, 0, 8, 377, 1,
+		0, 0, 0, 10, 389, 1, 0, 0, 0, 12, 397, 1, 0, 0, 0, 14, 405, 1, 0, 0, 0,
+		16, 413, 1, 0, 0, 0, 18, 421, 1, 0, 0, 0, 20, 430, 1, 0, 0, 0, 22, 451,
+		1, 0, 0, 0, 24, 472, 1, 0, 0, 0, 26, 481, 1, 0, 0, 0, 28, 485, 1, 0, 0,
+		0, 30, 493, 1, 0, 0, 0, 32, 497, 1, 0, 0, 0, 34, 501, 1, 0, 0, 0, 36, 515,
+		1, 0, 0, 0, 38, 526, 1, 0, 0, 0, 40, 534, 1, 0, 0, 0, 42, 539, 1, 0, 0,
+		0, 44, 555, 1, 0, 0, 0, 46, 569, 1, 0, 0, 0, 48, 588, 1, 0, 0, 0, 50, 590,
+		1, 0, 0, 0, 52, 594, 1, 0, 0, 0, 54, 600, 1, 0, 0, 0, 56, 611, 1, 0, 0,
+		0, 58, 617, 1, 0, 0, 0, 60, 625, 1, 0, 0, 0, 62, 627, 1, 0, 0, 0, 64, 637,
+		1, 0, 0, 0, 66, 645, 1, 0, 0, 0, 68, 649, 1, 0, 0, 0, 70, 656, 1, 0, 0,
+		0, 72, 658, 1, 0, 0, 0, 74, 674, 1, 0, 0, 0, 76, 676, 1, 0, 0, 0, 78, 687,
+		1, 0, 0, 0, 80, 689, 1, 0, 0, 0, 82, 698, 1, 0, 0, 0, 84, 704, 1, 0, 0,
+		0, 86, 730, 1, 0, 0, 0, 88, 735, 1, 0, 0, 0, 90, 740, 1, 0, 0, 0, 92, 747,
+		1, 0, 0, 0, 94, 758, 1, 0, 0, 0, 96, 777, 1, 0, 0, 0, 98, 791, 1, 0, 0,
+		0, 100, 793, 1, 0, 0, 0, 102, 801, 1, 0, 0, 0, 104, 807, 1, 0, 0, 0, 106,
+		813, 1, 0, 0, 0, 108, 826, 1, 0, 0, 0, 110, 832, 1, 0, 0, 0, 112, 836,
+		1, 0, 0, 0, 114, 839, 1, 0, 0, 0, 116, 842, 1, 0, 0, 0, 118, 846, 1, 0,
+		0, 0, 120, 850, 1, 0, 0, 0, 122, 854, 1, 0, 0, 0, 124, 858, 1, 0, 0, 0,
+		126, 865, 1, 0, 0, 0, 128, 870, 1, 0, 0, 0, 130, 878, 1, 0, 0, 0, 132,
+		884, 1, 0, 0, 0, 134, 891, 1, 0, 0, 0, 136, 896, 1, 0, 0, 0, 138, 901,
+		1, 0, 0, 0, 140, 914, 1, 0, 0, 0, 142, 929, 1, 0, 0, 0, 144, 933, 1, 0,
+		0, 0, 146, 935, 1, 0, 0, 0, 148, 940, 1, 0, 0, 0, 150, 942, 1, 0, 0, 0,
+		152, 946, 1, 0, 0, 0, 154, 972, 1, 0, 0, 0, 156, 1058, 1, 0, 0, 0, 158,
+		1079, 1, 0, 0, 0, 160, 1081, 1, 0, 0, 0, 162, 1088, 1, 0, 0, 0, 164, 1096,
+		1, 0, 0, 0, 166, 1104, 1, 0, 0, 0, 168, 1111, 1, 0, 0, 0, 170, 1114, 1,
+		0, 0, 0, 172, 1125, 1, 0, 0, 0, 174, 1127, 1, 0, 0, 0, 176, 1138, 1, 0,
+		0, 0, 178, 1142, 1, 0, 0, 0, 180, 1153, 1, 0, 0, 0, 182, 1159, 1, 0, 0,
+		0, 184, 1163, 1, 0, 0, 0, 186, 1196, 1, 0, 0, 0, 188, 1214, 1, 0, 0, 0,
+		190, 1237, 1, 0, 0, 0, 192, 1239, 1, 0, 0, 0, 194, 1247, 1, 0, 0, 0, 196,
+		1255, 1, 0, 0, 0, 198, 1259, 1, 0, 0, 0, 200, 1282, 1, 0, 0, 0, 202, 1284,
+		1, 0, 0, 0, 204, 1421, 1, 0, 0, 0, 206, 1429, 1, 0, 0, 0, 208, 1440, 1,
+		0, 0, 0, 210, 1444, 1, 0, 0, 0, 212, 1446, 1, 0, 0, 0, 214, 1458, 1, 0,
+		0, 0, 216, 1463, 1, 0, 0, 0, 218, 1466, 1, 0, 0, 0, 220, 1474, 1, 0, 0,
+		0, 222, 1478, 1, 0, 0, 0, 224, 1499, 1, 0, 0, 0, 226, 1506, 1, 0, 0, 0,
+		228, 1516, 1, 0, 0, 0, 230, 1533, 1, 0, 0, 0, 232, 1550, 1, 0, 0, 0, 234,
+		1552, 1, 0, 0, 0, 236, 1563, 1, 0, 0, 0, 238, 1571, 1, 0, 0, 0, 240, 1587,
+		1, 0, 0, 0, 242, 1589, 1, 0, 0, 0, 244, 1597, 1, 0, 0, 0, 246, 1613, 1,
+		0, 0, 0, 248, 1615, 1, 0, 0, 0, 250, 1652, 1, 0, 0, 0, 252, 1654, 1, 0,
+		0, 0, 254, 1658, 1, 0, 0, 0, 256, 1682, 1, 0, 0, 0, 258, 1688, 1, 0, 0,
+		0, 260, 1694, 1, 0, 0, 0, 262, 1696, 1, 0, 0, 0, 264, 1702, 1, 0, 0, 0,
+		266, 1705, 1, 0, 0, 0, 268, 1708, 1, 0, 0, 0, 270, 1797, 1, 0, 0, 0, 272,
+		1800, 1, 0, 0, 0, 274, 1804, 1, 0, 0, 0, 276, 1816, 1, 0, 0, 0, 278, 1818,
+		1, 0, 0, 0, 280, 1823, 1, 0, 0, 0, 282, 1858, 1, 0, 0, 0, 284, 1861, 1,
+		0, 0, 0, 286, 1864, 1, 0, 0, 0, 288, 1869, 1, 0, 0, 0, 290, 1874, 1, 0,
+		0, 0, 292, 1883, 1, 0, 0, 0, 294, 1890, 1, 0, 0, 0, 296, 1895, 1, 0, 0,
+		0, 298, 1900, 1, 0, 0, 0, 300, 1909, 1, 0, 0, 0, 302, 1911, 1, 0, 0, 0,
+		304, 1914, 1, 0, 0, 0, 306, 1917, 1, 0, 0, 0, 308, 1925, 1, 0, 0, 0, 310,
+		1929, 1, 0, 0, 0, 312, 1980, 1, 0, 0, 0, 314, 1982, 1, 0, 0, 0, 316, 1987,
+		1, 0, 0, 0, 318, 1989, 1, 0, 0, 0, 320, 1994, 1, 0, 0, 0, 322, 2002, 1,
+		0, 0, 0, 324, 2011, 1, 0, 0, 0, 326, 2013, 1, 0, 0, 0, 328, 329, 5, 43,
+		0, 0, 329, 330, 3, 322, 161, 0, 330, 331, 5, 27, 0, 0, 331, 332, 3, 322,
+		161, 0, 332, 333, 5, 199, 0, 0, 333, 338, 3, 2, 1, 0, 334, 335, 5, 206,
+		0, 0, 335, 337, 3, 2, 1, 0, 336, 334, 1, 0, 0, 0, 337, 340, 1, 0, 0, 0,
+		338, 336, 1, 0, 0, 0, 338, 339, 1, 0, 0, 0, 339, 341, 1, 0, 0, 0, 340,
+		338, 1, 0, 0, 0, 341, 342, 5, 200, 0, 0, 342, 343, 3, 76, 38, 0, 343, 344,
+		5, 0, 0, 1, 344, 1, 1, 0, 0, 0, 345, 346, 7, 0, 0, 0, 346, 347, 7, 1, 0,
+		0, 347, 3, 1, 0, 0, 0, 348, 349, 3, 6, 3, 0, 349, 350, 5, 0, 0, 1, 350,
+		353, 1, 0, 0, 0, 351, 353, 3, 0, 0, 0, 352, 348, 1, 0, 0, 0, 352, 351,
+		1, 0, 0, 0, 353, 5, 1, 0, 0, 0, 354, 356, 3, 24, 12, 0, 355, 354, 1, 0,
+		0, 0, 356, 359, 1, 0, 0, 0, 357, 355, 1, 0, 0, 0, 357, 358, 1, 0, 0, 0,
+		358, 360, 1, 0, 0, 0, 359, 357, 1, 0, 0, 0, 360, 376, 3, 8, 4, 0, 361,
+		363, 3, 24, 12, 0, 362, 361, 1, 0, 0, 0, 363, 366, 1, 0, 0, 0, 364, 362,
+		1, 0, 0, 0, 364, 365, 1, 0, 0, 0, 365, 367, 1, 0, 0, 0, 366, 364, 1, 0,
+		0, 0, 367, 376, 3, 10, 5, 0, 368, 370, 3, 24, 12, 0, 369, 368, 1, 0, 0,
+		0, 370, 373, 1, 0, 0, 0, 371, 369, 1, 0, 0, 0, 371, 372, 1, 0, 0, 0, 372,
 		374, 1, 0, 0, 0, 373, 371, 1, 0, 0, 0, 374, 376, 3, 14, 7, 0, 375, 357,
 		1, 0, 0, 0, 375, 364, 1, 0, 0, 0, 375, 371, 1, 0, 0, 0, 376, 7, 1, 0, 0,
 		0, 377, 378, 5, 6, 0, 0, 378, 381, 3, 322, 161, 0, 379, 380, 5, 12, 0,
@@ -2894,7 +2894,7 @@ func (p *ApexParser) EnumDeclaration() (localctx IEnumDeclarationContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-439087443106267124) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserIdentifier {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-438524493152845812) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserIdentifier {
 		{
 			p.SetState(392)
 			p.EnumConstants()
@@ -4937,14 +4937,14 @@ func (p *ApexParser) MethodDeclaration() (localctx IMethodDeclarationContext) {
 		goto errorExit
 	}
 
-	switch p.GetTokenStream().LA(1) {
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 19, p.GetParserRuleContext()) {
+	case 1:
 		{
 			p.SetState(483)
 			p.TypeRef()
 		}
 
-	case ApexParserVOID:
+	case 2:
 		{
 			p.SetState(484)
 			p.Match(ApexParserVOID)
@@ -4954,8 +4954,7 @@ func (p *ApexParser) MethodDeclaration() (localctx IMethodDeclarationContext) {
 			}
 		}
 
-	default:
-		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	case antlr.ATNInvalidAltNumber:
 		goto errorExit
 	}
 	{
@@ -5755,14 +5754,14 @@ func (p *ApexParser) InterfaceMethodDeclaration() (localctx IInterfaceMethodDecl
 		goto errorExit
 	}
 
-	switch p.GetTokenStream().LA(1) {
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 23, p.GetParserRuleContext()) {
+	case 1:
 		{
 			p.SetState(518)
 			p.TypeRef()
 		}
 
-	case ApexParserVOID:
+	case 2:
 		{
 			p.SetState(519)
 			p.Match(ApexParserVOID)
@@ -5772,8 +5771,7 @@ func (p *ApexParser) InterfaceMethodDeclaration() (localctx IInterfaceMethodDecl
 			}
 		}
 
-	default:
-		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	case antlr.ATNInvalidAltNumber:
 		goto errorExit
 	}
 	{
@@ -6324,7 +6322,7 @@ func (p *ApexParser) ArrayInitializer() (localctx IArrayInitializerContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 		{
 			p.SetState(540)
 			p.expression(0)
@@ -7266,7 +7264,7 @@ func (p *ApexParser) FormalParameters() (localctx IFormalParametersContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-5333881493184498) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserATSIGN || _la == ApexParserIdentifier {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-4770931539763186) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserATSIGN || _la == ApexParserIdentifier {
 		{
 			p.SetState(595)
 			p.FormalParameterList()
@@ -8369,7 +8367,7 @@ func (p *ApexParser) ElementValuePairs() (localctx IElementValuePairsContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-439087443106267124) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserCOMMA || _la == ApexParserIdentifier {
+	for ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-438524493152845812) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserCOMMA || _la == ApexParserIdentifier {
 		{
 			p.SetState(638)
 			p.DelimitedElementValuePair()
@@ -8819,7 +8817,7 @@ func (p *ApexParser) ElementValue() (localctx IElementValueContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserNEW, ApexParserNULL, ApexParserSET, ApexParserSHARING, ApexParserSUPER, ApexParserSWITCH, ApexParserTHIS, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserFindLiteral, ApexParserIntegerLiteral, ApexParserLongLiteral, ApexParserNumberLiteral, ApexParserBooleanLiteral, ApexParserStringLiteral, ApexParserLPAREN, ApexParserLBRACK, ApexParserBANG, ApexParserTILDE, ApexParserINC, ApexParserDEC, ApexParserADD, ApexParserSUB, ApexParserIdentifier:
+	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserNEW, ApexParserNULL, ApexParserSET, ApexParserSHARING, ApexParserSUPER, ApexParserSWITCH, ApexParserTHIS, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserVOID, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserFindLiteral, ApexParserIntegerLiteral, ApexParserLongLiteral, ApexParserNumberLiteral, ApexParserBooleanLiteral, ApexParserStringLiteral, ApexParserLPAREN, ApexParserLBRACK, ApexParserBANG, ApexParserTILDE, ApexParserINC, ApexParserDEC, ApexParserADD, ApexParserSUB, ApexParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(653)
@@ -9036,7 +9034,7 @@ func (p *ApexParser) ElementValueArrayInitializer() (localctx IElementValueArray
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&27021629977265503) != 0) {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&27021629977265503) != 0) {
 		{
 			p.SetState(659)
 			p.ElementValue()
@@ -9703,7 +9701,7 @@ func (p *ApexParser) Block() (localctx IBlockContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-562950096575586) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&27021629977265503) != 0) {
+	for ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-143154274) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&27021629977265503) != 0) {
 		{
 			p.SetState(690)
 			p.Statement()
@@ -11926,7 +11924,7 @@ func (p *ApexParser) WhenLiteral() (localctx IWhenLiteralContext) {
 			}
 		}
 
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserVOID, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
 		p.EnterOuterAlt(localctx, 5)
 		{
 			p.SetState(786)
@@ -12142,7 +12140,7 @@ func (p *ApexParser) ForStatement() (localctx IForStatementContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ApexParserABSTRACT, ApexParserAFTER, ApexParserBEFORE, ApexParserBREAK, ApexParserCONTINUE, ApexParserDELETE, ApexParserDO, ApexParserFINAL, ApexParserFOR, ApexParserGET, ApexParserGLOBAL, ApexParserIF, ApexParserINHERITED, ApexParserINSERT, ApexParserINSTANCEOF, ApexParserMERGE, ApexParserNEW, ApexParserNULL, ApexParserOVERRIDE, ApexParserPRIVATE, ApexParserPROTECTED, ApexParserPUBLIC, ApexParserRETURN, ApexParserSYSTEMRUNAS, ApexParserSET, ApexParserSHARING, ApexParserSTATIC, ApexParserSUPER, ApexParserSWITCH, ApexParserTESTMETHOD, ApexParserTHIS, ApexParserTHROW, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserTRY, ApexParserUNDELETE, ApexParserUPDATE, ApexParserUPSERT, ApexParserVIRTUAL, ApexParserWEBSERVICE, ApexParserWHEN, ApexParserWHILE, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserFindLiteral, ApexParserIntegerLiteral, ApexParserLongLiteral, ApexParserNumberLiteral, ApexParserBooleanLiteral, ApexParserStringLiteral, ApexParserLPAREN, ApexParserLBRACE, ApexParserLBRACK, ApexParserBANG, ApexParserTILDE, ApexParserINC, ApexParserDEC, ApexParserADD, ApexParserSUB, ApexParserATSIGN, ApexParserIdentifier:
+	case ApexParserABSTRACT, ApexParserAFTER, ApexParserBEFORE, ApexParserBREAK, ApexParserCONTINUE, ApexParserDELETE, ApexParserDO, ApexParserFINAL, ApexParserFOR, ApexParserGET, ApexParserGLOBAL, ApexParserIF, ApexParserINHERITED, ApexParserINSERT, ApexParserINSTANCEOF, ApexParserMERGE, ApexParserNEW, ApexParserNULL, ApexParserOVERRIDE, ApexParserPRIVATE, ApexParserPROTECTED, ApexParserPUBLIC, ApexParserRETURN, ApexParserSYSTEMRUNAS, ApexParserSET, ApexParserSHARING, ApexParserSTATIC, ApexParserSUPER, ApexParserSWITCH, ApexParserTESTMETHOD, ApexParserTHIS, ApexParserTHROW, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserTRY, ApexParserUNDELETE, ApexParserUPDATE, ApexParserUPSERT, ApexParserVIRTUAL, ApexParserVOID, ApexParserWEBSERVICE, ApexParserWHEN, ApexParserWHILE, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserFindLiteral, ApexParserIntegerLiteral, ApexParserLongLiteral, ApexParserNumberLiteral, ApexParserBooleanLiteral, ApexParserStringLiteral, ApexParserLPAREN, ApexParserLBRACE, ApexParserLBRACK, ApexParserBANG, ApexParserTILDE, ApexParserINC, ApexParserDEC, ApexParserADD, ApexParserSUB, ApexParserATSIGN, ApexParserIdentifier:
 		{
 			p.SetState(797)
 			p.Statement()
@@ -12318,7 +12316,7 @@ func (p *ApexParser) WhileStatement() (localctx IWhileStatementContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ApexParserABSTRACT, ApexParserAFTER, ApexParserBEFORE, ApexParserBREAK, ApexParserCONTINUE, ApexParserDELETE, ApexParserDO, ApexParserFINAL, ApexParserFOR, ApexParserGET, ApexParserGLOBAL, ApexParserIF, ApexParserINHERITED, ApexParserINSERT, ApexParserINSTANCEOF, ApexParserMERGE, ApexParserNEW, ApexParserNULL, ApexParserOVERRIDE, ApexParserPRIVATE, ApexParserPROTECTED, ApexParserPUBLIC, ApexParserRETURN, ApexParserSYSTEMRUNAS, ApexParserSET, ApexParserSHARING, ApexParserSTATIC, ApexParserSUPER, ApexParserSWITCH, ApexParserTESTMETHOD, ApexParserTHIS, ApexParserTHROW, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserTRY, ApexParserUNDELETE, ApexParserUPDATE, ApexParserUPSERT, ApexParserVIRTUAL, ApexParserWEBSERVICE, ApexParserWHEN, ApexParserWHILE, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserFindLiteral, ApexParserIntegerLiteral, ApexParserLongLiteral, ApexParserNumberLiteral, ApexParserBooleanLiteral, ApexParserStringLiteral, ApexParserLPAREN, ApexParserLBRACE, ApexParserLBRACK, ApexParserBANG, ApexParserTILDE, ApexParserINC, ApexParserDEC, ApexParserADD, ApexParserSUB, ApexParserATSIGN, ApexParserIdentifier:
+	case ApexParserABSTRACT, ApexParserAFTER, ApexParserBEFORE, ApexParserBREAK, ApexParserCONTINUE, ApexParserDELETE, ApexParserDO, ApexParserFINAL, ApexParserFOR, ApexParserGET, ApexParserGLOBAL, ApexParserIF, ApexParserINHERITED, ApexParserINSERT, ApexParserINSTANCEOF, ApexParserMERGE, ApexParserNEW, ApexParserNULL, ApexParserOVERRIDE, ApexParserPRIVATE, ApexParserPROTECTED, ApexParserPUBLIC, ApexParserRETURN, ApexParserSYSTEMRUNAS, ApexParserSET, ApexParserSHARING, ApexParserSTATIC, ApexParserSUPER, ApexParserSWITCH, ApexParserTESTMETHOD, ApexParserTHIS, ApexParserTHROW, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserTRY, ApexParserUNDELETE, ApexParserUPDATE, ApexParserUPSERT, ApexParserVIRTUAL, ApexParserVOID, ApexParserWEBSERVICE, ApexParserWHEN, ApexParserWHILE, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserLIST, ApexParserMAP, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserFindLiteral, ApexParserIntegerLiteral, ApexParserLongLiteral, ApexParserNumberLiteral, ApexParserBooleanLiteral, ApexParserStringLiteral, ApexParserLPAREN, ApexParserLBRACE, ApexParserLBRACK, ApexParserBANG, ApexParserTILDE, ApexParserINC, ApexParserDEC, ApexParserADD, ApexParserSUB, ApexParserATSIGN, ApexParserIdentifier:
 		{
 			p.SetState(803)
 			p.Statement()
@@ -12891,7 +12889,7 @@ func (p *ApexParser) ReturnStatement() (localctx IReturnStatementContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 		{
 			p.SetState(827)
 			p.expression(0)
@@ -14002,7 +14000,7 @@ func (p *ApexParser) UpsertStatement() (localctx IUpsertStatementContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-439087443106267124) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserIdentifier {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-438524493152845812) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserIdentifier {
 		{
 			p.SetState(860)
 			p.QualifiedName()
@@ -14354,7 +14352,7 @@ func (p *ApexParser) RunAsStatement() (localctx IRunAsStatementContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 		{
 			p.SetState(872)
 			p.ExpressionList()
@@ -15614,7 +15612,7 @@ func (p *ApexParser) ForControl() (localctx IForControlContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-5332644441939954) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&27021629977265247) != 0) {
+		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-4769694488518642) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&27021629977265247) != 0) {
 			{
 				p.SetState(918)
 				p.ForInit()
@@ -15636,7 +15634,7 @@ func (p *ApexParser) ForControl() (localctx IForControlContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 			{
 				p.SetState(922)
 				p.expression(0)
@@ -15658,7 +15656,7 @@ func (p *ApexParser) ForControl() (localctx IForControlContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 			{
 				p.SetState(926)
 				p.ForUpdate()
@@ -19867,7 +19865,7 @@ func (p *ApexParser) MethodCall() (localctx IMethodCallContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserVOID, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(1060)
@@ -19888,7 +19886,7 @@ func (p *ApexParser) MethodCall() (localctx IMethodCallContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 			{
 				p.SetState(1062)
 				p.ExpressionList()
@@ -19929,7 +19927,7 @@ func (p *ApexParser) MethodCall() (localctx IMethodCallContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 			{
 				p.SetState(1069)
 				p.ExpressionList()
@@ -19970,7 +19968,7 @@ func (p *ApexParser) MethodCall() (localctx IMethodCallContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+		if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 			{
 				p.SetState(1075)
 				p.ExpressionList()
@@ -20148,7 +20146,7 @@ func (p *ApexParser) DotMethodCall() (localctx IDotMethodCallContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 		{
 			p.SetState(1083)
 			p.ExpressionList()
@@ -21895,7 +21893,7 @@ func (p *ApexParser) Arguments() (localctx IArgumentsContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6740641827454964) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
+	if ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-6177691874033652) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-246290604621825) != 0) || ((int64((_la-193)) & ^0x3f) == 0 && ((int64(1)<<(_la-193))&18014430722524255) != 0) {
 		{
 			p.SetState(1154)
 			p.ExpressionList()
@@ -27569,7 +27567,7 @@ func (p *ApexParser) ConditionalExpression() (localctx IConditionalExpressionCon
 			}
 		}
 
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserVOID, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(1505)
@@ -30189,7 +30187,7 @@ func (p *ApexParser) DataCategoryName() (localctx IDataCategoryNameContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserVOID, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(1601)
@@ -37949,6 +37947,7 @@ type IIdContext interface {
 	SWITCH() antlr.TerminalNode
 	TRANSIENT() antlr.TerminalNode
 	TRIGGER() antlr.TerminalNode
+	VOID() antlr.TerminalNode
 	WHEN() antlr.TerminalNode
 	WITH() antlr.TerminalNode
 	WITHOUT() antlr.TerminalNode
@@ -38162,6 +38161,10 @@ func (s *IdContext) TRANSIENT() antlr.TerminalNode {
 
 func (s *IdContext) TRIGGER() antlr.TerminalNode {
 	return s.GetToken(ApexParserTRIGGER, 0)
+}
+
+func (s *IdContext) VOID() antlr.TerminalNode {
+	return s.GetToken(ApexParserVOID, 0)
 }
 
 func (s *IdContext) WHEN() antlr.TerminalNode {
@@ -38740,7 +38743,7 @@ func (p *ApexParser) Id() (localctx IIdContext) {
 		p.SetState(2002)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-439087443106267124) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserIdentifier) {
+		if !(((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-438524493152845812) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&9223125746250153983) != 0) || _la == ApexParserIdentifier) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -38893,7 +38896,7 @@ func (p *ApexParser) MethodId() (localctx IMethodIdContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
+	case ApexParserAFTER, ApexParserBEFORE, ApexParserGET, ApexParserINHERITED, ApexParserINSTANCEOF, ApexParserSET, ApexParserSHARING, ApexParserSWITCH, ApexParserTRANSIENT, ApexParserTRIGGER, ApexParserVOID, ApexParserWHEN, ApexParserWITH, ApexParserWITHOUT, ApexParserUSER_MODE, ApexParserSYSTEM_MODE, ApexParserSELECT, ApexParserCOUNT, ApexParserFROM, ApexParserAS, ApexParserUSING, ApexParserSCOPE, ApexParserWHERE, ApexParserORDER, ApexParserBY, ApexParserLIMIT, ApexParserSOQLAND, ApexParserSOQLOR, ApexParserNOT, ApexParserAVG, ApexParserCOUNT_DISTINCT, ApexParserMIN, ApexParserMAX, ApexParserSUM, ApexParserTYPEOF, ApexParserEND, ApexParserTHEN, ApexParserLIKE, ApexParserIN, ApexParserINCLUDES, ApexParserEXCLUDES, ApexParserASC, ApexParserDESC, ApexParserNULLS, ApexParserFIRST, ApexParserLAST, ApexParserGROUP, ApexParserALL, ApexParserROWS, ApexParserVIEW, ApexParserHAVING, ApexParserROLLUP, ApexParserTOLABEL, ApexParserOFFSET, ApexParserDATA, ApexParserCATEGORY, ApexParserAT, ApexParserABOVE, ApexParserBELOW, ApexParserABOVE_OR_BELOW, ApexParserSECURITY_ENFORCED, ApexParserREFERENCE, ApexParserCUBE, ApexParserFORMAT, ApexParserTRACKING, ApexParserVIEWSTAT, ApexParserCUSTOM, ApexParserSTANDARD, ApexParserDISTANCE, ApexParserGEOLOCATION, ApexParserGROUPING, ApexParserCONVERT_CURRENCY, ApexParserCALENDAR_MONTH, ApexParserCALENDAR_QUARTER, ApexParserCALENDAR_YEAR, ApexParserDAY_IN_MONTH, ApexParserDAY_IN_WEEK, ApexParserDAY_IN_YEAR, ApexParserDAY_ONLY, ApexParserFISCAL_MONTH, ApexParserFISCAL_QUARTER, ApexParserFISCAL_YEAR, ApexParserHOUR_IN_DAY, ApexParserWEEK_IN_MONTH, ApexParserWEEK_IN_YEAR, ApexParserCONVERT_TIMEZONE, ApexParserYESTERDAY, ApexParserTODAY, ApexParserTOMORROW, ApexParserLAST_WEEK, ApexParserTHIS_WEEK, ApexParserNEXT_WEEK, ApexParserLAST_MONTH, ApexParserTHIS_MONTH, ApexParserNEXT_MONTH, ApexParserLAST_90_DAYS, ApexParserNEXT_90_DAYS, ApexParserLAST_N_DAYS, ApexParserNEXT_N_DAYS, ApexParserNEXT_N_WEEKS, ApexParserLAST_N_WEEKS, ApexParserNEXT_N_MONTHS, ApexParserLAST_N_MONTHS, ApexParserTHIS_QUARTER, ApexParserLAST_QUARTER, ApexParserNEXT_QUARTER, ApexParserNEXT_N_QUARTERS, ApexParserLAST_N_QUARTERS, ApexParserTHIS_YEAR, ApexParserLAST_YEAR, ApexParserNEXT_YEAR, ApexParserNEXT_N_YEARS, ApexParserLAST_N_YEARS, ApexParserTHIS_FISCAL_QUARTER, ApexParserLAST_FISCAL_QUARTER, ApexParserNEXT_FISCAL_QUARTER, ApexParserNEXT_N_FISCAL_QUARTERS, ApexParserLAST_N_FISCAL_QUARTERS, ApexParserTHIS_FISCAL_YEAR, ApexParserLAST_FISCAL_YEAR, ApexParserNEXT_FISCAL_YEAR, ApexParserNEXT_N_FISCAL_YEARS, ApexParserLAST_N_FISCAL_YEARS, ApexParserN_DAYS_AGO, ApexParserN_WEEKS_AGO, ApexParserN_MONTHS_AGO, ApexParserN_QUARTERS_AGO, ApexParserN_FISCAL_QUARTERS_AGO, ApexParserN_YEARS_AGO, ApexParserN_FISCAL_YEARS_AGO, ApexParserIntegralCurrencyLiteral, ApexParserFIND, ApexParserEMAIL, ApexParserNAME, ApexParserPHONE, ApexParserSIDEBAR, ApexParserFIELDS, ApexParserMETADATA, ApexParserPRICEBOOKID, ApexParserNETWORK, ApexParserSNIPPET, ApexParserTARGET_LENGTH, ApexParserDIVISION, ApexParserRETURNING, ApexParserLISTVIEW, ApexParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(2004)

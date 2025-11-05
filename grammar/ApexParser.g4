@@ -951,6 +951,7 @@ id
     | SWITCH
     | TRANSIENT
     | TRIGGER
+    | VOID
     | WHEN
     | WITH
     | WITHOUT
