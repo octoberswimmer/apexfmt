@@ -516,6 +516,52 @@ func TestMemberDeclaration(t *testing.T) {
 	}
 	set;
 }`},
+			// Test DML keyword method names (allowed in standard library)
+			{
+				`System.PageReference delete() { return null; }`,
+				`System.PageReference delete() {
+	return null;
+}`,
+			},
+			{
+				`System.PageReference insert() { return null; }`,
+				`System.PageReference insert() {
+	return null;
+}`,
+			},
+			{
+				`System.PageReference update() { return null; }`,
+				`System.PageReference update() {
+	return null;
+}`,
+			},
+			{
+				`System.PageReference merge() { return null; }`,
+				`System.PageReference merge() {
+	return null;
+}`,
+			},
+			{
+				`System.PageReference upsert() { return null; }`,
+				`System.PageReference upsert() {
+	return null;
+}`,
+			},
+			{
+				`System.PageReference undelete() { return null; }`,
+				`System.PageReference undelete() {
+	return null;
+}`,
+			},
+			// Test interface method declarations with DML keywords
+			{
+				`void delete();`,
+				`void delete();`,
+			},
+			{
+				`void insert();`,
+				`void insert();`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
@@ -899,6 +945,33 @@ public class A {}`,
 			System.debug('System mode');
 		}
 	}
+}`,
+			},
+			// Test class with DML keyword method names (standard library pattern)
+			{
+				`global class IdeaStandardController {
+global System.PageReference delete() { return null; }
+global System.PageReference insert() { return null; }
+}`,
+				`global class IdeaStandardController {
+	global System.PageReference delete() {
+		return null;
+	}
+	global System.PageReference insert() {
+		return null;
+	}
+}`,
+			},
+			{
+				`public interface IDataOperations {
+void delete();
+void insert();
+void update();
+}`,
+				`public interface IDataOperations {
+	void delete();
+	void insert();
+	void update();
 }`,
 			},
 		}

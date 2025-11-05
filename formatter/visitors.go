@@ -142,7 +142,7 @@ func (v *FormatVisitor) VisitInterfaceMethodDeclaration(ctx *parser.InterfaceMet
 	if ctx.TypeRef() != nil {
 		returnType = v.visitRule(ctx.TypeRef()).(string)
 	}
-	return fmt.Sprintf("%s%s %s%s;", v.Modifiers(ctx.AllModifier()), returnType, ctx.Id().GetText(), v.visitRule(ctx.FormalParameters()))
+	return fmt.Sprintf("%s%s %s%s;", v.Modifiers(ctx.AllModifier()), returnType, ctx.MethodId().GetText(), v.visitRule(ctx.FormalParameters()))
 }
 
 func (v *FormatVisitor) VisitFieldDeclaration(ctx *parser.FieldDeclarationContext) interface{} {
@@ -1504,7 +1504,7 @@ func (v *FormatVisitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationCont
 	if ctx.Block() != nil {
 		body = " " + v.visitRule(ctx.Block()).(string)
 	}
-	return fmt.Sprintf("%s %s%s%s", returnType, ctx.Id().GetText(),
+	return fmt.Sprintf("%s %s%s%s", returnType, ctx.MethodId().GetText(),
 		v.visitRule(ctx.FormalParameters()),
 		body)
 }

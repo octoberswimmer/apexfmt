@@ -613,6 +613,9 @@ type ApexParserListener interface {
 	// EnterId is called when entering the id production.
 	EnterId(c *IdContext)
 
+	// EnterMethodId is called when entering the methodId production.
+	EnterMethodId(c *MethodIdContext)
+
 	// EnterAnyId is called when entering the anyId production.
 	EnterAnyId(c *AnyIdContext)
 
@@ -1221,6 +1224,9 @@ type ApexParserListener interface {
 
 	// ExitId is called when exiting the id production.
 	ExitId(c *IdContext)
+
+	// ExitMethodId is called when exiting the methodId production.
+	ExitMethodId(c *MethodIdContext)
 
 	// ExitAnyId is called when exiting the anyId production.
 	ExitAnyId(c *AnyIdContext)

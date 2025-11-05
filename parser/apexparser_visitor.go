@@ -613,6 +613,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#id.
 	VisitId(ctx *IdContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#methodId.
+	VisitMethodId(ctx *MethodIdContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#anyId.
 	VisitAnyId(ctx *AnyIdContext) interface{}
 }

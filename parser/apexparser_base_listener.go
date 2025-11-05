@@ -1241,6 +1241,12 @@ func (s *BaseApexParserListener) EnterId(ctx *IdContext) {}
 // ExitId is called when production id is exited.
 func (s *BaseApexParserListener) ExitId(ctx *IdContext) {}
 
+// EnterMethodId is called when production methodId is entered.
+func (s *BaseApexParserListener) EnterMethodId(ctx *MethodIdContext) {}
+
+// ExitMethodId is called when production methodId is exited.
+func (s *BaseApexParserListener) ExitMethodId(ctx *MethodIdContext) {}
+
 // EnterAnyId is called when production anyId is entered.
 func (s *BaseApexParserListener) EnterAnyId(ctx *AnyIdContext) {}
 

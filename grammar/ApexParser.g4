@@ -137,7 +137,7 @@ memberDeclaration
 
 
 methodDeclaration
-    : (typeRef|VOID) id formalParameters
+    : (typeRef|VOID) methodId formalParameters
       (   block
       |   SEMI
       )
@@ -156,7 +156,7 @@ propertyDeclaration
     ;
 
 interfaceMethodDeclaration
-    : modifier* (typeRef|VOID) id formalParameters SEMI
+    : modifier* (typeRef|VOID) methodId formalParameters SEMI
     ;
 
 variableDeclarators
@@ -1090,6 +1090,19 @@ id
     | DIVISION
     | RETURNING
     | LISTVIEW
+    ;
+
+// Method names can include DML keywords, though only Salesforce internal classes use them.
+// We allow them in the grammar to support parsing standard library files like IdeaStandardController.
+// The type checker validates that user code doesn't use these reserved keywords as method names.
+methodId
+    : id
+    | DELETE
+    | INSERT
+    | MERGE
+    | UNDELETE
+    | UPDATE
+    | UPSERT
     ;
 
 // In dot expressions we, can use a wider set of of identifiers, apparently any of them althogh I have excluding VOID

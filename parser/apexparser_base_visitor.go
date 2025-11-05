@@ -815,6 +815,10 @@ func (v *BaseApexParserVisitor) VisitId(ctx *IdContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitMethodId(ctx *MethodIdContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitAnyId(ctx *AnyIdContext) interface{} {
 	return v.VisitChildren(ctx)
 }
