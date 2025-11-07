@@ -205,6 +205,16 @@ Name = 'My Opportunity',
 	x = 1;
 }`},
 			{
+				`for (Integer i = 0, len = entries.size(); i < len; i++) { System.debug(i); }`,
+				`for (Integer i = 0, len = entries.size(); i < len; i++) {
+	System.debug(i);
+}`},
+			{
+				`for (i = 0, j = 1; i < 10; i++, j++) { System.debug(i + j); }`,
+				`for (i = 0, j = 1; i < 10; i++, j++) {
+	System.debug(i + j);
+}`},
+			{
 				// Don't wrap at what might be an inner class
 				`CRC_Inquiry__c inquiry1 = Fixtures.InquiryFactory.inquiry(program1).standardInquiry().patient(patient1).save();`,
 				`CRC_Inquiry__c inquiry1 = Fixtures.InquiryFactory.inquiry(program1)

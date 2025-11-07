@@ -107,13 +107,15 @@ func (f *Formatter) Format() error {
 	p.AddErrorListener(errListener)
 	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
 
-	v := NewFormatVisitor(stream)
-	out, ok := v.visitRule(p.CompilationUnit()).(string)
+	parseTree := p.CompilationUnit()
 
-	// Check if there were any syntax errors
+	// Check if there were any syntax errors during parsing
 	if errListener.HasErrors() {
 		return errListener.GetError()
 	}
+
+	v := NewFormatVisitor(stream)
+	out, ok := v.visitRule(parseTree).(string)
 
 	if !ok {
 		return fmt.Errorf("Unexpected result parsing apex")
