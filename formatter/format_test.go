@@ -437,6 +437,54 @@ BillingPostalCode = '90210'
 	BillingPostalCode = '90210'
 );`,
 			},
+			{
+				`insert as system acct;`,
+				`insert as system acct;`,
+			},
+			{
+				`insert as user acct;`,
+				`insert as user acct;`,
+			},
+			{
+				`update as system accounts;`,
+				`update as system accounts;`,
+			},
+			{
+				`update as user accounts;`,
+				`update as user accounts;`,
+			},
+			{
+				`delete as system records;`,
+				`delete as system records;`,
+			},
+			{
+				`delete as user records;`,
+				`delete as user records;`,
+			},
+			{
+				`upsert as system items;`,
+				`upsert as system items;`,
+			},
+			{
+				`upsert as user items;`,
+				`upsert as user items;`,
+			},
+			{
+				`upsert as system items Account.External_ID__c;`,
+				`upsert as system items Account.External_ID__c;`,
+			},
+			{
+				`upsert as user items Account.External_ID__c;`,
+				`upsert as user items Account.External_ID__c;`,
+			},
+			{
+				`undelete as system records;`,
+				`undelete as system records;`,
+			},
+			{
+				`undelete as user records;`,
+				`undelete as user records;`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {

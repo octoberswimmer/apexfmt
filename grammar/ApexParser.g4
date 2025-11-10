@@ -359,23 +359,23 @@ continueStatement
     ;
 
 insertStatement
-    : INSERT expression SEMI
+    : INSERT (AS (SYSTEM | USER))? expression SEMI
     ;
 
 updateStatement
-    : UPDATE expression SEMI
+    : UPDATE (AS (SYSTEM | USER))? expression SEMI
     ;
 
 deleteStatement
-    : DELETE expression SEMI
+    : DELETE (AS (SYSTEM | USER))? expression SEMI
     ;
 
 undeleteStatement
-    : UNDELETE expression SEMI
+    : UNDELETE (AS (SYSTEM | USER))? expression SEMI
     ;
 
 upsertStatement
-    : UPSERT expression qualifiedName? SEMI
+    : UPSERT (AS (SYSTEM | USER))? expression qualifiedName? SEMI
     ;
 
 mergeStatement
@@ -949,8 +949,10 @@ id
     | SET
     | SHARING
     | SWITCH
+    | SYSTEM
     | TRANSIENT
     | TRIGGER
+    | USER
     | VOID
     | WHEN
     | WITH
@@ -1150,6 +1152,7 @@ anyId
     | STATIC
     | SUPER
     | SWITCH
+    | SYSTEM
     | TESTMETHOD
     | THIS
     | THROW
@@ -1158,6 +1161,7 @@ anyId
     | TRY
     | UNDELETE
     | UPDATE
+    | USER
     | UPSERT
     | VIRTUAL
     | WEBSERVICE

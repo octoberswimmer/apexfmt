@@ -393,18 +393,42 @@ func (v *FormatVisitor) VisitLocalVariableDeclarationStatement(ctx *parser.Local
 }
 
 func (v *FormatVisitor) VisitInsertStatement(ctx *parser.InsertStatementContext) interface{} {
-	return fmt.Sprintf("insert %s;", v.visitRule(ctx.Expression()))
+	accessMode := ""
+	if ctx.AS() != nil {
+		if ctx.SYSTEM() != nil {
+			accessMode = " as system"
+		} else if ctx.USER() != nil {
+			accessMode = " as user"
+		}
+	}
+	return fmt.Sprintf("insert%s %s;", accessMode, v.visitRule(ctx.Expression()))
 }
 
 func (v *FormatVisitor) VisitUpdateStatement(ctx *parser.UpdateStatementContext) interface{} {
-	return fmt.Sprintf("update %s;", v.visitRule(ctx.Expression()))
+	accessMode := ""
+	if ctx.AS() != nil {
+		if ctx.SYSTEM() != nil {
+			accessMode = " as system"
+		} else if ctx.USER() != nil {
+			accessMode = " as user"
+		}
+	}
+	return fmt.Sprintf("update%s %s;", accessMode, v.visitRule(ctx.Expression()))
 }
 
 func (v *FormatVisitor) VisitUpsertStatement(ctx *parser.UpsertStatementContext) interface{} {
+	accessMode := ""
+	if ctx.AS() != nil {
+		if ctx.SYSTEM() != nil {
+			accessMode = " as system"
+		} else if ctx.USER() != nil {
+			accessMode = " as user"
+		}
+	}
 	if q := ctx.QualifiedName(); q != nil {
-		return fmt.Sprintf("upsert %s %s;", v.visitRule(ctx.Expression()), v.visitRule(q))
+		return fmt.Sprintf("upsert%s %s %s;", accessMode, v.visitRule(ctx.Expression()), v.visitRule(q))
 	} else {
-		return fmt.Sprintf("upsert %s;", v.visitRule(ctx.Expression()))
+		return fmt.Sprintf("upsert%s %s;", accessMode, v.visitRule(ctx.Expression()))
 	}
 }
 
@@ -413,11 +437,27 @@ func (v *FormatVisitor) VisitMergeStatement(ctx *parser.MergeStatementContext) i
 }
 
 func (v *FormatVisitor) VisitDeleteStatement(ctx *parser.DeleteStatementContext) interface{} {
-	return fmt.Sprintf("delete %s;", v.visitRule(ctx.Expression()))
+	accessMode := ""
+	if ctx.AS() != nil {
+		if ctx.SYSTEM() != nil {
+			accessMode = " as system"
+		} else if ctx.USER() != nil {
+			accessMode = " as user"
+		}
+	}
+	return fmt.Sprintf("delete%s %s;", accessMode, v.visitRule(ctx.Expression()))
 }
 
 func (v *FormatVisitor) VisitUndeleteStatement(ctx *parser.UndeleteStatementContext) interface{} {
-	return fmt.Sprintf("undelete %s;", v.visitRule(ctx.Expression()))
+	accessMode := ""
+	if ctx.AS() != nil {
+		if ctx.SYSTEM() != nil {
+			accessMode = " as system"
+		} else if ctx.USER() != nil {
+			accessMode = " as user"
+		}
+	}
+	return fmt.Sprintf("undelete%s %s;", accessMode, v.visitRule(ctx.Expression()))
 }
 
 func (v *FormatVisitor) VisitLocalVariableDeclaration(ctx *parser.LocalVariableDeclarationContext) interface{} {
