@@ -178,6 +178,10 @@ func TestSOQL(t *testing.T) {
 				`[SELECT CONVERTCURRENCY(Amount) FROM Opportunity]`,
 			},
 			{
+				`[SELECT CALENDAR_MONTH(CONVERTTIMEZONE(CreatedDate)) month FROM Opportunity]`,
+				`[SELECT CALENDAR_MONTH(convertTimezone(CreatedDate)) month FROM Opportunity]`,
+			},
+			{
 				`[SELECT Amount, FORMAT(amount) Amt, convertCurrency(amount) convertedAmount,
 						 FORMAT(convertCurrency(amount)) convertedCurrency FROM Opportunity where Id = '006R00000024gDtIAI']`,
 				`[
@@ -236,6 +240,33 @@ func TestSOQL(t *testing.T) {
 			{
 				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
 				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
+			},
+			{
+				`[SELECT StageName, COUNT(Id) cnt FROM opportunity GROUP BY StageName HAVING COUNT(Id) > 1]`,
+				`[
+	SELECT
+		StageName,
+		COUNT(Id) cnt
+	FROM
+		opportunity
+	GROUP BY
+		StageName
+	HAVING
+		COUNT(Id) > 1
+]`,
+			},
+			{
+				`[SELECT Id FROM Account GROUP BY Id HAVING COUNT(Id) > 1]`,
+				`[
+	SELECT
+		Id
+	FROM
+		Account
+	GROUP BY
+		Id
+	HAVING
+		COUNT(Id) > 1
+]`,
 			},
 		}
 	for _, tt := range tests {

@@ -1121,7 +1121,7 @@ func (v *FormatVisitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameter
 
 func (v *FormatVisitor) VisitDateFieldName(ctx *parser.DateFieldNameContext) interface{} {
 	if ctx.CONVERT_TIMEZONE() != nil {
-		return fmt.Sprintf("CONVERT_TIMEZONE(%s)", v.visitRule(ctx.FieldName()))
+		return fmt.Sprintf("convertTimezone(%s)", v.visitRule(ctx.FieldName()))
 	}
 	return v.visitRule(ctx.FieldName())
 }

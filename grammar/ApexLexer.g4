@@ -181,7 +181,7 @@ FISCAL_YEAR         : F I S C A L '_' Y E A R;
 HOUR_IN_DAY         : H O U R '_' I N '_' D A Y;
 WEEK_IN_MONTH       : W E E K '_' I N '_' M O N T H;
 WEEK_IN_YEAR        : W E E K '_' I N '_' Y E A R;
-CONVERT_TIMEZONE    : C O N V E R T '_' T I M E Z O N E;
+CONVERT_TIMEZONE    : C O N V E R T T I M E Z O N E;
 
 // SOQL Date formulas
 YESTERDAY                : Y E S T E R D A Y;
