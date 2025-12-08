@@ -671,6 +671,10 @@ func (v *BaseApexParserVisitor) VisitGroupByClause(ctx *GroupByClauseContext) in
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitGroupByField(ctx *GroupByFieldContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitOrderByClause(ctx *OrderByClauseContext) interface{} {
 	return v.VisitChildren(ctx)
 }

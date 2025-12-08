@@ -147,7 +147,40 @@ func TestSOQL(t *testing.T) {
 		GROUPING(OBJ3__c) O3Group
 	FROM
 		OBJ4__c
-	GROUP BY ROLLUP(OBJ1__c, OBJ2__c, OBJ3__c)
+	GROUP BY
+		ROLLUP(OBJ1__c, OBJ2__c, OBJ3__c)
+]`},
+			{
+				`[SELECT AccountId, CALENDAR_YEAR(CloseDate) CalendarYr, SUM(Amount) TotalOppAmount FROM Opportunity WHERE IsWon = true GROUP BY ROLLUP(AccountId, CALENDAR_YEAR(CloseDate)) HAVING AccountId != null]`,
+				`[
+	SELECT
+		AccountId,
+		CALENDAR_YEAR(CloseDate) CalendarYr,
+		SUM(Amount) TotalOppAmount
+	FROM
+		Opportunity
+	WHERE
+		IsWon = true
+	GROUP BY
+		ROLLUP(AccountId, CALENDAR_YEAR(CloseDate))
+	HAVING
+		AccountId != null
+]`},
+			{
+				`[SELECT AccountId, CALENDAR_YEAR(CloseDate) CalendarYr, SUM(Amount) TotalOppAmount FROM Opportunity WHERE IsWon = true GROUP BY CUBE(AccountId, CALENDAR_YEAR(CloseDate)) HAVING CALENDAR_YEAR(CloseDate) != null]`,
+				`[
+	SELECT
+		AccountId,
+		CALENDAR_YEAR(CloseDate) CalendarYr,
+		SUM(Amount) TotalOppAmount
+	FROM
+		Opportunity
+	WHERE
+		IsWon = true
+	GROUP BY
+		CUBE(AccountId, CALENDAR_YEAR(CloseDate))
+	HAVING
+		CALENDAR_YEAR(CloseDate) != null
 ]`},
 			{
 				`[SELECT Name, (SELECT Id, (SELECT Id, (SELECT Id, (SELECT Id FROM Child4 ) FROM Child3 ) FROM Child2 ) FROM Child1) FROM Parent]`,

@@ -505,6 +505,9 @@ type ApexParserListener interface {
 	// EnterGroupByClause is called when entering the groupByClause production.
 	EnterGroupByClause(c *GroupByClauseContext)
 
+	// EnterGroupByField is called when entering the groupByField production.
+	EnterGroupByField(c *GroupByFieldContext)
+
 	// EnterOrderByClause is called when entering the orderByClause production.
 	EnterOrderByClause(c *OrderByClauseContext)
 
@@ -1116,6 +1119,9 @@ type ApexParserListener interface {
 
 	// ExitGroupByClause is called when exiting the groupByClause production.
 	ExitGroupByClause(c *GroupByClauseContext)
+
+	// ExitGroupByField is called when exiting the groupByField production.
+	ExitGroupByField(c *GroupByFieldContext)
 
 	// ExitOrderByClause is called when exiting the orderByClause production.
 	ExitOrderByClause(c *OrderByClauseContext)

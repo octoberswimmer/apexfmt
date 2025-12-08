@@ -1025,6 +1025,12 @@ func (s *BaseApexParserListener) EnterGroupByClause(ctx *GroupByClauseContext) {
 // ExitGroupByClause is called when production groupByClause is exited.
 func (s *BaseApexParserListener) ExitGroupByClause(ctx *GroupByClauseContext) {}
 
+// EnterGroupByField is called when production groupByField is entered.
+func (s *BaseApexParserListener) EnterGroupByField(ctx *GroupByFieldContext) {}
+
+// ExitGroupByField is called when production groupByField is exited.
+func (s *BaseApexParserListener) ExitGroupByField(ctx *GroupByFieldContext) {}
+
 // EnterOrderByClause is called when production orderByClause is entered.
 func (s *BaseApexParserListener) EnterOrderByClause(ctx *OrderByClauseContext) {}
 

@@ -1227,7 +1227,7 @@ func (v *FormatVisitor) VisitValueList(ctx *parser.ValueListContext) interface{}
 
 func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) interface{} {
 	fieldNames := []string{}
-	for _, i := range ctx.AllFieldName() {
+	for _, i := range ctx.AllGroupByField() {
 		fieldNames = append(fieldNames, v.visitRule(i).(string))
 	}
 	sep := " "
@@ -1238,9 +1238,9 @@ func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) int
 	}
 	switch {
 	case ctx.ROLLUP() != nil:
-		return fmt.Sprintf("GROUP BY ROLLUP(%s)", strings.Join(fieldNames, ", "))
+		return v.formatGroupedClause("ROLLUP", fieldNames, ctx.LogicalExpression(), sep, indent)
 	case ctx.CUBE() != nil:
-		return fmt.Sprintf("GROUP BY CUBE(%s)", strings.Join(fieldNames, ", "))
+		return v.formatGroupedClause("CUBE", fieldNames, ctx.LogicalExpression(), sep, indent)
 	default:
 		var clause strings.Builder
 		clause.WriteString("GROUP BY")
@@ -1258,6 +1258,35 @@ func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) int
 
 func (v *FormatVisitor) VisitUsingScope(ctx *parser.UsingScopeContext) interface{} {
 	return fmt.Sprintf("USING SCOPE %s", ctx.SoqlId().GetText())
+}
+
+func (v *FormatVisitor) formatGroupedClause(keyword string, fields []string, having parser.ILogicalExpressionContext, sep string, indent int) string {
+	var clause strings.Builder
+	if v.wrap {
+		clause.WriteString("GROUP BY")
+		clause.WriteString(sep)
+		clause.WriteString(indentTo(fmt.Sprintf("%s(%s)", keyword, strings.Join(fields, ", ")), indent))
+	} else {
+		clause.WriteString(fmt.Sprintf("GROUP BY %s(%s)", keyword, strings.Join(fields, ", ")))
+	}
+	if having != nil {
+		clause.WriteString(sep)
+		clause.WriteString("HAVING")
+		clause.WriteString(sep)
+		clause.WriteString(indentTo(v.visitRule(having).(string), indent))
+	}
+	return clause.String()
+}
+
+func (v *FormatVisitor) VisitGroupByField(ctx *parser.GroupByFieldContext) interface{} {
+	switch {
+	case ctx.SoqlFunction() != nil:
+		return v.visitRule(ctx.SoqlFunction()).(string)
+	case ctx.FieldName() != nil:
+		return v.visitRule(ctx.FieldName()).(string)
+	default:
+		return ""
+	}
 }
 
 func (v *FormatVisitor) VisitOrderByClause(ctx *parser.OrderByClauseContext) interface{} {

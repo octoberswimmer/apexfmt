@@ -505,6 +505,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#groupByClause.
 	VisitGroupByClause(ctx *GroupByClauseContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#groupByField.
+	VisitGroupByField(ctx *GroupByFieldContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#orderByClause.
 	VisitOrderByClause(ctx *OrderByClauseContext) interface{}
 
