@@ -812,6 +812,20 @@ public class A {
 public class A {}`,
 			},
 			{
+				`@IsTest(testFor='ApexClass:Sample, ApexTrigger:SampleTrigger')
+public class SampleTest {
+}`,
+				`@IsTest(testFor='ApexClass:Sample, ApexTrigger:SampleTrigger')
+public class SampleTest {}`,
+			},
+			{
+				`@IsTest(critical=true)
+public class SampleTest {
+}`,
+				`@IsTest(critical=true)
+public class SampleTest {}`,
+			},
+			{
 				`class X {
 	/*
 	 * Property getters
