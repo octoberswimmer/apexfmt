@@ -1376,10 +1376,23 @@ func (v *FormatVisitor) VisitClassCreatorRest(ctx *parser.ClassCreatorRestContex
 func (v *FormatVisitor) VisitArrayCreatorRest(ctx *parser.ArrayCreatorRestContext) interface{} {
 	if expression := ctx.Expression(); expression != nil {
 		return fmt.Sprintf("[%s]", v.visitRule(expression))
-	} else if arrayInitializer := ctx.ArrayInitializer(); arrayInitializer != nil {
-		return fmt.Sprintf("[]%s", v.visitRule(arrayInitializer))
 	}
-	return "[]"
+
+	dimensions := len(ctx.AllLBRACK())
+	if dimensions == 0 {
+		dimensions = 1
+	}
+
+	var out strings.Builder
+	for i := 0; i < dimensions; i++ {
+		out.WriteString("[]")
+	}
+
+	if arrayInitializer := ctx.ArrayInitializer(); arrayInitializer != nil {
+		out.WriteString(v.visitRule(arrayInitializer).(string))
+	}
+
+	return out.String()
 }
 
 func (v *FormatVisitor) VisitMapCreatorRest(ctx *parser.MapCreatorRestContext) interface{} {
@@ -1412,6 +1425,22 @@ func (v *FormatVisitor) VisitArrayInitializer(ctx *parser.ArrayInitializerContex
 	expressions := []string{}
 	for _, i := range ctx.AllExpression() {
 		expressions = append(expressions, v.visitRule(i).(string))
+	}
+	if len(expressions) == 0 {
+		return "{}"
+	}
+
+	hasNestedInitializer := false
+	for _, expression := range expressions {
+		if strings.Contains(expression, "{") {
+			hasNestedInitializer = true
+			break
+		}
+	}
+
+	wrap := v.wrap || len(ctx.GetText()) > 50 || (hasNestedInitializer && len(expressions) > 1)
+	if wrap {
+		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(expressions, ",\n")))
 	}
 	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))
 }

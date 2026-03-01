@@ -524,7 +524,7 @@ classCreatorRest
 
 arrayCreatorRest
     : LBRACK expression RBRACK
-    | LBRACK RBRACK arrayInitializer?
+    | (LBRACK RBRACK)+ arrayInitializer?
     ;
 
 mapCreatorRest

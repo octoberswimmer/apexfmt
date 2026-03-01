@@ -267,6 +267,21 @@ Name = 'My Opportunity',
 				`Error__c[] errorLogs = new Error__c[0];`,
 				`Error__c[] errorLogs = new Error__c[0];`},
 			{
+				`String[][][][][] matrix = new String[][][][][]{};`,
+				`String[][][][][] matrix = new String[][][][][]{};`},
+			{
+				`Integer[][] numGroups = new Integer[][]{new Integer[]{1,2},new Integer[]{3}};`,
+				`Integer[][] numGroups = new Integer[][]{
+	new Integer[]{ 1, 2 },
+	new Integer[]{ 3 }
+};`},
+			{
+				`Account[][] accountGroups = new Account[][]{new Account[]{new Account(Name='A')},new Account[]{new Account(Name='B'),new Account(Name='C')}};`,
+				`Account[][] accountGroups = new Account[][]{
+	new Account[]{ new Account(Name = 'A') },
+	new Account[]{ new Account(Name = 'B'), new Account(Name = 'C') }
+};`},
+			{
 				`upsert myAccount External_Id__c;`,
 				`upsert myAccount External_Id__c;`},
 			{
