@@ -568,6 +568,12 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#withSnippet.
 	VisitWithSnippet(ctx *WithSnippetContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#withHighlight.
+	VisitWithHighlight(ctx *WithHighlightContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#withSpellCorrection.
+	VisitWithSpellCorrection(ctx *WithSpellCorrectionContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#withNetworkIn.
 	VisitWithNetworkIn(ctx *WithNetworkInContext) interface{}
 

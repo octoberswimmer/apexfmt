@@ -1151,6 +1151,18 @@ func (s *BaseApexParserListener) EnterWithSnippet(ctx *WithSnippetContext) {}
 // ExitWithSnippet is called when production withSnippet is exited.
 func (s *BaseApexParserListener) ExitWithSnippet(ctx *WithSnippetContext) {}
 
+// EnterWithHighlight is called when production withHighlight is entered.
+func (s *BaseApexParserListener) EnterWithHighlight(ctx *WithHighlightContext) {}
+
+// ExitWithHighlight is called when production withHighlight is exited.
+func (s *BaseApexParserListener) ExitWithHighlight(ctx *WithHighlightContext) {}
+
+// EnterWithSpellCorrection is called when production withSpellCorrection is entered.
+func (s *BaseApexParserListener) EnterWithSpellCorrection(ctx *WithSpellCorrectionContext) {}
+
+// ExitWithSpellCorrection is called when production withSpellCorrection is exited.
+func (s *BaseApexParserListener) ExitWithSpellCorrection(ctx *WithSpellCorrectionContext) {}
+
 // EnterWithNetworkIn is called when production withNetworkIn is entered.
 func (s *BaseApexParserListener) EnterWithNetworkIn(ctx *WithNetworkInContext) {}
 

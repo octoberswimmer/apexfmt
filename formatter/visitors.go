@@ -1665,6 +1665,12 @@ func (v *FormatVisitor) VisitSoslClauses(ctx *parser.SoslClausesContext) interfa
 	if i := ctx.WithSnippet(); i != nil {
 		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
 	}
+	if i := ctx.WithHighlight(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
+	if i := ctx.WithSpellCorrection(); i != nil {
+		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+	}
 	if i := ctx.WithNetworkIn(); i != nil {
 		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
 	}
@@ -1721,6 +1727,17 @@ func (v *FormatVisitor) VisitWithModeClause(ctx *parser.WithModeClauseContext) i
 		return "WITH USER_MODE"
 	}
 	return "WITH SYSTEM_MODE"
+}
+
+func (v *FormatVisitor) VisitWithHighlight(_ *parser.WithHighlightContext) interface{} {
+	return "WITH HIGHLIGHT"
+}
+
+func (v *FormatVisitor) VisitWithSpellCorrection(ctx *parser.WithSpellCorrectionContext) interface{} {
+	if b := ctx.BooleanLiteral(); b != nil {
+		return fmt.Sprintf("WITH SPELL_CORRECTION = %s", strings.ToLower(b.GetText()))
+	}
+	return "WITH SPELL_CORRECTION"
 }
 
 func (v *FormatVisitor) VisitFieldSpecClauses(ctx *parser.FieldSpecClausesContext) interface{} {

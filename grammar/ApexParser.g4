@@ -842,6 +842,8 @@ soslClauses
       withDivisionAssign?
       withDataCategory?
       withSnippet?
+      withHighlight?
+      withSpellCorrection?
       withNetworkIn?
       withNetworkAssign?
       withPricebookIdAssign?
@@ -869,6 +871,14 @@ withDataCategory
 
 withSnippet
     : WITH SNIPPET (LPAREN TARGET_LENGTH ASSIGN IntegerLiteral RPAREN)?
+    ;
+
+withHighlight
+    : WITH HIGHLIGHT
+    ;
+
+withSpellCorrection
+    : WITH SPELL_CORRECTION (ASSIGN BooleanLiteral)?
     ;
 
 withNetworkIn
@@ -1093,6 +1103,8 @@ id
     | PRICEBOOKID
     | NETWORK
     | SNIPPET
+    | HIGHLIGHT
+    | SPELL_CORRECTION
     | TARGET_LENGTH
     | DIVISION
     | RETURNING
@@ -1305,6 +1317,8 @@ anyId
     | PRICEBOOKID
     | NETWORK
     | SNIPPET
+    | HIGHLIGHT
+    | SPELL_CORRECTION
     | TARGET_LENGTH
     | DIVISION
     | RETURNING

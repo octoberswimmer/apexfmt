@@ -755,6 +755,14 @@ func (v *BaseApexParserVisitor) VisitWithSnippet(ctx *WithSnippetContext) interf
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitWithHighlight(ctx *WithHighlightContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitWithSpellCorrection(ctx *WithSpellCorrectionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitWithNetworkIn(ctx *WithNetworkInContext) interface{} {
 	return v.VisitChildren(ctx)
 }

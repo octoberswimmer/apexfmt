@@ -343,6 +343,28 @@ RETURNING Account(
 	Name)
 WITH SYSTEM_MODE]`,
 			},
+			{
+				`[FIND 'Acme' IN ALL FIELDS RETURNING Account(Name) WITH HIGHLIGHT]`,
+				`[FIND 'Acme'
+IN ALL FIELDS
+RETURNING Account(
+	Name)
+WITH HIGHLIGHT]`,
+			},
+			{
+				`[FIND 'Acme' RETURNING Account(Name) WITH SPELL_CORRECTION]`,
+				`[FIND 'Acme'
+RETURNING Account(
+	Name)
+WITH SPELL_CORRECTION]`,
+			},
+			{
+				`[FIND 'Acme' RETURNING Account(Name) WITH SPELL_CORRECTION = false]`,
+				`[FIND 'Acme'
+RETURNING Account(
+	Name)
+WITH SPELL_CORRECTION = false]`,
+			},
 		}
 
 	for _, tt := range tests {

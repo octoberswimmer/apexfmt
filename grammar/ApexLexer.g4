@@ -249,6 +249,8 @@ METADATA         : M E T A D A T A;
 PRICEBOOKID      : P R I C E B O O K I D;
 NETWORK          : N E T W O R K;
 SNIPPET          : S N I P P E T;
+HIGHLIGHT        : H I G H L I G H T;
+SPELL_CORRECTION : S P E L L '_' C O R R E C T I O N;
 TARGET_LENGTH    : T A R G E T '_' L E N G T H;
 DIVISION         : D I V I S I O N;
 RETURNING        : R E T U R N I N G;

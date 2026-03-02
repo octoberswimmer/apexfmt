@@ -568,6 +568,12 @@ type ApexParserListener interface {
 	// EnterWithSnippet is called when entering the withSnippet production.
 	EnterWithSnippet(c *WithSnippetContext)
 
+	// EnterWithHighlight is called when entering the withHighlight production.
+	EnterWithHighlight(c *WithHighlightContext)
+
+	// EnterWithSpellCorrection is called when entering the withSpellCorrection production.
+	EnterWithSpellCorrection(c *WithSpellCorrectionContext)
+
 	// EnterWithNetworkIn is called when entering the withNetworkIn production.
 	EnterWithNetworkIn(c *WithNetworkInContext)
 
@@ -1182,6 +1188,12 @@ type ApexParserListener interface {
 
 	// ExitWithSnippet is called when exiting the withSnippet production.
 	ExitWithSnippet(c *WithSnippetContext)
+
+	// ExitWithHighlight is called when exiting the withHighlight production.
+	ExitWithHighlight(c *WithHighlightContext)
+
+	// ExitWithSpellCorrection is called when exiting the withSpellCorrection production.
+	ExitWithSpellCorrection(c *WithSpellCorrectionContext)
 
 	// ExitWithNetworkIn is called when exiting the withNetworkIn production.
 	ExitWithNetworkIn(c *WithNetworkInContext)
