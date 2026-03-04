@@ -490,6 +490,9 @@ type ApexParserListener interface {
 	// EnterWithClause is called when entering the withClause production.
 	EnterWithClause(c *WithClauseContext)
 
+	// EnterRecordVisibilityContextParam is called when entering the recordVisibilityContextParam production.
+	EnterRecordVisibilityContextParam(c *RecordVisibilityContextParamContext)
+
 	// EnterFilteringExpression is called when entering the filteringExpression production.
 	EnterFilteringExpression(c *FilteringExpressionContext)
 
@@ -1110,6 +1113,9 @@ type ApexParserListener interface {
 
 	// ExitWithClause is called when exiting the withClause production.
 	ExitWithClause(c *WithClauseContext)
+
+	// ExitRecordVisibilityContextParam is called when exiting the recordVisibilityContextParam production.
+	ExitRecordVisibilityContextParam(c *RecordVisibilityContextParamContext)
 
 	// ExitFilteringExpression is called when exiting the filteringExpression production.
 	ExitFilteringExpression(c *FilteringExpressionContext)

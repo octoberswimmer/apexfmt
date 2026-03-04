@@ -275,6 +275,45 @@ func TestSOQL(t *testing.T) {
 				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
 			},
 			{
+				`[SELECT Id, RecordVisibility.VisibilityAttribute FROM Account WHERE Id = 'xxx' WITH RecordVisibilityContext (maxDescriptorPerRecord=100, supportsDomains=true, supportsDelegates=true)]`,
+				`[
+	SELECT
+		Id,
+		RecordVisibility.VisibilityAttribute
+	FROM
+		Account
+	WHERE
+		Id = 'xxx'
+	WITH RecordVisibilityContext (maxDescriptorPerRecord=100, supportsDomains=true, supportsDelegates=true)
+]`,
+			},
+			{
+				`[SELECT recordId, VisibilityAttribute FROM RecordVisibility WHERE recordId = 'xxx' WITH RecordVisibilityContext (maxDescriptorPerRecord=100, supportsDomains=true, supportsDelegates=true)]`,
+				`[
+	SELECT
+		recordId,
+		VisibilityAttribute
+	FROM
+		RecordVisibility
+	WHERE
+		recordId = 'xxx'
+	WITH RecordVisibilityContext (maxDescriptorPerRecord=100, supportsDomains=true, supportsDelegates=true)
+]`,
+			},
+			{
+				`[SELECT Id, RecordVisibility.VisibilityAttribute FROM Account WHERE Id = 'xxx' WITH RecordVisibilityContext (maxDescriptorPerRecord=100)]`,
+				`[
+	SELECT
+		Id,
+		RecordVisibility.VisibilityAttribute
+	FROM
+		Account
+	WHERE
+		Id = 'xxx'
+	WITH RecordVisibilityContext (maxDescriptorPerRecord=100)
+]`,
+			},
+			{
 				`[SELECT StageName, COUNT(Id) cnt FROM opportunity GROUP BY StageName HAVING COUNT(Id) > 1]`,
 				`[
 	SELECT

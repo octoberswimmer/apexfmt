@@ -651,6 +651,10 @@ func (v *BaseApexParserVisitor) VisitWithClause(ctx *WithClauseContext) interfac
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitRecordVisibilityContextParam(ctx *RecordVisibilityContextParamContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitFilteringExpression(ctx *FilteringExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }

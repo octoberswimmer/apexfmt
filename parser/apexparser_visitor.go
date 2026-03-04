@@ -490,6 +490,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#withClause.
 	VisitWithClause(ctx *WithClauseContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#recordVisibilityContextParam.
+	VisitRecordVisibilityContextParam(ctx *RecordVisibilityContextParamContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#filteringExpression.
 	VisitFilteringExpression(ctx *FilteringExpressionContext) interface{}
 

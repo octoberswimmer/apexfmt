@@ -1009,7 +1009,29 @@ func (v *FormatVisitor) VisitWithClause(ctx *parser.WithClauseContext) interface
 	if ctx.SYSTEM_MODE() != nil {
 		return "WITH SYSTEM_MODE"
 	}
+	if ctx.RECORDVISIBILITYCONTEXT() != nil {
+		params := make([]string, 0, len(ctx.AllRecordVisibilityContextParam()))
+		for _, param := range ctx.AllRecordVisibilityContextParam() {
+			params = append(params, v.visitRule(param).(string))
+		}
+		return fmt.Sprintf("WITH RecordVisibilityContext (%s)", strings.Join(params, ", "))
+	}
 	return "WITH"
+}
+
+func (v *FormatVisitor) VisitRecordVisibilityContextParam(ctx *parser.RecordVisibilityContextParamContext) interface{} {
+	if intValue := ctx.IntegerLiteral(); intValue != nil {
+		return fmt.Sprintf("maxDescriptorPerRecord=%s", intValue.GetText())
+	}
+	if boolValue := ctx.BooleanLiteral(); boolValue != nil {
+		switch {
+		case ctx.SUPPORTSDOMAINS() != nil:
+			return fmt.Sprintf("supportsDomains=%s", boolValue.GetText())
+		case ctx.SUPPORTSDELEGATES() != nil:
+			return fmt.Sprintf("supportsDelegates=%s", boolValue.GetText())
+		}
+	}
+	return ctx.GetText()
 }
 
 func (v *FormatVisitor) VisitWhereClause(ctx *parser.WhereClauseContext) interface{} {

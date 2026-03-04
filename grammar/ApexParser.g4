@@ -719,7 +719,14 @@ withClause
     | WITH SECURITY_ENFORCED
     | WITH USER_MODE
     | WITH SYSTEM_MODE
+    | WITH RECORDVISIBILITYCONTEXT LPAREN recordVisibilityContextParam (COMMA recordVisibilityContextParam)* RPAREN
     | WITH logicalExpression;
+
+recordVisibilityContextParam
+    : MAXDESCRIPTORPERRECORD ASSIGN IntegerLiteral
+    | SUPPORTSDOMAINS ASSIGN BooleanLiteral
+    | SUPPORTSDELEGATES ASSIGN BooleanLiteral
+    ;
 
 filteringExpression
     : dataCategorySelection (AND dataCategorySelection)*;
@@ -1019,6 +1026,10 @@ id
     | BELOW
     | ABOVE_OR_BELOW
     | SECURITY_ENFORCED
+    | RECORDVISIBILITYCONTEXT
+    | MAXDESCRIPTORPERRECORD
+    | SUPPORTSDOMAINS
+    | SUPPORTSDELEGATES
     | USER_MODE
     | SYSTEM_MODE
     | REFERENCE
@@ -1233,6 +1244,10 @@ anyId
     | BELOW
     | ABOVE_OR_BELOW
     | SECURITY_ENFORCED
+    | RECORDVISIBILITYCONTEXT
+    | MAXDESCRIPTORPERRECORD
+    | SUPPORTSDOMAINS
+    | SUPPORTSDELEGATES
     | USER_MODE
     | SYSTEM_MODE
     | REFERENCE

@@ -995,6 +995,14 @@ func (s *BaseApexParserListener) EnterWithClause(ctx *WithClauseContext) {}
 // ExitWithClause is called when production withClause is exited.
 func (s *BaseApexParserListener) ExitWithClause(ctx *WithClauseContext) {}
 
+// EnterRecordVisibilityContextParam is called when production recordVisibilityContextParam is entered.
+func (s *BaseApexParserListener) EnterRecordVisibilityContextParam(ctx *RecordVisibilityContextParamContext) {
+}
+
+// ExitRecordVisibilityContextParam is called when production recordVisibilityContextParam is exited.
+func (s *BaseApexParserListener) ExitRecordVisibilityContextParam(ctx *RecordVisibilityContextParamContext) {
+}
+
 // EnterFilteringExpression is called when production filteringExpression is entered.
 func (s *BaseApexParserListener) EnterFilteringExpression(ctx *FilteringExpressionContext) {}
 
