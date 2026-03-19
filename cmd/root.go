@@ -29,8 +29,9 @@ func init() {
 }
 
 var RootCmd = &cobra.Command{
-	Use:   "apexfmt [file...]",
-	Short: "Format Apex",
+	Use:     "apexfmt [file...]",
+	Short:   "Format Apex",
+	Version: version,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if soql, _ := cmd.Flags().GetBool("soql"); soql {
 			formatSOQL()
