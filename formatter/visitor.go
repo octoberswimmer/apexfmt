@@ -68,19 +68,32 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 
 	result = appendHiddenTokens(v, result, beforeHiddenTokens, PositionBefore)
 
+	// Check for empty block before adding after tokens
+	handledEmptyBlock := false
+	if result.(string) == "{}" {
+		inbetweenTokens := interleaveHiddenTokens(
+			getHiddenTokensBetween(v.tokens, start, stop),
+		)
+		tokenText := appendHiddenTokens(v, "", inbetweenTokens, PositionAfter).(string)
+		// Strip trailing whitespace, accounting for comment markers
+		tokenText = strings.TrimRight(tokenText, " \t\n")
+		if strings.HasSuffix(tokenText, "\uFFFB") {
+			tokenText = strings.TrimRight(tokenText[:len(tokenText)-len("\uFFFB")], " \t\n") + "\uFFFB"
+		}
+		if strings.TrimSpace(tokenText) != "" {
+			result = fmt.Sprintf("{\n%s\n}", indent(tokenText))
+			handledEmptyBlock = true
+		}
+	}
+
 	// Collect and interleave comments and whitespace after the node
 	afterHiddenTokens := interleaveHiddenTokens(
 		getHiddenTokens(v.tokens, stop, HiddenTokenDirectionAfter),
 	)
 
 	_ = afterHiddenTokens
-	result = appendHiddenTokens(v, result, afterHiddenTokens, PositionAfter)
-
-	if result.(string) == "{}" {
-		inbetweenTokens := interleaveHiddenTokens(
-			getHiddenTokensBetween(v.tokens, start, stop),
-		)
-		result = fmt.Sprintf("%s}", appendHiddenTokens(v, "{", inbetweenTokens, PositionAfter))
+	if !handledEmptyBlock {
+		result = appendHiddenTokens(v, result, afterHiddenTokens, PositionAfter)
 	}
 
 	return result

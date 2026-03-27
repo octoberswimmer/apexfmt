@@ -916,9 +916,9 @@ public class SampleTest {}`,
 }`,
 				`class TestClass {
 	public void go() {
-	// Line Comment
+		// Line Comment
 
-	/* MULTI
+		/* MULTI
 	 *
 	*/
 	}
@@ -1059,6 +1059,71 @@ void update();
 	void delete();
 	void insert();
 	void update();
+}`,
+			},
+			{
+				`public class TestClass {
+	public void methodWithOnlyComment() {
+		// This is the only content in the method
+	}
+}`,
+				`public class TestClass {
+	public void methodWithOnlyComment() {
+		// This is the only content in the method
+	}
+}`,
+			},
+			{
+				`public class TestClass {
+	public void methodWithOnlyMultilineComment() {
+		/* This is the only content
+		   in the method */
+	}
+}`,
+				`public class TestClass {
+	public void methodWithOnlyMultilineComment() {
+		/* This is the only content
+		   in the method */
+	}
+}`,
+			},
+			{
+				`public class TestClass {
+	public void processjobrequest() {
+		/*
+		Logger.info('LOCAL_DOMTL '+LOCAL_DOMTL);
+		Logger.info('LOCAL_DOLAB '+LOCAL_DOLAB);
+		Logger.info('LOCAL_DOODC '+LOCAL_DOODC);
+		Map < String, Object>  jobparms = new   Map< String, Object>();
+			jobparms.put('icjobset',icjobset);
+
+		if(LOCAL_DOMTL){
+			Logger.info('Reprice Material Job call');
+			AbstractBatchJob job = new RepriceMaterial();
+			job.doSetJobParms(jobparms);
+			executeJob(job);
+		}
+		*/
+
+	}
+}`,
+				`public class TestClass {
+	public void processjobrequest() {
+		/*
+		Logger.info('LOCAL_DOMTL '+LOCAL_DOMTL);
+		Logger.info('LOCAL_DOLAB '+LOCAL_DOLAB);
+		Logger.info('LOCAL_DOODC '+LOCAL_DOODC);
+		Map < String, Object>  jobparms = new   Map< String, Object>();
+			jobparms.put('icjobset',icjobset);
+
+		if(LOCAL_DOMTL){
+			Logger.info('Reprice Material Job call');
+			AbstractBatchJob job = new RepriceMaterial();
+			job.doSetJobParms(jobparms);
+			executeJob(job);
+		}
+		*/
+	}
 }`,
 			},
 		}
