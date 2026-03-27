@@ -547,6 +547,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#soqlId.
 	VisitSoqlId(ctx *SoqlIdContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#soqlSelectAlias.
+	VisitSoqlSelectAlias(ctx *SoqlSelectAliasContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#soslLiteral.
 	VisitSoslLiteral(ctx *SoslLiteralContext) interface{}
 

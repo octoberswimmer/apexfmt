@@ -861,11 +861,11 @@ func (v *FormatVisitor) VisitUpdateList(ctx *parser.UpdateListContext) interface
 }
 
 func (v *FormatVisitor) VisitFieldNameAlias(ctx *parser.FieldNameAliasContext) interface{} {
-	soqlId := ""
-	if s := ctx.SoqlId(); s != nil {
-		soqlId = " " + s.GetText()
+	alias := ""
+	if s := ctx.SoqlSelectAlias(); s != nil {
+		alias = " " + s.GetText()
 	}
-	return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
+	return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), alias)
 }
 
 func (v *FormatVisitor) VisitSelectList(ctx *parser.SelectListContext) interface{} {
@@ -889,17 +889,17 @@ func (v *FormatVisitor) VisitSubFieldList(ctx *parser.SubFieldListContext) inter
 }
 
 func (v *FormatVisitor) VisitSelectEntry(ctx *parser.SelectEntryContext) interface{} {
-	soqlId := ""
-	if s := ctx.SoqlId(); s != nil {
-		soqlId = " " + s.GetText()
+	alias := ""
+	if s := ctx.SoqlSelectAlias(); s != nil {
+		alias = " " + s.GetText()
 	}
 	switch {
 	case ctx.FieldName() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), alias)
 	case ctx.SoqlFunction() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), soqlId)
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), alias)
 	case ctx.SubQuery() != nil:
-		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), soqlId)
+		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), alias)
 	case ctx.TypeOf() != nil:
 		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
 	}
@@ -907,17 +907,17 @@ func (v *FormatVisitor) VisitSelectEntry(ctx *parser.SelectEntryContext) interfa
 }
 
 func (v *FormatVisitor) VisitSubFieldEntry(ctx *parser.SubFieldEntryContext) interface{} {
-	soqlId := ""
-	if s := ctx.SoqlId(); s != nil {
-		soqlId = " " + s.GetText()
+	alias := ""
+	if s := ctx.SoqlSelectAlias(); s != nil {
+		alias = " " + s.GetText()
 	}
 	switch {
 	case ctx.FieldName() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), soqlId)
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), alias)
 	case ctx.SoqlFunction() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), soqlId)
+		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), alias)
 	case ctx.SubQuery() != nil:
-		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), soqlId)
+		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), alias)
 	case ctx.TypeOf() != nil:
 		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
 	}

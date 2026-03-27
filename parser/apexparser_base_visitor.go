@@ -727,6 +727,10 @@ func (v *BaseApexParserVisitor) VisitSoqlId(ctx *SoqlIdContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitSoqlSelectAlias(ctx *SoqlSelectAliasContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitSoslLiteral(ctx *SoslLiteralContext) interface{} {
 	return v.VisitChildren(ctx)
 }

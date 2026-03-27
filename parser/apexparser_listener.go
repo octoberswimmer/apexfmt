@@ -547,6 +547,9 @@ type ApexParserListener interface {
 	// EnterSoqlId is called when entering the soqlId production.
 	EnterSoqlId(c *SoqlIdContext)
 
+	// EnterSoqlSelectAlias is called when entering the soqlSelectAlias production.
+	EnterSoqlSelectAlias(c *SoqlSelectAliasContext)
+
 	// EnterSoslLiteral is called when entering the soslLiteral production.
 	EnterSoslLiteral(c *SoslLiteralContext)
 
@@ -1170,6 +1173,9 @@ type ApexParserListener interface {
 
 	// ExitSoqlId is called when exiting the soqlId production.
 	ExitSoqlId(c *SoqlIdContext)
+
+	// ExitSoqlSelectAlias is called when exiting the soqlSelectAlias production.
+	ExitSoqlSelectAlias(c *SoqlSelectAliasContext)
 
 	// ExitSoslLiteral is called when exiting the soslLiteral production.
 	ExitSoslLiteral(c *SoslLiteralContext)

@@ -578,9 +578,9 @@ selectList
     : selectEntry (COMMA selectEntry)*;
 
 selectEntry
-    : fieldName soqlId?
-    | soqlFunction soqlId?
-    | LPAREN subQuery RPAREN soqlId?
+    : fieldName soqlSelectAlias?
+    | soqlFunction soqlSelectAlias?
+    | LPAREN subQuery RPAREN soqlSelectAlias?
     | typeOf
     ;
 
@@ -591,18 +591,18 @@ fromNameList
     : fieldNameAlias (COMMA fieldNameAlias)*;
 
 fieldNameAlias
-    : fieldName soqlId?
+    : fieldName soqlSelectAlias?
     ;
 
 subFieldList
     : subFieldEntry (COMMA subFieldEntry)*;
 
 subFieldEntry
-    : fieldName soqlId?
-    | soqlFunction soqlId?
-   | LPAREN subQuery RPAREN soqlId?
+    : fieldName soqlSelectAlias?
+    | soqlFunction soqlSelectAlias?
+    | LPAREN subQuery RPAREN soqlSelectAlias?
     | typeOf
-   ;
+    ;
 
 soqlFieldsParameter
     : ALL
@@ -832,6 +832,91 @@ signedInteger
 
 soqlId
     : id;
+
+// Restricted identifier for SOQL field aliases. Only includes keywords that
+// Salesforce actually allows as aliases.
+soqlSelectAlias
+    : Identifier
+    | IntegralCurrencyLiteral
+    // Apex keywords allowed as aliases
+    | INHERITED
+    | SWITCH
+    | SYSTEM
+    | USER
+    | VOID
+    | WHEN
+    // SOQL keywords allowed as aliases
+    | SCOPE
+    | ORDER
+    | SOQLAND
+    | SOQLOR
+    | AVG
+    | COUNT_DISTINCT
+    | MIN
+    | MAX
+    | SUM
+    | TYPEOF
+    | END
+    | THEN
+    | ALL
+    | ROWS
+    | VIEW
+    | TOLABEL
+    | OFFSET
+    | DATA
+    | CATEGORY
+    | AT
+    | ABOVE
+    | BELOW
+    | ABOVE_OR_BELOW
+    | SECURITY_ENFORCED
+    | REFERENCE
+    | FORMAT
+    | TRACKING
+    | VIEWSTAT
+    | STANDARD
+    | CUSTOM
+    | DISTANCE
+    | GEOLOCATION
+    | GROUPING
+    // Date functions
+    | CALENDAR_MONTH
+    | CALENDAR_QUARTER
+    | CALENDAR_YEAR
+    | DAY_IN_MONTH
+    | DAY_IN_WEEK
+    | DAY_IN_YEAR
+    | DAY_ONLY
+    | FISCAL_MONTH
+    | FISCAL_QUARTER
+    | FISCAL_YEAR
+    | HOUR_IN_DAY
+    | WEEK_IN_MONTH
+    | WEEK_IN_YEAR
+    // Date literals
+    | YESTERDAY
+    | TODAY
+    | TOMORROW
+    | LAST_WEEK
+    | THIS_WEEK
+    | NEXT_WEEK
+    | LAST_MONTH
+    | THIS_MONTH
+    | NEXT_MONTH
+    | THIS_QUARTER
+    | LAST_QUARTER
+    | NEXT_QUARTER
+    | THIS_YEAR
+    | LAST_YEAR
+    | NEXT_YEAR
+    // SOSL keywords allowed as aliases
+    | EMAIL
+    | NAME
+    | PHONE
+    | SIDEBAR
+    | METADATA
+    | DIVISION
+    ;
 
 // SOSL
 soslLiteral

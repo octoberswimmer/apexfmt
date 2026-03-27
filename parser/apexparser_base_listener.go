@@ -1111,6 +1111,12 @@ func (s *BaseApexParserListener) EnterSoqlId(ctx *SoqlIdContext) {}
 // ExitSoqlId is called when production soqlId is exited.
 func (s *BaseApexParserListener) ExitSoqlId(ctx *SoqlIdContext) {}
 
+// EnterSoqlSelectAlias is called when production soqlSelectAlias is entered.
+func (s *BaseApexParserListener) EnterSoqlSelectAlias(ctx *SoqlSelectAliasContext) {}
+
+// ExitSoqlSelectAlias is called when production soqlSelectAlias is exited.
+func (s *BaseApexParserListener) ExitSoqlSelectAlias(ctx *SoqlSelectAliasContext) {}
+
 // EnterSoslLiteral is called when production soslLiteral is entered.
 func (s *BaseApexParserListener) EnterSoslLiteral(ctx *SoslLiteralContext) {}
 
