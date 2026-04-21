@@ -211,6 +211,7 @@ literal
     | LongLiteral
     | NumberLiteral
     | StringLiteral
+    | TextBlockLiteral
     | BooleanLiteral
     | NULL
     ;

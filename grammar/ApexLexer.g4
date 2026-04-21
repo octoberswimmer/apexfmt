@@ -328,6 +328,13 @@ BooleanLiteral
 
 // §3.10.5 String Literals
 
+// Triple-quoted (multi-line) string literal. Must be matched before
+// StringLiteral so the longest-match rule picks it up on inputs that
+// start with three single quotes.
+TextBlockLiteral
+    :   '\'\'\'' .*? '\'\'\''
+    ;
+
 StringLiteral
     :   '\'' StringCharacters? '\''
     ;

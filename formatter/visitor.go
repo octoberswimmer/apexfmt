@@ -325,6 +325,10 @@ func indentTo(text string, indents int) string {
 	var indentedText strings.Builder
 	scanner := bufio.NewScanner(strings.NewReader(text))
 	isFirstLine := true
+	// Track whether the scanner is currently inside a triple-quoted text
+	// block literal. Content inside must not receive indentation; any
+	// whitespace prepended would become part of the string value.
+	insideTextBlock := false
 
 	scanner.Split(SplitLeadingFFFAOrFFFBOrNewline)
 
@@ -337,6 +341,13 @@ func indentTo(text string, indents int) string {
 			indentedText.WriteString(t)
 			continue
 		}
+		// Decide indentation based on the state entering this line, then
+		// update the state for the next line based on any triple-quoted
+		// text block transitions that happen on this one. Content inside
+		// a text block is preserved verbatim; everything else is indented
+		// normally.
+		applyIndent := !insideTextBlock
+		insideTextBlock = updateTextBlockState(t, insideTextBlock)
 		if isFirstLine {
 			isFirstLine = false
 		} else if !strings.HasPrefix(t, "\uFFFA") && !strings.HasPrefix(t, "\uFFF9") {
@@ -346,12 +357,72 @@ func indentTo(text string, indents int) string {
 			indentedText.WriteString(scanner.Text())
 			continue
 		}
-		t = strings.Repeat("\t", indents) + t
+		if applyIndent {
+			t = strings.Repeat("\t", indents) + t
+		}
 		indentedText.WriteString(t)
 	}
 	log.Debug(fmt.Sprintf("INDENTED:  %q\n\n", indentedText.String()))
 
 	return indentedText.String()
+}
+
+// updateTextBlockState walks the line to determine whether, at its end, we
+// are still inside a triple-quoted text block. When entering inside a text
+// block, it looks only for the first ”' that closes the block. When
+// starting outside, it skips over // line comments, /* ... */ block
+// comments, and ordinary '...' string literals so those cannot
+// spuriously trigger a text block.
+func updateTextBlockState(line string, insideTextBlock bool) bool {
+	i := 0
+	for i < len(line) {
+		if insideTextBlock {
+			if idx := strings.Index(line[i:], "'''"); idx >= 0 {
+				i += idx + 3
+				insideTextBlock = false
+				continue
+			}
+			return insideTextBlock
+		}
+		c := line[i]
+		switch {
+		case c == '/' && i+1 < len(line) && line[i+1] == '/':
+			// Line comment — nothing after this matters for the state.
+			return insideTextBlock
+		case c == '/' && i+1 < len(line) && line[i+1] == '*':
+			i += 2
+			if end := strings.Index(line[i:], "*/"); end >= 0 {
+				i += end + 2
+			} else {
+				// Unterminated block comment on this line; nothing
+				// further can affect the text block state.
+				return insideTextBlock
+			}
+		case c == '\'' && i+2 < len(line) && line[i+1] == '\'' && line[i+2] == '\'':
+			// Opening triple-quote delimiter.
+			insideTextBlock = true
+			i += 3
+		case c == '\'':
+			// Ordinary single-quoted string literal; skip to the
+			// matching closing quote, respecting backslash escapes so
+			// we do not terminate on a \' in the middle.
+			i++
+			for i < len(line) {
+				if line[i] == '\\' && i+1 < len(line) {
+					i += 2
+					continue
+				}
+				if line[i] == '\'' {
+					i++
+					break
+				}
+				i++
+			}
+		default:
+			i++
+		}
+	}
+	return insideTextBlock
 }
 
 func restoreWrap(v *FormatVisitor, reset bool) *FormatVisitor {
