@@ -320,6 +320,7 @@ whenLiteral
     : (SUB)? IntegerLiteral
     | LongLiteral
     | StringLiteral
+    | TextBlockLiteral
     | NULL
     | id
     // Salesforce tolerates paren pairs around each literal,

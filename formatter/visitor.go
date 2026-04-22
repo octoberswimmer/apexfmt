@@ -377,12 +377,24 @@ func updateTextBlockState(line string, insideTextBlock bool) bool {
 	i := 0
 	for i < len(line) {
 		if insideTextBlock {
-			if idx := strings.Index(line[i:], "'''"); idx >= 0 {
-				i += idx + 3
-				insideTextBlock = false
-				continue
+			// Walk forward char by char so backslash-escaped delimiters
+			// (\''' per JEP 378) do not spuriously close the block.
+			for i < len(line) {
+				if line[i] == '\\' && i+1 < len(line) {
+					i += 2
+					continue
+				}
+				if i+2 < len(line) && line[i] == '\'' && line[i+1] == '\'' && line[i+2] == '\'' {
+					i += 3
+					insideTextBlock = false
+					break
+				}
+				i++
 			}
-			return insideTextBlock
+			if insideTextBlock {
+				return insideTextBlock
+			}
+			continue
 		}
 		c := line[i]
 		switch {

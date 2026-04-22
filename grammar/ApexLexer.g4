@@ -330,9 +330,12 @@ BooleanLiteral
 
 // Triple-quoted (multi-line) string literal. Must be matched before
 // StringLiteral so the longest-match rule picks it up on inputs that
-// start with three single quotes.
+// start with three single quotes. The content allows backslash-escaped
+// characters (including an escaped ''' sequence via \''' and an explicit
+// line continuation \<line-terminator>); non-greedy '.*?' stops at the
+// first unescaped ''' triple.
 TextBlockLiteral
-    :   '\'\'\'' .*? '\'\'\''
+    :   '\'\'\'' ( '\\' . | ~[\\] )*? '\'\'\''
     ;
 
 StringLiteral
@@ -351,10 +354,12 @@ StringCharacter
     ;
 
 // §3.10.6 Escape Sequences for Character and String Literals
-
+// 's' (space) is a Java text-block escape; it is also accepted in
+// single-quoted string literals so that source produced by
+// copy-pasting from a text block keeps working.
 fragment
 EscapeSequence
-    :   '\\' [btnfr"'\\]
+    :   '\\' [btnfrs"'\\]
     |   '\\u' HexCharacter HexCharacter HexCharacter HexCharacter
     ;
 

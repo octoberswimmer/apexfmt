@@ -265,6 +265,118 @@ func TestFormatter_AdjacentTextBlocksStayIndependent(t *testing.T) {
 	}
 }
 
+// TestFormatter_TextBlockWithJep378Escapes asserts apexfmt round-trips
+// the JEP 378 escape sequences — \s (space), \<line-terminator>, and
+// \”' (escaped triple quote) — without corrupting them. These escapes
+// are lexer-level constructs that the formatter must preserve verbatim
+// the same way it preserves \n and \t.
+func TestFormatter_TextBlockWithJep378Escapes(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String fenced() {\n" +
+		"\t\treturn '''\n" +
+		"red  \\s\n" +
+		"green\\s\n" +
+		"blue \\s\n" +
+		"''';\n" +
+		"\t}\n" +
+		"\n" +
+		"\tpublic static String continued() {\n" +
+		"\t\treturn '''\n" +
+		"one \\\n" +
+		"two''';\n" +
+		"\t}\n" +
+		"\n" +
+		"\tpublic static String withTriple() {\n" +
+		"\t\treturn '''\n" +
+		"before \\''' after''';\n" +
+		"\t}\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err != nil {
+		t.Fatalf("Format() failed: %v", err)
+	}
+	got := string(f.formatted)
+	if got != input {
+		t.Fatalf("JEP 378 escapes were altered\nwant:\n%q\n got:\n%q", input, got)
+	}
+}
+
+// TestFormatter_SlashSInRegularString asserts \s is accepted by the
+// single-quoted StringLiteral grammar and formatted unchanged.
+func TestFormatter_SlashSInRegularString(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String s = 'a\\sb';\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err != nil {
+		t.Fatalf("Format() failed: %v", err)
+	}
+	got := string(f.formatted)
+	if got != input {
+		t.Fatalf("\\s in string literal was altered\nwant:\n%q\n got:\n%q", input, got)
+	}
+}
+
+// TestFormatter_TextBlockAsSwitchCaseLiteral asserts that a text block is
+// accepted as a switch-when case value. The whenLiteral grammar rule must
+// accept TextBlockLiteral in the same positions as StringLiteral so that
+// multi-line case literals round-trip through the formatter unchanged.
+func TestFormatter_TextBlockAsSwitchCaseLiteral(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String classify(String s) {\n" +
+		"\t\tString branch = '';\n" +
+		"\t\tswitch on s {\n" +
+		"\t\t\twhen '''\n" +
+		"hello''' {\n" +
+		"\t\t\t\tbranch = 'matched';\n" +
+		"\t\t\t}\n" +
+		"\t\t\twhen else {\n" +
+		"\t\t\t\tbranch = 'other';\n" +
+		"\t\t\t}\n" +
+		"\t\t}\n" +
+		"\t\treturn branch;\n" +
+		"\t}\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err != nil {
+		t.Fatalf("Format() failed: %v", err)
+	}
+	got := string(f.formatted)
+	if got != input {
+		t.Fatalf("text block in switch case was altered\nwant:\n%q\n got:\n%q", input, got)
+	}
+}
+
+// TestFormatter_MultipleTextBlockSwitchCases asserts the comma-separated
+// whenLiteral list accepts multiple text block literals back-to-back.
+func TestFormatter_MultipleTextBlockSwitchCases(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String classify(String s) {\n" +
+		"\t\tString branch = '';\n" +
+		"\t\tswitch on s {\n" +
+		"\t\t\twhen '''\n" +
+		"one''', '''\n" +
+		"two''', '''\n" +
+		"three''' {\n" +
+		"\t\t\t\tbranch = 'hit';\n" +
+		"\t\t\t}\n" +
+		"\t\t\twhen else {\n" +
+		"\t\t\t\tbranch = 'miss';\n" +
+		"\t\t\t}\n" +
+		"\t\t}\n" +
+		"\t\treturn branch;\n" +
+		"\t}\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err != nil {
+		t.Fatalf("Format() failed: %v", err)
+	}
+	got := string(f.formatted)
+	if got != input {
+		t.Fatalf("comma-separated text block cases were altered\nwant:\n%q\n got:\n%q", input, got)
+	}
+}
+
 // TestFormatter_TextBlockInsideIndentedMethodBody is the end-to-end
 // regression: a text block nested inside two levels of block indentation
 // must come out with the surrounding code re-indented normally but its
