@@ -30,9 +30,6 @@ let g:autoformat_retab = 0
 let g:autoformat_remove_trailing_spaces = 0
 ```
 
-# Demo
-
-Try out apexfmt in a browser at https://apexfmt.octoberswimmer.com/.
 
 # Thanks
 
