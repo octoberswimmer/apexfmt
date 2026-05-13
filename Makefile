@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 VERSION=$(shell git describe --abbrev=0 --always)
 LDFLAGS = -ldflags "-X github.com/octoberswimmer/apexfmt/cmd.version=${VERSION}"
 GCFLAGS = -gcflags="all=-N -l"
@@ -7,6 +9,8 @@ LINUX=$(EXECUTABLE)_linux_amd64
 OSX_AMD64=$(EXECUTABLE)_osx_amd64
 OSX_ARM64=$(EXECUTABLE)_osx_arm64
 ALL=$(WINDOWS) $(LINUX) $(OSX_AMD64) $(OSX_ARM64)
+ZIPS=$(addsuffix .zip,$(basename $(ALL)))
+RELEASE_ASSETS=$(ZIPS) SHA256SUMS-$(VERSION)
 
 default:
 	go build ${LDFLAGS}
@@ -25,13 +29,25 @@ $(LINUX):
 
 $(OSX_AMD64):
 	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -v -o $(OSX_AMD64) ${LDFLAGS}
+	rcodesign sign --for-notarization --pem-file <(pass OctoberSwimmer/codesign/combined) $@
 
 $(OSX_ARM64):
 	env CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -v -o $(OSX_ARM64) ${LDFLAGS}
+	rcodesign sign --for-notarization --pem-file <(pass OctoberSwimmer/codesign/combined) $@
 
 $(basename $(WINDOWS)).zip: $(WINDOWS)
 	zip $@ $<
 	7za rn $@ $< $(EXECUTABLE)$(suffix $<)
+
+$(basename $(OSX_AMD64)).zip: $(OSX_AMD64)
+	zip $@ $<
+	7za rn $@ $< $(EXECUTABLE)
+	rcodesign notary-submit --api-key-file <(pass OctoberSwimmer/codesign/api-key) $@
+
+$(basename $(OSX_ARM64)).zip: $(OSX_ARM64)
+	zip $@ $<
+	7za rn $@ $< $(EXECUTABLE)
+	rcodesign notary-submit --api-key-file <(pass OctoberSwimmer/codesign/api-key) $@
 
 %.zip: %
 	zip $@ $<
@@ -40,7 +56,26 @@ $(basename $(WINDOWS)).zip: $(WINDOWS)
 docs:
 	go run docs/mkdocs.go
 
-dist: test $(addsuffix .zip,$(basename $(ALL)))
+dist: test $(ZIPS)
+
+checksum: dist
+	shasum -a 256 $(ZIPS) > SHA256SUMS-$(VERSION)
+
+release: checksum
+	@if ! command -v gh >/dev/null 2>&1; then \
+		echo "gh CLI is required for 'make release'."; \
+		exit 1; \
+	fi
+	@if ! git rev-parse --verify "refs/tags/$(VERSION)" >/dev/null 2>&1; then \
+		echo "Tag '$(VERSION)' does not exist. Create the tag before running 'make release'."; \
+		exit 1; \
+	fi
+	@if [ "$$(git describe --exact-match --tags HEAD 2>/dev/null)" != "$(VERSION)" ]; then \
+		echo "HEAD is not exactly at tag '$(VERSION)'. Check out the tag before running 'make release'."; \
+		exit 1; \
+	fi
+	git push octoberswimmer "$(VERSION)"
+	gh release create "$(VERSION)" --title "apexfmt $(VERSION)" --notes-from-tag --verify-tag $(RELEASE_ASSETS)
 
 fmt:
 	go fmt ./...
@@ -52,9 +87,9 @@ test:
 	go test -race ./...
 
 clean:
-	-rm -f $(EXECUTABLE) $(EXECUTABLE)_*
+	-rm -f $(EXECUTABLE) $(EXECUTABLE)_* SHA256SUMS-*
 
-.PHONY: default dist clean docs
+.PHONY: default dist clean docs checksum release
 
 generate:
 	go generate ./...
