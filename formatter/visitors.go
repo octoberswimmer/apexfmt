@@ -1184,6 +1184,8 @@ func (v *FormatVisitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) inter
 		loc2 := v.visitRule(locationValues[1]).(string)
 		unit := ctx.StringLiteral().GetText()
 		return fmt.Sprintf("DISTANCE(%s, %s, %s)", loc1, loc2, unit)
+	case ctx.FORMULA() != nil:
+		return fmt.Sprintf("FORMULA(%s)", ctx.StringLiteral().GetText())
 	default:
 		panic("Unexpected parameter type for soqlFunction")
 	}

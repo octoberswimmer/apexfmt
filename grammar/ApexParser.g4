@@ -621,6 +621,7 @@ soqlFunction
     | SUM LPAREN fieldName RPAREN
     | TOLABEL LPAREN fieldName RPAREN
     | FORMAT LPAREN ( fieldName | soqlFunction ) RPAREN
+    | FORMULA LPAREN StringLiteral RPAREN
     | CALENDAR_MONTH LPAREN dateFieldName RPAREN
     | CALENDAR_QUARTER LPAREN dateFieldName RPAREN
     | CALENDAR_YEAR LPAREN dateFieldName RPAREN
@@ -874,6 +875,7 @@ soqlSelectAlias
     | SECURITY_ENFORCED
     | REFERENCE
     | FORMAT
+    | FORMULA
     | TRACKING
     | VIEWSTAT
     | STANDARD
@@ -1122,6 +1124,7 @@ id
     | REFERENCE
     | CUBE
     | FORMAT
+    | FORMULA
     | TRACKING
     | VIEWSTAT
     | STANDARD
@@ -1340,6 +1343,7 @@ anyId
     | REFERENCE
     | CUBE
     | FORMAT
+    | FORMULA
     | TRACKING
     | VIEWSTAT
     | STANDARD

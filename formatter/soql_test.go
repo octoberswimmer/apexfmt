@@ -271,6 +271,42 @@ func TestSOQL(t *testing.T) {
 				`[SELECT Name FROM Account WITH USER_MODE]`,
 			},
 			{
+				`[SELECT Id FROM Opportunity WHERE FORMULA('Amount + ExpectedRevenue') > 100]`,
+				`[SELECT Id FROM Opportunity WHERE FORMULA('Amount + ExpectedRevenue') > 100]`,
+			},
+			{
+				`[select Id from Campaign where formula('EndDate - StartDate') > 10]`,
+				`[SELECT Id FROM Campaign WHERE FORMULA('EndDate - StartDate') > 10]`,
+			},
+			{
+				`[SELECT Id FROM Campaign WHERE FORMULA('BudgetedCost+ActualCost') >= 800]`,
+				`[SELECT Id FROM Campaign WHERE FORMULA('BudgetedCost+ActualCost') >= 800]`,
+			},
+			{
+				`[SELECT Id, FORMULA('BudgetedCost - ActualCost') remaining FROM Campaign ORDER BY FORMULA('EndDate - StartDate') DESC NULLS LAST]`,
+				`[
+	SELECT
+		Id,
+		FORMULA('BudgetedCost - ActualCost') remaining
+	FROM
+		Campaign
+	ORDER BY
+		FORMULA('EndDate - StartDate') DESC NULLS LAST
+]`,
+			},
+			{
+				`[SELECT Id FROM Campaign WHERE FORMULA('BudgetedCost - ActualCost') > 500 AND Name != null]`,
+				`[
+	SELECT
+		Id
+	FROM
+		Campaign
+	WHERE
+		FORMULA('BudgetedCost - ActualCost') > 500 AND
+		Name != null
+]`,
+			},
+			{
 				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
 				`[SELECT Name FROM Account WHERE Id = :accountId WITH SYSTEM_MODE]`,
 			},

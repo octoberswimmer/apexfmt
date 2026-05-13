@@ -162,6 +162,7 @@ SUPPORTSDELEGATES : S U P P O R T S D E L E G A T E S;
 REFERENCE         : R E F E R E N C E;
 CUBE              : C U B E;
 FORMAT            : F O R M A T;
+FORMULA           : F O R M U L A;
 TRACKING          : T R A C K I N G;
 VIEWSTAT          : V I E W S T A T;
 CUSTOM            : C U S T O M;
