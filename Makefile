@@ -5,11 +5,13 @@ LDFLAGS = -ldflags "-X github.com/octoberswimmer/apexfmt/cmd.version=${VERSION}"
 GCFLAGS = -gcflags="all=-N -l"
 EXECUTABLE=apexfmt
 WINDOWS=$(EXECUTABLE)_windows_amd64.exe
+WINDOWS_ARM64=$(EXECUTABLE)_windows_arm64.exe
 LINUX=$(EXECUTABLE)_linux_amd64
-OSX_AMD64=$(EXECUTABLE)_osx_amd64
-OSX_ARM64=$(EXECUTABLE)_osx_arm64
-ALL=$(WINDOWS) $(LINUX) $(OSX_AMD64) $(OSX_ARM64)
-ZIPS=$(addsuffix .zip,$(basename $(ALL)))
+LINUX_ARM64=$(EXECUTABLE)_linux_arm64
+DARWIN_AMD64=$(EXECUTABLE)_darwin_amd64
+DARWIN_ARM64=$(EXECUTABLE)_darwin_arm64
+ALL=$(WINDOWS) $(WINDOWS_ARM64) $(LINUX) $(LINUX_ARM64) $(DARWIN_AMD64) $(DARWIN_ARM64)
+ZIPS=$(addsuffix _$(VERSION).zip,$(basename $(ALL)))
 RELEASE_ASSETS=$(ZIPS) SHA256SUMS-$(VERSION)
 
 default:
@@ -24,32 +26,47 @@ install-debug:
 $(WINDOWS):
 	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -v -o $(WINDOWS) ${LDFLAGS}
 
+$(WINDOWS_ARM64):
+	env CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -v -o $(WINDOWS_ARM64) ${LDFLAGS}
+
 $(LINUX):
 	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o $(LINUX) ${LDFLAGS}
 
-$(OSX_AMD64):
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -v -o $(OSX_AMD64) ${LDFLAGS}
+$(LINUX_ARM64):
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -v -o $(LINUX_ARM64) ${LDFLAGS}
+
+$(DARWIN_AMD64):
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -v -o $(DARWIN_AMD64) ${LDFLAGS}
 	rcodesign sign --for-notarization --pem-file <(pass OctoberSwimmer/codesign/combined) $@
 
-$(OSX_ARM64):
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -v -o $(OSX_ARM64) ${LDFLAGS}
+$(DARWIN_ARM64):
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -v -o $(DARWIN_ARM64) ${LDFLAGS}
 	rcodesign sign --for-notarization --pem-file <(pass OctoberSwimmer/codesign/combined) $@
 
-$(basename $(WINDOWS)).zip: $(WINDOWS)
+$(basename $(WINDOWS))_$(VERSION).zip: $(WINDOWS)
+	@rm -f $@
 	zip $@ $<
 	7za rn $@ $< $(EXECUTABLE)$(suffix $<)
 
-$(basename $(OSX_AMD64)).zip: $(OSX_AMD64)
+$(basename $(WINDOWS_ARM64))_$(VERSION).zip: $(WINDOWS_ARM64)
+	@rm -f $@
+	zip $@ $<
+	7za rn $@ $< $(EXECUTABLE)$(suffix $<)
+
+$(basename $(DARWIN_AMD64))_$(VERSION).zip: $(DARWIN_AMD64)
+	@rm -f $@
 	zip $@ $<
 	7za rn $@ $< $(EXECUTABLE)
 	rcodesign notary-submit --api-key-file <(pass OctoberSwimmer/codesign/api-key) $@
 
-$(basename $(OSX_ARM64)).zip: $(OSX_ARM64)
+$(basename $(DARWIN_ARM64))_$(VERSION).zip: $(DARWIN_ARM64)
+	@rm -f $@
 	zip $@ $<
 	7za rn $@ $< $(EXECUTABLE)
 	rcodesign notary-submit --api-key-file <(pass OctoberSwimmer/codesign/api-key) $@
 
-%.zip: %
+%_$(VERSION).zip: %
+	@rm -f $@
 	zip $@ $<
 	7za rn $@ $< $(EXECUTABLE)
 
@@ -87,7 +104,7 @@ test:
 	go test -race ./...
 
 clean:
-	-rm -f $(EXECUTABLE) $(EXECUTABLE)_* SHA256SUMS-*
+	-rm -f $(EXECUTABLE) $(EXECUTABLE)_* *.zip SHA256SUMS-*
 
 .PHONY: default dist clean docs checksum release
 
