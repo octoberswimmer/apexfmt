@@ -10,6 +10,18 @@ Given a file, it writes the formatted code to standard output by default.  The
 apexfmt's.
 
 
+# Installation
+
+On macOS and Linux, apexfmt can be installed with [Homebrew](https://brew.sh):
+
+```
+$ brew install octoberswimmer/tap/apexfmt
+```
+
+Pre-built binaries for Linux, macOS, and Windows are also available on the
+[releases page](https://github.com/octoberswimmer/apexfmt/releases).
+
+
 # Usage
 
 ## CLI
