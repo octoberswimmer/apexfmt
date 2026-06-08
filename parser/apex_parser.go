@@ -977,7 +977,7 @@ func apexparserParserInit() {
 		1647, 5, 204, 0, 0, 1643, 1644, 5, 109, 0, 0, 1644, 1645, 5, 217, 0, 0,
 		1645, 1647, 5, 204, 0, 0, 1646, 1637, 1, 0, 0, 0, 1646, 1640, 1, 0, 0,
 		0, 1646, 1643, 1, 0, 0, 0, 1647, 243, 1, 0, 0, 0, 1648, 1653, 3, 246, 123,
-		0, 1649, 1650, 5, 230, 0, 0, 1650, 1652, 3, 246, 123, 0, 1651, 1649, 1,
+		0, 1649, 1650, 5, 71, 0, 0, 1650, 1652, 3, 246, 123, 0, 1651, 1649, 1,
 		0, 0, 0, 1652, 1655, 1, 0, 0, 0, 1653, 1651, 1, 0, 0, 0, 1653, 1654, 1,
 		0, 0, 0, 1654, 245, 1, 0, 0, 0, 1655, 1653, 1, 0, 0, 0, 1656, 1657, 3,
 		278, 139, 0, 1657, 1658, 3, 250, 125, 0, 1658, 1659, 3, 248, 124, 0, 1659,
@@ -985,7 +985,7 @@ func apexparserParserInit() {
 		1662, 1667, 3, 278, 139, 0, 1663, 1664, 5, 215, 0, 0, 1664, 1666, 3, 278,
 		139, 0, 1665, 1663, 1, 0, 0, 0, 1666, 1669, 1, 0, 0, 0, 1667, 1665, 1,
 		0, 0, 0, 1667, 1668, 1, 0, 0, 0, 1668, 1670, 1, 0, 0, 0, 1669, 1667, 1,
-		0, 0, 0, 1670, 1671, 5, 208, 0, 0, 1671, 1673, 1, 0, 0, 0, 1672, 1660,
+		0, 0, 0, 1670, 1671, 5, 209, 0, 0, 1671, 1673, 1, 0, 0, 0, 1672, 1660,
 		1, 0, 0, 0, 1672, 1661, 1, 0, 0, 0, 1673, 249, 1, 0, 0, 0, 1674, 1675,
 		7, 15, 0, 0, 1675, 251, 1, 0, 0, 0, 1676, 1677, 5, 91, 0, 0, 1677, 1678,
 		5, 69, 0, 0, 1678, 1681, 3, 188, 94, 0, 1679, 1680, 5, 95, 0, 0, 1680,
@@ -30409,8 +30409,8 @@ type IFilteringExpressionContext interface {
 	// Getter signatures
 	AllDataCategorySelection() []IDataCategorySelectionContext
 	DataCategorySelection(i int) IDataCategorySelectionContext
-	AllAND() []antlr.TerminalNode
-	AND(i int) antlr.TerminalNode
+	AllSOQLAND() []antlr.TerminalNode
+	SOQLAND(i int) antlr.TerminalNode
 
 	// IsFilteringExpressionContext differentiates from other interfaces.
 	IsFilteringExpressionContext()
@@ -30489,12 +30489,12 @@ func (s *FilteringExpressionContext) DataCategorySelection(i int) IDataCategoryS
 	return t.(IDataCategorySelectionContext)
 }
 
-func (s *FilteringExpressionContext) AllAND() []antlr.TerminalNode {
-	return s.GetTokens(ApexParserAND)
+func (s *FilteringExpressionContext) AllSOQLAND() []antlr.TerminalNode {
+	return s.GetTokens(ApexParserSOQLAND)
 }
 
-func (s *FilteringExpressionContext) AND(i int) antlr.TerminalNode {
-	return s.GetToken(ApexParserAND, i)
+func (s *FilteringExpressionContext) SOQLAND(i int) antlr.TerminalNode {
+	return s.GetToken(ApexParserSOQLAND, i)
 }
 
 func (s *FilteringExpressionContext) GetRuleContext() antlr.RuleContext {
@@ -30544,10 +30544,10 @@ func (p *ApexParser) FilteringExpression() (localctx IFilteringExpressionContext
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == ApexParserAND {
+	for _la == ApexParserSOQLAND {
 		{
 			p.SetState(1649)
-			p.Match(ApexParserAND)
+			p.Match(ApexParserSOQLAND)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -30745,8 +30745,8 @@ type IDataCategoryNameContext interface {
 	// Getter signatures
 	AllSoqlId() []ISoqlIdContext
 	SoqlId(i int) ISoqlIdContext
-	AllLPAREN() []antlr.TerminalNode
-	LPAREN(i int) antlr.TerminalNode
+	LPAREN() antlr.TerminalNode
+	RPAREN() antlr.TerminalNode
 	AllCOMMA() []antlr.TerminalNode
 	COMMA(i int) antlr.TerminalNode
 
@@ -30827,12 +30827,12 @@ func (s *DataCategoryNameContext) SoqlId(i int) ISoqlIdContext {
 	return t.(ISoqlIdContext)
 }
 
-func (s *DataCategoryNameContext) AllLPAREN() []antlr.TerminalNode {
-	return s.GetTokens(ApexParserLPAREN)
+func (s *DataCategoryNameContext) LPAREN() antlr.TerminalNode {
+	return s.GetToken(ApexParserLPAREN, 0)
 }
 
-func (s *DataCategoryNameContext) LPAREN(i int) antlr.TerminalNode {
-	return s.GetToken(ApexParserLPAREN, i)
+func (s *DataCategoryNameContext) RPAREN() antlr.TerminalNode {
+	return s.GetToken(ApexParserRPAREN, 0)
 }
 
 func (s *DataCategoryNameContext) AllCOMMA() []antlr.TerminalNode {
@@ -30936,7 +30936,7 @@ func (p *ApexParser) DataCategoryName() (localctx IDataCategoryNameContext) {
 		}
 		{
 			p.SetState(1670)
-			p.Match(ApexParserLPAREN)
+			p.Match(ApexParserRPAREN)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit

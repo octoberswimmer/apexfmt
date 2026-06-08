@@ -340,6 +340,32 @@ func TestSOQL(t *testing.T) {
 		COUNT(Id) > 1
 ]`,
 			},
+			{
+				`[SELECT Id FROM Knowledge__kav WHERE Id = :x WITH DATA CATEGORY Regions__c AT USA__c]`,
+				`[SELECT Id FROM Knowledge__kav WHERE Id = :x WITH DATA CATEGORY Regions__c AT USA__c]`,
+			},
+			{
+				`[SELECT Id, Title, UrlName FROM Knowledge__kav WHERE PublishStatus = 'Draft' WITH DATA CATEGORY Regions__c BELOW Americas__c]`,
+				`[
+	SELECT
+		Id,
+		Title,
+		UrlName
+	FROM
+		Knowledge__kav
+	WHERE
+		PublishStatus = 'Draft'
+	WITH DATA CATEGORY Regions__c BELOW Americas__c
+]`,
+			},
+			{
+				`[SELECT Id FROM Knowledge__kav WITH DATA CATEGORY Regions__c AT (USA__c, Canada__c)]`,
+				`[SELECT Id FROM Knowledge__kav WITH DATA CATEGORY Regions__c AT (USA__c, Canada__c)]`,
+			},
+			{
+				`[SELECT Id FROM Knowledge__kav WITH DATA CATEGORY Regions__c BELOW Americas__c AND Topics__c AT Sports__c]`,
+				`[SELECT Id FROM Knowledge__kav WITH DATA CATEGORY Regions__c BELOW Americas__c AND Topics__c AT Sports__c]`,
+			},
 		}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)

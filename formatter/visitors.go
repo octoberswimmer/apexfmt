@@ -1019,6 +1019,45 @@ func (v *FormatVisitor) VisitWithClause(ctx *parser.WithClauseContext) interface
 	return "WITH"
 }
 
+func (v *FormatVisitor) VisitFilteringExpression(ctx *parser.FilteringExpressionContext) interface{} {
+	selections := make([]string, 0, len(ctx.AllDataCategorySelection()))
+	for _, selection := range ctx.AllDataCategorySelection() {
+		selections = append(selections, v.visitRule(selection).(string))
+	}
+	return strings.Join(selections, " AND ")
+}
+
+func (v *FormatVisitor) VisitDataCategorySelection(ctx *parser.DataCategorySelectionContext) interface{} {
+	return fmt.Sprintf("%s %s %s",
+		ctx.SoqlId().GetText(),
+		v.visitRule(ctx.FilteringSelector()),
+		v.visitRule(ctx.DataCategoryName()))
+}
+
+func (v *FormatVisitor) VisitDataCategoryName(ctx *parser.DataCategoryNameContext) interface{} {
+	ids := make([]string, 0, len(ctx.AllSoqlId()))
+	for _, id := range ctx.AllSoqlId() {
+		ids = append(ids, id.GetText())
+	}
+	if ctx.LPAREN() != nil {
+		return fmt.Sprintf("(%s)", strings.Join(ids, ", "))
+	}
+	return strings.Join(ids, ", ")
+}
+
+func (v *FormatVisitor) VisitFilteringSelector(ctx *parser.FilteringSelectorContext) interface{} {
+	switch {
+	case ctx.ABOVE_OR_BELOW() != nil:
+		return "ABOVE_OR_BELOW"
+	case ctx.ABOVE() != nil:
+		return "ABOVE"
+	case ctx.BELOW() != nil:
+		return "BELOW"
+	default:
+		return "AT"
+	}
+}
+
 func (v *FormatVisitor) VisitRecordVisibilityContextParam(ctx *parser.RecordVisibilityContextParamContext) interface{} {
 	if intValue := ctx.IntegerLiteral(); intValue != nil {
 		return fmt.Sprintf("maxDescriptorPerRecord=%s", intValue.GetText())
