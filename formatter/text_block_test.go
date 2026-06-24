@@ -377,6 +377,54 @@ func TestFormatter_MultipleTextBlockSwitchCases(t *testing.T) {
 	}
 }
 
+// TestFormatter_SingleLineTextBlockRejected asserts apexfmt rejects a
+// triple-quoted literal whose opening ”' is not immediately followed by a
+// line terminator. Salesforce requires the newline (reporting "was
+// expecting '\n'"), so the single-line form is not valid Apex and the
+// formatter must surface a parse error rather than silently accept it.
+func TestFormatter_SingleLineTextBlockRejected(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String s = '''hello''';\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err == nil {
+		t.Fatalf("expected a parse error for a single-line text block, got none")
+	}
+}
+
+// TestFormatter_WhitespaceBeforeOpeningNewlineRejected asserts that even
+// whitespace between the opening ”' and the line terminator is rejected,
+// matching Salesforce, which allows no character — not even a space — before
+// the required newline.
+func TestFormatter_WhitespaceBeforeOpeningNewlineRejected(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String s = '''   \n" +
+		"hello''';\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err == nil {
+		t.Fatalf("expected a parse error for whitespace before the opening newline, got none")
+	}
+}
+
+// TestFormatter_CRLFAfterOpeningDelimiterRoundTrips asserts that a CRLF line
+// terminator immediately after the opening ”' satisfies the requirement and
+// the block is preserved verbatim.
+func TestFormatter_CRLFAfterOpeningDelimiterRoundTrips(t *testing.T) {
+	input := "public class Foo {\n" +
+		"\tpublic static String s = '''\r\n" +
+		"hello''';\n" +
+		"}\n"
+	f := NewFormatter("", strings.NewReader(input))
+	if err := f.Format(); err != nil {
+		t.Fatalf("Format() failed for CRLF after opening delimiter: %v", err)
+	}
+	got := string(f.formatted)
+	if got != input {
+		t.Fatalf("CRLF text block was altered\nwant:\n%q\n got:\n%q", input, got)
+	}
+}
+
 // TestFormatter_TextBlockInsideIndentedMethodBody is the end-to-end
 // regression: a text block nested inside two levels of block indentation
 // must come out with the surrounding code re-indented normally but its

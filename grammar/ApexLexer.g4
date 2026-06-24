@@ -330,12 +330,14 @@ BooleanLiteral
 
 // Triple-quoted (multi-line) string literal. Must be matched before
 // StringLiteral so the longest-match rule picks it up on inputs that
-// start with three single quotes. The content allows backslash-escaped
-// characters (including an escaped ''' sequence via \''' and an explicit
-// line continuation \<line-terminator>); non-greedy '.*?' stops at the
-// first unescaped ''' triple.
+// start with three single quotes. Salesforce requires the opening '''
+// to be immediately followed by a line terminator (LF or CRLF); no other
+// character — not even whitespace — may appear before it. The content
+// allows backslash-escaped characters (including an escaped ''' sequence
+// via \''' and an explicit line continuation \<line-terminator>);
+// non-greedy '.*?' stops at the first unescaped ''' triple.
 TextBlockLiteral
-    :   '\'\'\'' ( '\\' . | ~[\\] )*? '\'\'\''
+    :   '\'\'\'' '\r'? '\n' ( '\\' . | ~[\\] )*? '\'\'\''
     ;
 
 StringLiteral
