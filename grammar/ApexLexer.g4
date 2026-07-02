@@ -502,5 +502,8 @@ LINE_COMMENT
     :  [ \t\r\n\u000C]* '//' ~[\r\n]* -> channel(COMMENT_CHANNEL)
     ;
 
-WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE_CHANNEL)
+// \u0000 (NUL) is treated as ignorable whitespace so spurious NUL
+// bytes (e.g. editor-introduced trailing padding) don't break lexing;
+// Salesforce tolerates them too.
+WS  :  [ \t\r\n\u000C\u0000]+ -> channel(WHITESPACE_CHANNEL)
     ;
