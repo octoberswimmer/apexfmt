@@ -93,6 +93,7 @@ release: checksum
 	fi
 	git push octoberswimmer "$(VERSION)"
 	gh release create "$(VERSION)" --title "apexfmt $(VERSION)" --notes-from-tag --verify-tag $(RELEASE_ASSETS)
+	brew bump-cask-pr apexfmt --version $(VERSION:v%=%)
 
 fmt:
 	go fmt ./...
