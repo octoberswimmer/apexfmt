@@ -358,11 +358,13 @@ StringCharacter
 // §3.10.6 Escape Sequences for Character and String Literals
 // 's' (space) is a Java text-block escape; it is also accepted in
 // single-quoted string literals so that source produced by
-// copy-pasting from a text block keeps working.
+// copy-pasting from a text block keeps working. Apex accepts the escape
+// letter in either case (e.g. '\F' is a form feed just like '\f'), so the
+// letters and the unicode marker 'u' are matched case-insensitively.
 fragment
 EscapeSequence
-    :   '\\' [btnfrs"'\\]
-    |   '\\u' HexCharacter HexCharacter HexCharacter HexCharacter
+    :   '\\' [btnfrsBTNFRS"'\\]
+    |   '\\' U HexCharacter HexCharacter HexCharacter HexCharacter
     ;
 
 // §3.10.7 The Null Literal
