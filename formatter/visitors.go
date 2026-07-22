@@ -230,7 +230,7 @@ func (v *FormatVisitor) VisitIfStatement(ctx *parser.IfStatementContext) interfa
 		} else if ifStatement := ctx.Statement(1).IfStatement(); ifStatement != nil {
 			out.WriteString(fmt.Sprintf(" else %s", v.visitRule(ifStatement)))
 		} else {
-			out.WriteString(fmt.Sprintf(" else {\n%s}", indent(v.visitRule(ctx.Statement(1)).(string))))
+			out.WriteString(fmt.Sprintf(" else {\n%s\n}", indent(v.visitRule(ctx.Statement(1)).(string))))
 		}
 	}
 	return out.String()

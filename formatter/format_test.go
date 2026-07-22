@@ -145,6 +145,14 @@ func TestStatement(t *testing.T) {
 }`},
 
 			{
+				`if (x) doThing(); else doOther();`,
+				`if (x) {
+	doThing();
+} else {
+	doOther();
+}`},
+
+			{
 				`return new List<CountryZip>{
    new CountryZip( new Territory_Zip_Lookup__c( Id = zip.Id, Name = zip.Name, City__c = zip.City__c, State_2_Letter_Code__c = zip.State_2_Letter_Code__c, Country__c = zip.Country__c))
 };`,
