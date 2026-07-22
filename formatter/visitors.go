@@ -243,7 +243,7 @@ func (v *FormatVisitor) VisitWhileStatement(ctx *parser.WhileStatementContext) i
 	if block := ctx.Statement().Block(); block != nil {
 		return fmt.Sprintf("while %s %s", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
 	} else {
-		return fmt.Sprintf("while %s {\n%s}", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
+		return fmt.Sprintf("while %s {\n%s\n}", v.visitRule(ctx.ParExpression()), indent(v.visitRule(ctx.Statement()).(string)))
 	}
 }
 

@@ -153,6 +153,26 @@ func TestStatement(t *testing.T) {
 }`},
 
 			{
+				`while (x) spin();`,
+				`while (x) {
+	spin();
+}`},
+
+			{
+				`while (![SELECT Id, Name, Type, Phone FROM Account].isEmpty()) drain();`,
+				`while (![
+	SELECT
+		Id,
+		Name,
+		Type,
+		Phone
+	FROM
+		Account
+].isEmpty()) {
+	drain();
+}`},
+
+			{
 				`return new List<CountryZip>{
    new CountryZip( new Territory_Zip_Lookup__c( Id = zip.Id, Name = zip.Name, City__c = zip.City__c, State_2_Letter_Code__c = zip.State_2_Letter_Code__c, Country__c = zip.Country__c))
 };`,
