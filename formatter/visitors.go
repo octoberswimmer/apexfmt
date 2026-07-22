@@ -1567,7 +1567,7 @@ func (v *FormatVisitor) VisitFormalParameters(ctx *parser.FormalParametersContex
 		}
 	}
 	if wrap {
-		return fmt.Sprintf("(\n%s\n)", strings.Join(params, ",\n"))
+		return fmt.Sprintf("(\n%s)", strings.Join(params, ",\n"))
 	} else {
 		return fmt.Sprintf("(%s)", strings.Join(params, ", "))
 	}
