@@ -169,21 +169,21 @@ func TestStatement(t *testing.T) {
 }`},
 
 			{
-				`if (x) doThing(); else doOther();`,
-				`if (x) {
-	doThing();
+				`if (condition) statement(); else statement2();`,
+				`if (condition) {
+	statement();
 } else {
-	doOther();
+	statement2();
 }`},
 
 			{
-				`while (x) spin();`,
-				`while (x) {
-	spin();
+				`while (condition) statement();`,
+				`while (condition) {
+	statement();
 }`},
 
 			{
-				`while (![SELECT Id, Name, Type, Phone FROM Account].isEmpty()) drain();`,
+				`while (![SELECT Id, Name, Type, Phone FROM Account].isEmpty()) statement();`,
 				`while (![
 	SELECT
 		Id,
@@ -193,7 +193,7 @@ func TestStatement(t *testing.T) {
 	FROM
 		Account
 ].isEmpty()) {
-	drain();
+	statement();
 }`},
 
 			{
@@ -730,19 +730,19 @@ func TestCompilationUnit(t *testing.T) {
 	public static void noop() {}
 }`},
 			{
-				`public class T {
-	public void run(Boolean x) {
-		for (Integer i = 0; i < 10; i++) step(i);
-		if (x) other();
+				`public class MyClass {
+	public void doit() {
+		for (Integer i = 0; i < 10; i++) System.debug(i);
+		if (condition) statement();
 	}
 }`,
-				`public class T {
-	public void run(Boolean x) {
+				`public class MyClass {
+	public void doit() {
 		for (Integer i = 0; i < 10; i++) {
-			step(i);
+			System.debug(i);
 		}
-		if (x) {
-			other();
+		if (condition) {
+			statement();
 		}
 	}
 }`},
