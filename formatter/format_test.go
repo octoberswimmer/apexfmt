@@ -382,8 +382,7 @@ while(condition);`,
 				`for (Campaign campaign : results) resultList.add(campaign.Group__c);`,
 				`for (Campaign campaign : results) {
 	resultList.add(campaign.Group__c);
-}
-`},
+}`},
 			{
 				`Boolean stepDownOpportunity = recordQualifies &&
 	(i == 0 || ce.Inquiry__c != found[i - 1].Inquiry__c ||
@@ -703,6 +702,23 @@ func TestCompilationUnit(t *testing.T) {
 				`public class MyClass { public static void noop() {}}`,
 				`public class MyClass {
 	public static void noop() {}
+}`},
+			{
+				`public class T {
+	public void run(Boolean x) {
+		for (Integer i = 0; i < 10; i++) step(i);
+		if (x) other();
+	}
+}`,
+				`public class T {
+	public void run(Boolean x) {
+		for (Integer i = 0; i < 10; i++) {
+			step(i);
+		}
+		if (x) {
+			other();
+		}
+	}
 }`},
 			{
 				`public class MyClass {
