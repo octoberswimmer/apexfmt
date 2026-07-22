@@ -964,8 +964,40 @@ public class SampleTest {}`,
 	public static void getInquiryMarketingOwners(
 		Set<Id> inqIds,/**first**/
 		Map<Id, Set<Id>> mapInqIdMarketingOwnerIds, /**second**/
-		Set<Id> inquiryMarketingOwnerIds /**third**/
-	) {}
+		Set<Id> inquiryMarketingOwnerIds /**third**/) {}
+}`,
+			},
+			{
+				`public class TestClass {
+	public void execute(Database.BatchableContext bc, Transaction__c[] scope, Map<Id, Set<Id>> ownersByInquiry) {
+		Integer i = 0;
+	}
+}`,
+				`public class TestClass {
+	public void execute(
+		Database.BatchableContext bc,
+		Transaction__c[] scope,
+		Map<Id, Set<Id>> ownersByInquiry) {
+		Integer i = 0;
+	}
+}`,
+			},
+			{
+				`public class TestClass {
+	public void execute(Database.BatchableContext bc,
+		Transaction__c[] scope, Map<Id, Set<Id>> ownersByInquiry // trailing comment
+	) {
+		Integer i = 0;
+	}
+}`,
+				`public class TestClass {
+	public void execute(
+		Database.BatchableContext bc,
+		Transaction__c[] scope,
+		Map<Id, Set<Id>> ownersByInquiry // trailing comment
+	) {
+		Integer i = 0;
+	}
 }`,
 			},
 			{
