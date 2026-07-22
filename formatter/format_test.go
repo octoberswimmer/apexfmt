@@ -21,6 +21,30 @@ func (e *testErrorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line,
 	e.t.Error("Parse Error: line " + strconv.Itoa(line) + ":" + strconv.Itoa(column) + " " + msg)
 }
 
+// assertIdempotent re-parses and re-formats already-formatted output and
+// fails if the result differs, i.e. format(format(x)) != format(x). This
+// guards every table-driven case against formatter round-trip instability.
+func assertIdempotent(t *testing.T, formatted string, parse func(*parser.ApexParser) antlr.RuleNode) {
+	input := antlr.NewInputStream(formatted)
+	lexer := parser.NewApexLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := parser.NewApexParser(stream)
+	p.RemoveErrorListeners()
+	p.AddErrorListener(&testErrorListener{t: t})
+
+	v := NewFormatVisitor(stream)
+	out, ok := v.visitRule(parse(p)).(string)
+	if !ok {
+		t.Errorf("idempotency: unexpected result re-parsing formatted apex")
+		return
+	}
+	out = removeExtraCommentIndentation(out)
+	if out != formatted {
+		t.Errorf("not idempotent: format(format(x)) != format(x)\nfirst:\n%q\nsecond:\n%q\n", formatted, out)
+	}
+}
+
 func TestStatement(t *testing.T) {
 	if testing.Verbose() {
 		log.SetLevel(log.TraceLevel)
@@ -142,6 +166,34 @@ func TestStatement(t *testing.T) {
 				`if ((accountIds == null || accountIds.isEmpty()) &&
 	(contactIds == null || contactIds.isEmpty())) {
 	return null;
+}`},
+
+			{
+				`if (condition) statement(); else statement2();`,
+				`if (condition) {
+	statement();
+} else {
+	statement2();
+}`},
+
+			{
+				`while (condition) statement();`,
+				`while (condition) {
+	statement();
+}`},
+
+			{
+				`while (![SELECT Id, Name, Type, Phone FROM Account].isEmpty()) statement();`,
+				`while (![
+	SELECT
+		Id,
+		Name,
+		Type,
+		Phone
+	FROM
+		Account
+].isEmpty()) {
+	statement();
 }`},
 
 			{
@@ -354,8 +406,7 @@ while(condition);`,
 				`for (Campaign campaign : results) resultList.add(campaign.Group__c);`,
 				`for (Campaign campaign : results) {
 	resultList.add(campaign.Group__c);
-}
-`},
+}`},
 			{
 				`Boolean stepDownOpportunity = recordQualifies &&
 	(i == 0 || ce.Inquiry__c != found[i - 1].Inquiry__c ||
@@ -523,6 +574,7 @@ BillingPostalCode = '90210'
 				diffs := dmp.DiffMain(tt.output, out, false)
 				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
 			}
+			assertIdempotent(t, out, func(p *parser.ApexParser) antlr.RuleNode { return p.Statement() })
 		})
 	}
 
@@ -653,6 +705,7 @@ func TestMemberDeclaration(t *testing.T) {
 		if out != tt.output {
 			t.Errorf("unexpected format.  expected:\n%s\ngot:\n%s\n", tt.output, out)
 		}
+		assertIdempotent(t, out, func(p *parser.ApexParser) antlr.RuleNode { return p.MemberDeclaration() })
 	}
 }
 
@@ -675,6 +728,23 @@ func TestCompilationUnit(t *testing.T) {
 				`public class MyClass { public static void noop() {}}`,
 				`public class MyClass {
 	public static void noop() {}
+}`},
+			{
+				`public class MyClass {
+	public void doit() {
+		for (Integer i = 0; i < 10; i++) System.debug(i);
+		if (condition) statement();
+	}
+}`,
+				`public class MyClass {
+	public void doit() {
+		for (Integer i = 0; i < 10; i++) {
+			System.debug(i);
+		}
+		if (condition) {
+			statement();
+		}
+	}
 }`},
 			{
 				`public class MyClass {
@@ -1181,6 +1251,7 @@ void update();
 				diffs := dmp.DiffMain(tt.output, out, false)
 				t.Errorf("unexpected format.  expected:\n%q\ngot:\n%q\ndiff:\n%s\n", tt.output, out, dmp.DiffPrettyText(diffs))
 			}
+			assertIdempotent(t, out, func(p *parser.ApexParser) antlr.RuleNode { return p.CompilationUnit() })
 		})
 	}
 }

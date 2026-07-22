@@ -230,7 +230,7 @@ func (v *FormatVisitor) VisitIfStatement(ctx *parser.IfStatementContext) interfa
 		} else if ifStatement := ctx.Statement(1).IfStatement(); ifStatement != nil {
 			out.WriteString(fmt.Sprintf(" else %s", v.visitRule(ifStatement)))
 		} else {
-			out.WriteString(fmt.Sprintf(" else {\n%s}", indent(v.visitRule(ctx.Statement(1)).(string))))
+			out.WriteString(fmt.Sprintf(" else {\n%s\n}", indent(v.visitRule(ctx.Statement(1)).(string))))
 		}
 	}
 	return out.String()
@@ -243,7 +243,7 @@ func (v *FormatVisitor) VisitWhileStatement(ctx *parser.WhileStatementContext) i
 	if block := ctx.Statement().Block(); block != nil {
 		return fmt.Sprintf("while %s %s", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
 	} else {
-		return fmt.Sprintf("while %s {\n%s}", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
+		return fmt.Sprintf("while %s {\n%s\n}", v.visitRule(ctx.ParExpression()), indent(v.visitRule(ctx.Statement()).(string)))
 	}
 }
 
@@ -260,7 +260,7 @@ func (v *FormatVisitor) VisitForStatement(ctx *parser.ForStatementContext) inter
 		if statement.Block() != nil {
 			return fmt.Sprintf("for (%s) %s", v.visitRule(ctx.ForControl()), v.visitRule(ctx.Statement()))
 		} else {
-			return fmt.Sprintf("for (%s) {\n%s\n}\n", v.visitRule(ctx.ForControl()), indent(v.visitRule(ctx.Statement()).(string)))
+			return fmt.Sprintf("for (%s) {\n%s\n}", v.visitRule(ctx.ForControl()), indent(v.visitRule(ctx.Statement()).(string)))
 		}
 	} else {
 		return fmt.Sprintf("for (%s);", v.visitRule(ctx.ForControl()))
