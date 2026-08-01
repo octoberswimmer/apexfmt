@@ -492,6 +492,30 @@ b);`,
 ]);`,
 			},
 			{
+				`return [
+   SELECT
+      TYPEOF Subject
+         WHEN Account THEN Name, AccountNumber
+         ELSE Id
+      END
+   FROM SurveySubject
+];`,
+				`return [
+	SELECT
+		TYPEOF Subject
+		WHEN
+			Account
+		THEN
+			Name,
+			AccountNumber
+		ELSE
+			Id
+		END
+	FROM
+		SurveySubject
+];`,
+			},
+			{
 				`Account a = new Account(
 Name = 'Acme',
 Type = 'Something', // a comment

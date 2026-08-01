@@ -947,7 +947,7 @@ func (v *FormatVisitor) VisitTypeOf(ctx *parser.TypeOfContext) interface{} {
 	}
 	elseClause := ""
 	if e := ctx.ElseClause(); e != nil {
-		elseClause = fmt.Sprintf("ELSE %s", v.visitRule(e))
+		elseClause = fmt.Sprintf("%s\n", v.visitRule(e))
 	}
 
 	return fmt.Sprintf("TYPEOF %s\n%s\n%sEND",
@@ -982,6 +982,20 @@ func (v *FormatVisitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface
 	clause.WriteString(indentTo(v.visitRule(ctx.FieldName()).(string), indent))
 	clause.WriteString(sep)
 	clause.WriteString("THEN")
+	clause.WriteString(sep)
+	clause.WriteString(indentTo(v.visitRule(ctx.FieldNameList()).(string), indent))
+	return clause.String()
+}
+
+func (v *FormatVisitor) VisitElseClause(ctx *parser.ElseClauseContext) interface{} {
+	sep := " "
+	indent := 0
+	if v.wrap {
+		sep = "\n"
+		indent = 1
+	}
+	var clause strings.Builder
+	clause.WriteString("ELSE")
 	clause.WriteString(sep)
 	clause.WriteString(indentTo(v.visitRule(ctx.FieldNameList()).(string), indent))
 	return clause.String()
