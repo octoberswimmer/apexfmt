@@ -529,6 +529,9 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#allRowsClause.
 	VisitAllRowsClause(ctx *AllRowsClauseContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#setOptionsClause.
+	VisitSetOptionsClause(ctx *SetOptionsClauseContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#forClauses.
 	VisitForClauses(ctx *ForClausesContext) interface{}
 

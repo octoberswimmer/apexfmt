@@ -1075,6 +1075,12 @@ func (s *BaseApexParserListener) EnterAllRowsClause(ctx *AllRowsClauseContext) {
 // ExitAllRowsClause is called when production allRowsClause is exited.
 func (s *BaseApexParserListener) ExitAllRowsClause(ctx *AllRowsClauseContext) {}
 
+// EnterSetOptionsClause is called when production setOptionsClause is entered.
+func (s *BaseApexParserListener) EnterSetOptionsClause(ctx *SetOptionsClauseContext) {}
+
+// ExitSetOptionsClause is called when production setOptionsClause is exited.
+func (s *BaseApexParserListener) ExitSetOptionsClause(ctx *SetOptionsClauseContext) {}
+
 // EnterForClauses is called when production forClauses is entered.
 func (s *BaseApexParserListener) EnterForClauses(ctx *ForClausesContext) {}
 

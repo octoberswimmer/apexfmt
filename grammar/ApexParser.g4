@@ -564,6 +564,7 @@ query
         allRowsClause?
         forClauses
         (UPDATE updateList)?
+        setOptionsClause?
         ;
 
 subQuery
@@ -773,6 +774,9 @@ offsetClause
 
 allRowsClause
     : ALL ROWS;
+
+setOptionsClause
+    : SET OPTIONS boundExpression;
 
 forClauses
     : (forClause)*;
@@ -1119,6 +1123,7 @@ id
     | MAXDESCRIPTORPERRECORD
     | SUPPORTSDOMAINS
     | SUPPORTSDELEGATES
+    | OPTIONS
     | USER_MODE
     | SYSTEM_MODE
     | REFERENCE
@@ -1338,6 +1343,7 @@ anyId
     | MAXDESCRIPTORPERRECORD
     | SUPPORTSDOMAINS
     | SUPPORTSDELEGATES
+    | OPTIONS
     | USER_MODE
     | SYSTEM_MODE
     | REFERENCE

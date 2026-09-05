@@ -816,7 +816,17 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 		query.WriteString(sep)
 		query.WriteString(fmt.Sprintf("UPDATE %s", v.visitRule(update).(string)))
 	}
+	if setOptions := ctx.SetOptionsClause(); setOptions != nil {
+		query.WriteString(sep)
+		query.WriteString(v.visitRule(setOptions).(string))
+	}
 	return query.String()
+}
+
+// VisitSetOptionsClause formats a SET OPTIONS clause, which passes a
+// Database.QueryOptions bind variable to the query.
+func (v *FormatVisitor) VisitSetOptionsClause(ctx *parser.SetOptionsClauseContext) interface{} {
+	return fmt.Sprintf("SET OPTIONS %s", v.visitRule(ctx.BoundExpression()).(string))
 }
 
 func (v *FormatVisitor) VisitSubQuery(ctx *parser.SubQueryContext) interface{} {

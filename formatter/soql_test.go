@@ -121,6 +121,115 @@ func TestSOQL(t *testing.T) {
 				`[SELECT Id FROM ClinicalEncounter WHERE Id = :encounters[0].Id ALL ROWS]`,
 			},
 			{
+				`[SELECT Id FROM Account SET OPTIONS :opts]`,
+				`[SELECT Id FROM Account SET OPTIONS :opts]`,
+			},
+			{
+				`[SELECT Id FROM Account LIMIT 1 SET OPTIONS   :opts]`,
+				`[
+	SELECT
+		Id
+	FROM
+		Account
+	LIMIT 1
+	SET OPTIONS :opts
+]`},
+			{
+				// SET OPTIONS counts toward the wrap decision like LIMIT does,
+				// so the same query wraps with it and stays on one line without.
+				`[SELECT Id, Name FROM Account]`,
+				`[SELECT Id, Name FROM Account]`,
+			},
+			{
+				`[SELECT Id, Name FROM Account SET OPTIONS :opts]`,
+				`[
+	SELECT
+		Id,
+		Name
+	FROM
+		Account
+	SET OPTIONS :opts
+]`},
+			{
+				`[SELECT Id FROM Account WHERE Options__c = 'x']`,
+				`[SELECT Id FROM Account WHERE Options__c = 'x']`,
+			},
+			{
+				`[SELECT Id, Name, Industry FROM Account WHERE Name = 'x' ORDER BY Name LIMIT 1 SET OPTIONS :opts]`,
+				`[
+	SELECT
+		Id,
+		Name,
+		Industry
+	FROM
+		Account
+	WHERE
+		Name = 'x'
+	ORDER BY
+		Name
+	LIMIT 1
+	SET OPTIONS :opts
+]`},
+			{
+				// A query already wrapped keeps its shape.
+				`[
+	SELECT
+		Id,
+		Name,
+		Industry
+	FROM
+		Account
+	WHERE
+		Name = 'x'
+	ORDER BY
+		Name
+	LIMIT 1
+	SET OPTIONS :opts
+]`,
+				`[
+	SELECT
+		Id,
+		Name,
+		Industry
+	FROM
+		Account
+	WHERE
+		Name = 'x'
+	ORDER BY
+		Name
+	LIMIT 1
+	SET OPTIONS :opts
+]`},
+			{
+				`[SELECT Id, (SELECT Id FROM Contacts) FROM Account WHERE Name = 'x' SET OPTIONS :opts]`,
+				`[
+	SELECT
+		Id,
+		(SELECT
+			Id
+		FROM
+			Contacts)
+	FROM
+		Account
+	WHERE
+		Name = 'x'
+	SET OPTIONS :opts
+]`},
+			{
+				`[SELECT Id, Name, Industry FROM Account WHERE Industry IN :industries ALL ROWS SET OPTIONS :opts]`,
+				`[
+	SELECT
+		Id,
+		Name,
+		Industry
+	FROM
+		Account
+	WHERE
+		Industry IN :industries
+	ALL ROWS
+	SET OPTIONS :opts
+]`},
+			{
 				`[SELECT Id, SBQQ__Quote__c FROM SBQQ__QuoteLineGroup__c WHERE SBQQ__Quote__c IN :quoteIds ORDER BY SBQQ__Quote__c, SBQQ__Number__c]`,
 				`[
 	SELECT

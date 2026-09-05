@@ -529,6 +529,9 @@ type ApexParserListener interface {
 	// EnterAllRowsClause is called when entering the allRowsClause production.
 	EnterAllRowsClause(c *AllRowsClauseContext)
 
+	// EnterSetOptionsClause is called when entering the setOptionsClause production.
+	EnterSetOptionsClause(c *SetOptionsClauseContext)
+
 	// EnterForClauses is called when entering the forClauses production.
 	EnterForClauses(c *ForClausesContext)
 
@@ -1155,6 +1158,9 @@ type ApexParserListener interface {
 
 	// ExitAllRowsClause is called when exiting the allRowsClause production.
 	ExitAllRowsClause(c *AllRowsClauseContext)
+
+	// ExitSetOptionsClause is called when exiting the setOptionsClause production.
+	ExitSetOptionsClause(c *SetOptionsClauseContext)
 
 	// ExitForClauses is called when exiting the forClauses production.
 	ExitForClauses(c *ForClausesContext)

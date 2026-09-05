@@ -703,6 +703,10 @@ func (v *BaseApexParserVisitor) VisitAllRowsClause(ctx *AllRowsClauseContext) in
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitSetOptionsClause(ctx *SetOptionsClauseContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitForClauses(ctx *ForClausesContext) interface{} {
 	return v.VisitChildren(ctx)
 }

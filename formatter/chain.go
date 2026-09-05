@@ -104,6 +104,9 @@ func (v *ChainVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	if update := ctx.UpdateList(); update != nil {
 		score++
 	}
+	if setOptions := ctx.SetOptionsClause(); setOptions != nil {
+		score++
+	}
 	return score
 }
 
