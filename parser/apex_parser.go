@@ -696,8 +696,8 @@ func apexparserParserInit() {
 		978, 151, 1, 0, 0, 0, 979, 984, 3, 154, 77, 0, 980, 981, 5, 217, 0, 0,
 		981, 983, 3, 154, 77, 0, 982, 980, 1, 0, 0, 0, 983, 986, 1, 0, 0, 0, 984,
 		982, 1, 0, 0, 0, 984, 985, 1, 0, 0, 0, 985, 153, 1, 0, 0, 0, 986, 984,
-		1, 0, 0, 0, 987, 988, 6, 77, -1, 0, 988, 1006, 3, 156, 78, 0, 989, 1006,
-		3, 158, 79, 0, 990, 991, 5, 25, 0, 0, 991, 1006, 3, 162, 81, 0, 992, 993,
+		1, 0, 0, 0, 987, 988, 6, 77, -1, 0, 988, 1006, 3, 158, 79, 0, 989, 1006,
+		3, 156, 78, 0, 990, 991, 5, 25, 0, 0, 991, 1006, 3, 162, 81, 0, 992, 993,
 		5, 210, 0, 0, 993, 994, 3, 44, 22, 0, 994, 995, 5, 211, 0, 0, 995, 996,
 		3, 154, 77, 19, 996, 1006, 1, 0, 0, 0, 997, 998, 5, 210, 0, 0, 998, 999,
 		3, 154, 77, 0, 999, 1000, 5, 211, 0, 0, 1000, 1006, 1, 0, 0, 0, 1001, 1002,
@@ -724,10 +724,10 @@ func apexparserParserInit() {
 		1050, 1077, 3, 154, 77, 4, 1051, 1052, 10, 2, 0, 0, 1052, 1053, 5, 225,
 		0, 0, 1053, 1054, 3, 154, 77, 0, 1054, 1055, 5, 226, 0, 0, 1055, 1056,
 		3, 154, 77, 2, 1056, 1077, 1, 0, 0, 0, 1057, 1058, 10, 1, 0, 0, 1058, 1059,
-		7, 10, 0, 0, 1059, 1077, 3, 154, 77, 1, 1060, 1061, 10, 23, 0, 0, 1061,
+		7, 10, 0, 0, 1059, 1077, 3, 154, 77, 1, 1060, 1061, 10, 22, 0, 0, 1061,
 		1064, 7, 11, 0, 0, 1062, 1065, 3, 160, 80, 0, 1063, 1065, 3, 338, 169,
 		0, 1064, 1062, 1, 0, 0, 0, 1064, 1063, 1, 0, 0, 0, 1065, 1077, 1, 0, 0,
-		0, 1066, 1067, 10, 22, 0, 0, 1067, 1068, 5, 214, 0, 0, 1068, 1069, 3, 154,
+		0, 1066, 1067, 10, 21, 0, 0, 1067, 1068, 5, 214, 0, 0, 1068, 1069, 3, 154,
 		77, 0, 1069, 1070, 5, 215, 0, 0, 1070, 1077, 1, 0, 0, 0, 1071, 1072, 10,
 		17, 0, 0, 1072, 1077, 7, 12, 0, 0, 1073, 1074, 10, 10, 0, 0, 1074, 1075,
 		5, 22, 0, 0, 1075, 1077, 3, 44, 22, 0, 1076, 1007, 1, 0, 0, 0, 1076, 1010,
@@ -18806,22 +18806,22 @@ func (p *ApexParser) expression(_p int) (localctx IExpressionContext) {
 
 	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 84, p.GetParserRuleContext()) {
 	case 1:
-		localctx = NewPrimaryExpressionContext(p, localctx)
+		localctx = NewMethodCallExpressionContext(p, localctx)
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 
 		{
 			p.SetState(988)
-			p.Primary()
+			p.MethodCall()
 		}
 
 	case 2:
-		localctx = NewMethodCallExpressionContext(p, localctx)
+		localctx = NewPrimaryExpressionContext(p, localctx)
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
 			p.SetState(989)
-			p.MethodCall()
+			p.Primary()
 		}
 
 	case 3:
@@ -19361,8 +19361,8 @@ func (p *ApexParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, ApexParserRULE_expression)
 				p.SetState(1060)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 23)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 23)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 22)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 22)", ""))
 					goto errorExit
 				}
 				{
@@ -19404,8 +19404,8 @@ func (p *ApexParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, ApexParserRULE_expression)
 				p.SetState(1066)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 22)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 22)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 21)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 21)", ""))
 					goto errorExit
 				}
 				{
@@ -42111,10 +42111,10 @@ func (p *ApexParser) Expression_Sempred(localctx antlr.RuleContext, predIndex in
 		return p.Precpred(p.GetParserRuleContext(), 1)
 
 	case 13:
-		return p.Precpred(p.GetParserRuleContext(), 23)
+		return p.Precpred(p.GetParserRuleContext(), 22)
 
 	case 14:
-		return p.Precpred(p.GetParserRuleContext(), 22)
+		return p.Precpred(p.GetParserRuleContext(), 21)
 
 	case 15:
 		return p.Precpred(p.GetParserRuleContext(), 17)

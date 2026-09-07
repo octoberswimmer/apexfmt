@@ -101,17 +101,26 @@ func (f *Formatter) Format() error {
 	lexer := parser.NewApexLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-	p := parser.NewApexParser(stream)
-	p.RemoveErrorListeners()
-	errListener := &errorListener{filename: f.filename}
-	p.AddErrorListener(errListener)
-	// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
+	// Parse with SLL prediction first. It is faster than LL prediction but
+	// cannot resolve every ambiguity in the grammar, for example a call
+	// statement such as "return name(arg);" or "super(arg);". When it
+	// stops at a syntax error, rewind the token stream and parse again with
+	// full LL prediction, which reports any real syntax errors.
+	parseTree, ok := parseSLL(stream)
+	if !ok {
+		stream.Seek(0)
+		p := parser.NewApexParser(stream)
+		p.RemoveErrorListeners()
+		errListener := &errorListener{filename: f.filename}
+		p.AddErrorListener(errListener)
+		// p.AddErrorListener(antlr.NewDiagnosticErrorListener(false))
 
-	parseTree := p.CompilationUnit()
+		parseTree = p.CompilationUnit()
 
-	// Check if there were any syntax errors during parsing
-	if errListener.HasErrors() {
-		return errListener.GetError()
+		// Check if there were any syntax errors during parsing
+		if errListener.HasErrors() {
+			return errListener.GetError()
+		}
 	}
 
 	v := NewFormatVisitor(stream)
@@ -124,6 +133,32 @@ func (f *Formatter) Format() error {
 	out = strings.TrimRight(out, " \t\n")
 	f.formatted = append([]byte(out), '\n')
 	return nil
+}
+
+// bailErrorStrategy stops the parser at the first syntax error without
+// reporting it. antlr's BailErrorStrategy passes the cancellation to
+// DefaultErrorStrategy.ReportError, which prints "unknown recognition error
+// type" to stdout, so ReportError is overridden to record the failure only.
+type bailErrorStrategy struct {
+	*antlr.BailErrorStrategy
+	failed bool
+}
+
+func (b *bailErrorStrategy) ReportError(_ antlr.Parser, _ antlr.RecognitionException) {
+	b.failed = true
+}
+
+// parseSLL parses the token stream with SLL prediction. It returns false when
+// the parser hit a syntax error, which may or may not be a real error in the
+// source; the caller must then parse again with LL prediction.
+func parseSLL(stream *antlr.CommonTokenStream) (parser.ICompilationUnitContext, bool) {
+	p := parser.NewApexParser(stream)
+	p.RemoveErrorListeners()
+	strategy := &bailErrorStrategy{BailErrorStrategy: antlr.NewBailErrorStrategy()}
+	p.SetErrorHandler(strategy)
+	p.GetInterpreter().SetPredictionMode(antlr.PredictionModeSLL)
+	tree := p.CompilationUnit()
+	return tree, !strategy.failed
 }
 
 func (f *Formatter) Write() error {

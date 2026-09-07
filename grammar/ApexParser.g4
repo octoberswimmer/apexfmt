@@ -440,14 +440,22 @@ expressionList
     : expression (COMMA expression)*
     ;
 
+// methodCall is listed before primary on purpose. mergeStatement places two
+// expressions side by side, so every token that can start an expression,
+// including LPAREN, can follow an expression. With SLL prediction the parser
+// therefore cannot tell "name (" apart as a method call or an identifier
+// followed by another expression, and resolves the conflict to the first
+// listed alternative. Listing methodCall first makes that choice right for
+// every statement except a merge whose target is followed by a parenthesized
+// expression, which the LL fallback still parses.
 expression
-    : primary                                                                                         # primaryExpression
+    : methodCall                                                                                      # methodCallExpression
+    | primary                                                                                         # primaryExpression
     | expression (DOT | QUESTIONDOT)
         ( dotMethodCall
         | anyId
         )                                                                                             # dotExpression
     | expression LBRACK expression RBRACK                                                             # arrayExpression
-    | methodCall                                                                                      # methodCallExpression
     | NEW creator                                                                                     # newInstanceExpression
     | LPAREN typeRef RPAREN expression                                                                # castExpression
     | LPAREN expression RPAREN                                                                        # subExpression
