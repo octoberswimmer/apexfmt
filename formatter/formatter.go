@@ -99,7 +99,8 @@ func (f *Formatter) Format() error {
 		f.source = src
 	}
 	input := antlr.NewInputStream(string(f.source))
-	lexer := parser.NewApexLexer(input)
+	lexer, release := parser.NewApexLexerWithPrivateATN(input)
+	defer release()
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	// Parse with SLL prediction first. It is faster than LL prediction but
