@@ -563,9 +563,9 @@ func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext)
 	i := NewChainVisitor()
 	left := i.visitRule(ctx.Expression(0)).(int)
 	right := i.visitRule(ctx.Expression(1)).(int)
-	log.Debug(fmt.Sprintf("LEFT %d: %s ", left, ctx.Expression(0).GetText()))
-	log.Debug(fmt.Sprintf("RIGHT %d: %s ", right, ctx.Expression(1).GetText()))
-	log.Debug(fmt.Sprintf("TEXT %d: %s ", len(ctx.GetText()), ctx.GetText()))
+	log.Debugf("LEFT %d: %s ", left, ctx.Expression(0).GetText())
+	log.Debugf("RIGHT %d: %s ", right, ctx.Expression(1).GetText())
+	log.Debugf("TEXT %d: %s ", len(ctx.GetText()), ctx.GetText())
 	wrap := v.wrap || (left+right > 2 && len(ctx.GetText()) > 40) || len(ctx.GetText()) > 60
 	if wrap {
 		sep = "\n\t"
@@ -608,7 +608,7 @@ func (v *FormatVisitor) VisitArrayExpression(ctx *parser.ArrayExpressionContext)
 func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) interface{} {
 	i := NewChainVisitor()
 	depth := i.visitRule(ctx.Expression()).(int)
-	log.Debug(fmt.Sprintf("depth is %d: %s", depth, ctx.GetText()))
+	log.Debugf("depth is %d: %s", depth, ctx.GetText())
 	if depth > 1 {
 		defer restoreWrap(wrap(v))
 	}
@@ -624,14 +624,14 @@ func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) int
 			}
 			switch left := ctx.Expression().(type) {
 			case *parser.PrimaryExpressionContext:
-				log.Debug(fmt.Sprintf("NOT wrapping after between %q (%T)", expr, ctx.Expression()))
+				log.Debugf("NOT wrapping after between %q (%T)", expr, ctx.Expression())
 			case *parser.DotExpressionContext:
 				if left.DotMethodCall() != nil {
-					log.Debug(fmt.Sprintf("%q is method call; safe to wrap before %q", expr, ctx.DotMethodCall().GetText()))
+					log.Debugf("%q is method call; safe to wrap before %q", expr, ctx.DotMethodCall().GetText())
 					return expr.(string) + "\n" + indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
 				}
 			default:
-				log.Debug(fmt.Sprintf("Wrapping in between %q (%T) and %q", expr, ctx.Expression(), ctx.DotMethodCall().GetText()))
+				log.Debugf("Wrapping in between %q (%T) and %q", expr, ctx.Expression(), ctx.DotMethodCall().GetText())
 				return expr.(string) + "\n" + indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
 			}
 		}
@@ -645,7 +645,7 @@ func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) int
 
 func (v *FormatVisitor) VisitDotMethodCall(ctx *parser.DotMethodCallContext) interface{} {
 	if v.wrap {
-		log.Debug(fmt.Sprintf("Visitor says to wrap in VisitDotMethodCall; not wrapping individual expressions: %s", ctx.GetText()))
+		log.Debugf("Visitor says to wrap in VisitDotMethodCall; not wrapping individual expressions: %s", ctx.GetText())
 		defer restoreWrap(unwrap(v))
 	}
 	expressionList := ""

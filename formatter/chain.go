@@ -22,7 +22,7 @@ func (v *ChainVisitor) visitRule(node antlr.RuleNode) interface{} {
 		return r
 	}
 	if result == nil {
-		log.Debug(fmt.Sprintf("missing ChainVisitor function for %T", node))
+		log.Debugf("missing ChainVisitor function for %T", node)
 	}
 	return 0
 }
