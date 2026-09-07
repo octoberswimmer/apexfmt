@@ -1,7 +1,6 @@
 package formatter
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
 	"sort"
@@ -360,19 +359,32 @@ func hasInlineComment(line, inlineCommentStart, fffb []byte) bool {
 
 func indentTo(text string, indents int) string {
 	var indentedText strings.Builder
-	scanner := bufio.NewScanner(strings.NewReader(text))
+	indentedText.Grow(len(text) + indents*(strings.Count(text, "\n")+1))
+	tabs := strings.Repeat("\t", indents)
 	isFirstLine := true
 	// Track whether the scanner is currently inside a triple-quoted text
 	// block literal. Content inside must not receive indentation; any
 	// whitespace prepended would become part of the string value.
 	insideTextBlock := false
 
-	scanner.Split(SplitLeadingFFFAOrFFFBOrNewline)
-
 	log.Debugf("INDENTING: %q\n", text)
 
-	for scanner.Scan() {
-		t := scanner.Text()
+	// Split the whole text at once rather than through a bufio.Scanner. The
+	// scanner stops at the first token longer than its 64 KB buffer limit,
+	// which silently dropped the rest of the text after a long line. The
+	// split function returns each token as a prefix of the data it is
+	// given, so the token is also a substring of text at the same offset.
+	data := []byte(text)
+	for pos := 0; pos < len(data); {
+		advance, token, err := SplitLeadingFFFAOrFFFBOrNewline(data[pos:], true)
+		if err != nil || advance <= 0 {
+			break
+		}
+		t := text[pos : pos+len(token)]
+		pos += advance
+		if token == nil {
+			continue
+		}
 		log.Tracef("INDENTING LINE: %q\n", t)
 		if t == "\uFFFB" {
 			indentedText.WriteString(t)
@@ -390,12 +402,11 @@ func indentTo(text string, indents int) string {
 		} else if !strings.HasPrefix(t, "\uFFFA") && !strings.HasPrefix(t, "\uFFF9") {
 			indentedText.WriteString("\n")
 		}
-		if scanner.Text() == "" {
-			indentedText.WriteString(scanner.Text())
+		if t == "" {
 			continue
 		}
 		if applyIndent {
-			t = strings.Repeat("\t", indents) + t
+			indentedText.WriteString(tabs)
 		}
 		indentedText.WriteString(t)
 	}
