@@ -23,6 +23,14 @@ type FormatVisitor struct {
 	newlinesOutput map[int]struct{}
 	parser.BaseApexParserVisitor
 	wrap bool
+	// hiddenBefore[i] and hiddenAfter[i] hold the whitespace and comment
+	// tokens adjacent to token i, up to the nearest token on the default
+	// channel. They are built once from the token stream on first use.
+	hiddenBefore [][]antlr.Token
+	hiddenAfter  [][]antlr.Token
+	// textLens caches the length of each rule node's text, which the
+	// wrapping decisions consult for nested expressions.
+	textLens map[antlr.RuleNode]int
 }
 
 type HiddenTokenDirection int
@@ -44,7 +52,89 @@ func NewFormatVisitor(tokens *antlr.CommonTokenStream) *FormatVisitor {
 		tokens:         tokens,
 		commentsOutput: make(map[int]struct{}),
 		newlinesOutput: make(map[int]struct{}),
+		textLens:       make(map[antlr.RuleNode]int),
 	}
+}
+
+// textLen returns len(node.GetText()) without building the text: the length
+// of a rule node is the sum of its children's lengths, and each rule node's
+// length is cached, so nested expressions that check their length at every
+// level do not rebuild the same text repeatedly.
+func (v *FormatVisitor) textLen(node antlr.Tree) int {
+	switch n := node.(type) {
+	case antlr.TerminalNode:
+		return len(n.GetText())
+	case antlr.RuleNode:
+		if l, ok := v.textLens[n]; ok {
+			return l
+		}
+		l := 0
+		for _, child := range n.GetChildren() {
+			l += v.textLen(child)
+		}
+		v.textLens[n] = l
+		return l
+	}
+	return len(node.(antlr.ParseTree).GetText())
+}
+
+// indexHiddenTokens records, for every token index, the whitespace and
+// comment tokens between it and the nearest default-channel token on each
+// side, in stream order. This is what interleaving the results of
+// GetHiddenTokensToLeft and GetHiddenTokensToRight for the whitespace and
+// comment channels produces, computed once instead of four times per node.
+func (v *FormatVisitor) indexHiddenTokens() {
+	all := v.tokens.GetAllTokens()
+	v.hiddenBefore = make([][]antlr.Token, len(all))
+	v.hiddenAfter = make([][]antlr.Token, len(all))
+	hidden := func(from, to int) []antlr.Token {
+		var run []antlr.Token
+		for i := from; i <= to; i++ {
+			if c := all[i].GetChannel(); c == WHITESPACE_CHANNEL || c == COMMENTS_CHANNEL {
+				run = append(run, all[i])
+			}
+		}
+		return run
+	}
+	// runStart is the index after the last default-channel token seen.
+	runStart := 0
+	for i := range all {
+		if i > runStart {
+			v.hiddenBefore[i] = hidden(runStart, i-1)
+		}
+		if all[i].GetChannel() == antlr.TokenDefaultChannel {
+			runStart = i + 1
+		}
+	}
+	// runEnd is the index before the next default-channel token seen.
+	runEnd := len(all) - 1
+	for i := len(all) - 1; i >= 0; i-- {
+		if i < runEnd {
+			v.hiddenAfter[i] = hidden(i+1, runEnd)
+		}
+		if all[i].GetChannel() == antlr.TokenDefaultChannel {
+			runEnd = i - 1
+		}
+	}
+}
+
+// hiddenTokens returns the whitespace and comment tokens adjacent to token
+// in the given direction, in stream order.
+func (v *FormatVisitor) hiddenTokens(token antlr.Token, direction HiddenTokenDirection) []antlr.Token {
+	if token == nil {
+		return nil
+	}
+	if v.hiddenBefore == nil {
+		v.indexHiddenTokens()
+	}
+	index := token.GetTokenIndex()
+	if index < 0 || index >= len(v.hiddenBefore) {
+		return nil
+	}
+	if direction == HiddenTokenDirectionBefore {
+		return v.hiddenBefore[index]
+	}
+	return v.hiddenAfter[index]
 }
 
 func (v *FormatVisitor) VisitRule(node antlr.RuleNode) interface{} {
@@ -54,10 +144,8 @@ func (v *FormatVisitor) VisitRule(node antlr.RuleNode) interface{} {
 func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 	start, stop := getStartStop(node)
 
-	// Collect and interleave comments and whitespace before the node
-	beforeHiddenTokens := interleaveHiddenTokens(
-		getHiddenTokens(v.tokens, start, HiddenTokenDirectionBefore),
-	)
+	// Collect comments and whitespace before the node
+	beforeHiddenTokens := v.hiddenTokens(start, HiddenTokenDirectionBefore)
 
 	result := node.Accept(v)
 	if result == nil {
@@ -84,10 +172,8 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 		}
 	}
 
-	// Collect and interleave comments and whitespace after the node
-	afterHiddenTokens := interleaveHiddenTokens(
-		getHiddenTokens(v.tokens, stop, HiddenTokenDirectionAfter),
-	)
+	// Collect comments and whitespace after the node
+	afterHiddenTokens := v.hiddenTokens(stop, HiddenTokenDirectionAfter)
 
 	_ = afterHiddenTokens
 	if !handledEmptyBlock {
@@ -619,23 +705,6 @@ func getHiddenTokensBetween(tokens *antlr.CommonTokenStream, start, stop antlr.T
 		}
 	}
 	return whitespaceTokens, commentTokens
-}
-
-func getHiddenTokens(tokens *antlr.CommonTokenStream, token antlr.Token, direction HiddenTokenDirection) ([]antlr.Token, []antlr.Token) {
-	if token == nil || len(tokens.GetAllTokens()) == 0 {
-		return nil, nil
-	}
-
-	switch direction {
-	case HiddenTokenDirectionBefore:
-		return tokens.GetHiddenTokensToLeft(token.GetTokenIndex(), WHITESPACE_CHANNEL),
-			tokens.GetHiddenTokensToLeft(token.GetTokenIndex(), COMMENTS_CHANNEL)
-	case HiddenTokenDirectionAfter:
-		return tokens.GetHiddenTokensToRight(token.GetTokenIndex(), WHITESPACE_CHANNEL),
-			tokens.GetHiddenTokensToRight(token.GetTokenIndex(), COMMENTS_CHANNEL)
-	default:
-		return nil, nil
-	}
 }
 
 func getLeadingWhitespace(s string) string {

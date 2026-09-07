@@ -165,7 +165,7 @@ func (v *FormatVisitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclaration
 }
 
 func (v *FormatVisitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
-	if len(ctx.GetText()) > 40 {
+	if v.textLen(ctx) > 40 {
 		defer restoreWrap(wrap(v))
 	}
 	if ctx.Getter() != nil {
@@ -485,7 +485,7 @@ func (v *FormatVisitor) VisitAssignExpression(ctx *parser.AssignExpressionContex
 }
 
 func (v *FormatVisitor) VisitCondExpression(ctx *parser.CondExpressionContext) interface{} {
-	if len(ctx.Expression(0).GetText())+len(ctx.Expression(1).GetText())+len(ctx.Expression(2).GetText()) <= 60 {
+	if v.textLen(ctx.Expression(0))+v.textLen(ctx.Expression(1))+v.textLen(ctx.Expression(2)) <= 60 {
 		return fmt.Sprintf("%s ? %s : %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)), v.visitRule(ctx.Expression(2)))
 	}
 	return fmt.Sprintf("%s ?\n%s :\n%s", v.visitRule(ctx.Expression(0)),
@@ -495,7 +495,7 @@ func (v *FormatVisitor) VisitCondExpression(ctx *parser.CondExpressionContext) i
 
 func (v *FormatVisitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContext) interface{} {
 	i := NewChainVisitor()
-	if len(ctx.GetText()) < 40 {
+	if v.textLen(ctx) < 40 {
 		defer restoreWrap(unwrap(v))
 	} else if i.visitRule(ctx.Expression(0)).(int)+i.visitRule(ctx.Expression(1)).(int) > 2 {
 		defer restoreWrap(wrap(v))
@@ -508,7 +508,7 @@ func (v *FormatVisitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContex
 
 func (v *FormatVisitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext) interface{} {
 	i := NewChainVisitor()
-	if len(ctx.GetText()) < 40 {
+	if v.textLen(ctx) < 40 {
 		defer restoreWrap(unwrap(v))
 	} else if i.visitRule(ctx.Expression(0)).(int)+i.visitRule(ctx.Expression(1)).(int) > 2 {
 		defer restoreWrap(wrap(v))
@@ -563,10 +563,13 @@ func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext)
 	i := NewChainVisitor()
 	left := i.visitRule(ctx.Expression(0)).(int)
 	right := i.visitRule(ctx.Expression(1)).(int)
-	log.Debugf("LEFT %d: %s ", left, ctx.Expression(0).GetText())
-	log.Debugf("RIGHT %d: %s ", right, ctx.Expression(1).GetText())
-	log.Debugf("TEXT %d: %s ", len(ctx.GetText()), ctx.GetText())
-	wrap := v.wrap || (left+right > 2 && len(ctx.GetText()) > 40) || len(ctx.GetText()) > 60
+	textLen := v.textLen(ctx)
+	if log.IsLevelEnabled(log.DebugLevel) {
+		log.Debugf("LEFT %d: %s ", left, ctx.Expression(0).GetText())
+		log.Debugf("RIGHT %d: %s ", right, ctx.Expression(1).GetText())
+		log.Debugf("TEXT %d: %s ", textLen, ctx.GetText())
+	}
+	wrap := v.wrap || (left+right > 2 && textLen > 40) || textLen > 60
 	if wrap {
 		sep = "\n\t"
 		defer restoreWrap(unwrap(v))
@@ -599,7 +602,7 @@ func (v *FormatVisitor) VisitNewInstanceExpression(ctx *parser.NewInstanceExpres
 }
 
 func (v *FormatVisitor) VisitArrayExpression(ctx *parser.ArrayExpressionContext) interface{} {
-	if len(ctx.GetText()) < 20 {
+	if v.textLen(ctx) < 20 {
 		defer restoreWrap(unwrap(v))
 	}
 	return fmt.Sprintf("%s[%s]", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
@@ -608,7 +611,9 @@ func (v *FormatVisitor) VisitArrayExpression(ctx *parser.ArrayExpressionContext)
 func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) interface{} {
 	i := NewChainVisitor()
 	depth := i.visitRule(ctx.Expression()).(int)
-	log.Debugf("depth is %d: %s", depth, ctx.GetText())
+	if log.IsLevelEnabled(log.DebugLevel) {
+		log.Debugf("depth is %d: %s", depth, ctx.GetText())
+	}
 	if depth > 1 {
 		defer restoreWrap(wrap(v))
 	}
@@ -627,11 +632,15 @@ func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) int
 				log.Debugf("NOT wrapping after between %q (%T)", expr, ctx.Expression())
 			case *parser.DotExpressionContext:
 				if left.DotMethodCall() != nil {
-					log.Debugf("%q is method call; safe to wrap before %q", expr, ctx.DotMethodCall().GetText())
+					if log.IsLevelEnabled(log.DebugLevel) {
+						log.Debugf("%q is method call; safe to wrap before %q", expr, ctx.DotMethodCall().GetText())
+					}
 					return expr.(string) + "\n" + indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
 				}
 			default:
-				log.Debugf("Wrapping in between %q (%T) and %q", expr, ctx.Expression(), ctx.DotMethodCall().GetText())
+				if log.IsLevelEnabled(log.DebugLevel) {
+					log.Debugf("Wrapping in between %q (%T) and %q", expr, ctx.Expression(), ctx.DotMethodCall().GetText())
+				}
 				return expr.(string) + "\n" + indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
 			}
 		}
@@ -645,7 +654,9 @@ func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) int
 
 func (v *FormatVisitor) VisitDotMethodCall(ctx *parser.DotMethodCallContext) interface{} {
 	if v.wrap {
-		log.Debugf("Visitor says to wrap in VisitDotMethodCall; not wrapping individual expressions: %s", ctx.GetText())
+		if log.IsLevelEnabled(log.DebugLevel) {
+			log.Debugf("Visitor says to wrap in VisitDotMethodCall; not wrapping individual expressions: %s", ctx.GetText())
+		}
 		defer restoreWrap(unwrap(v))
 	}
 	expressionList := ""
@@ -656,7 +667,8 @@ func (v *FormatVisitor) VisitDotMethodCall(ctx *parser.DotMethodCallContext) int
 }
 
 func (v *FormatVisitor) VisitExpressionList(ctx *parser.ExpressionListContext) interface{} {
-	wrap := v.wrap || (len(ctx.GetText()) > 40 && len(ctx.AllExpression()) > 3) || len(ctx.GetText()) > 150
+	textLen := v.textLen(ctx)
+	wrap := v.wrap || (textLen > 40 && len(ctx.AllExpression()) > 3) || textLen > 150
 
 	expressions := []string{}
 	for i, p := range ctx.AllExpression() {
@@ -1502,7 +1514,7 @@ func (v *FormatVisitor) VisitSetCreatorRest(ctx *parser.SetCreatorRestContext) i
 	for _, i := range ctx.AllExpression() {
 		expressions = append(expressions, v.visitRule(i).(string))
 	}
-	if len(ctx.GetText()) > 50 {
+	if v.textLen(ctx) > 50 {
 		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(expressions, ",\n")))
 	}
 	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))
@@ -1525,7 +1537,7 @@ func (v *FormatVisitor) VisitArrayInitializer(ctx *parser.ArrayInitializerContex
 		}
 	}
 
-	wrap := v.wrap || len(ctx.GetText()) > 50 || (hasNestedInitializer && len(expressions) > 1)
+	wrap := v.wrap || v.textLen(ctx) > 50 || (hasNestedInitializer && len(expressions) > 1)
 	if wrap {
 		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(expressions, ",\n")))
 	}
@@ -1541,7 +1553,7 @@ func (v *FormatVisitor) VisitArguments(ctx *parser.ArgumentsContext) interface{}
 	if v.wrap {
 		log.Debug("Visitor says to wrap in VisitArguments")
 	}
-	if len(expressionList.GetText()) > 40 {
+	if v.textLen(expressionList) > 40 {
 		defer restoreWrap(wrap(v))
 		return fmt.Sprintf("(\n%s\n)", indent(v.visitRule(expressionList).(string)))
 	}
@@ -1572,7 +1584,7 @@ func (v *FormatVisitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {
 		types = append(types, v.visitRule(p).(string))
 	}
 	sep := ", "
-	if len(ctx.GetText()) > 80 {
+	if v.textLen(ctx) > 80 {
 		sep = ",\n"
 	}
 	return strings.Join(types, sep)
@@ -1584,7 +1596,8 @@ func (v *FormatVisitor) VisitFormalParameters(ctx *parser.FormalParametersContex
 	if list == nil {
 		return "()"
 	}
-	wrap := v.wrap || (len(ctx.GetText()) > 40 && len(list.AllFormalParameter()) > 2) || len(ctx.GetText()) > 60
+	textLen := v.textLen(ctx)
+	wrap := v.wrap || (textLen > 40 && len(list.AllFormalParameter()) > 2) || textLen > 60
 	for _, p := range list.AllFormalParameter() {
 		if wrap {
 			params = append(params, indent(v.visitRule(p).(string)))
