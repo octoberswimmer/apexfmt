@@ -29,6 +29,11 @@ Pre-built binaries for Linux, macOS, and Windows are also available on the
 $ apexfmt -w sfdx/main/default/classes/*.cls sfdx/main/default/triggers/*.trigger
 ```
 
+apexfmt sets the Go garbage collector target to 200 unless the `GOGC`
+environment variable is set, which cuts the CPU time spent formatting by about
+a third. Peak memory rises when many files are formatted at once; set
+`GOGC=100` to restore the runtime default.
+
 ## Vim
 
 apexfmt is included as a default formatter in [vim-autoformat](https://github.com/vim-autoformat/vim-autoformat/pull/394).
