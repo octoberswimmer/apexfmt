@@ -8,6 +8,13 @@ import (
 	"github.com/octoberswimmer/apexfmt/parser"
 )
 
+func testEngine(t *testing.T) *parser.ParserEngine {
+	t.Helper()
+	engine, release := parser.AcquireParserEngine()
+	t.Cleanup(release)
+	return engine
+}
+
 func tokenStream(src string) *antlr.CommonTokenStream {
 	lexer := parser.NewApexLexer(antlr.NewInputStream(src))
 	return antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
@@ -40,7 +47,7 @@ func Test_sll_prediction_accepts_unqualified_method_calls(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if _, ok := parseSLL(tokenStream(tt.src)); !ok {
+			if _, ok := parseSLL(testEngine(t), tokenStream(tt.src)); !ok {
 				t.Errorf("expected SLL prediction to parse %q", tt.src)
 			}
 		})
@@ -51,7 +58,7 @@ func Test_sll_prediction_accepts_unqualified_method_calls(t *testing.T) {
 // where the methodCall alternative is the wrong choice.
 func Test_sll_prediction_reports_failure_on_merge_with_parenthesized_duplicate(t *testing.T) {
 	src := "public class Test {\n\tvoid run(Account a, Account b) {\n\t\tmerge a (b);\n\t}\n}\n"
-	if _, ok := parseSLL(tokenStream(src)); ok {
+	if _, ok := parseSLL(testEngine(t), tokenStream(src)); ok {
 		t.Errorf("expected SLL prediction to fail on %q", src)
 	}
 }

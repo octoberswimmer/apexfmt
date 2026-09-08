@@ -108,10 +108,12 @@ func (f *Formatter) Format() error {
 	// statement such as "return name(arg);" or "super(arg);". When it
 	// stops at a syntax error, rewind the token stream and parse again with
 	// full LL prediction, which reports any real syntax errors.
-	parseTree, ok := parseSLL(stream)
+	engine, release := parser.AcquireParserEngine()
+	defer release()
+	parseTree, ok := parseSLL(engine, stream)
 	if !ok {
 		stream.Seek(0)
-		p := parser.NewApexParser(stream)
+		p := engine.NewApexParser(stream)
 		p.RemoveErrorListeners()
 		errListener := &errorListener{filename: f.filename}
 		p.AddErrorListener(errListener)
@@ -153,8 +155,8 @@ func (b *bailErrorStrategy) ReportError(_ antlr.Parser, _ antlr.RecognitionExcep
 // parseSLL parses the token stream with SLL prediction. It returns false when
 // the parser hit a syntax error, which may or may not be a real error in the
 // source; the caller must then parse again with LL prediction.
-func parseSLL(stream *antlr.CommonTokenStream) (parser.ICompilationUnitContext, bool) {
-	p := parser.NewApexParser(stream)
+func parseSLL(engine *parser.ParserEngine, stream *antlr.CommonTokenStream) (parser.ICompilationUnitContext, bool) {
+	p := engine.NewApexParser(stream)
 	p.RemoveErrorListeners()
 	strategy := &bailErrorStrategy{BailErrorStrategy: antlr.NewBailErrorStrategy()}
 	p.SetErrorHandler(strategy)
