@@ -99,6 +99,14 @@ func (v *BaseApexParserVisitor) VisitTypeRef(ctx *TypeRefContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseApexParserVisitor) VisitInstanceOfTypeRef(ctx *InstanceOfTypeRefContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseApexParserVisitor) VisitInstanceOfTypeName(ctx *InstanceOfTypeNameContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseApexParserVisitor) VisitArraySubscripts(ctx *ArraySubscriptsContext) interface{} {
 	return v.VisitChildren(ctx)
 }

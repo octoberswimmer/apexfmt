@@ -76,6 +76,12 @@ type ApexParserVisitor interface {
 	// Visit a parse tree produced by ApexParser#typeRef.
 	VisitTypeRef(ctx *TypeRefContext) interface{}
 
+	// Visit a parse tree produced by ApexParser#instanceOfTypeRef.
+	VisitInstanceOfTypeRef(ctx *InstanceOfTypeRefContext) interface{}
+
+	// Visit a parse tree produced by ApexParser#instanceOfTypeName.
+	VisitInstanceOfTypeName(ctx *InstanceOfTypeNameContext) interface{}
+
 	// Visit a parse tree produced by ApexParser#arraySubscripts.
 	VisitArraySubscripts(ctx *ArraySubscriptsContext) interface{}
 

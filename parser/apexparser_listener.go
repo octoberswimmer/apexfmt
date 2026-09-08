@@ -76,6 +76,12 @@ type ApexParserListener interface {
 	// EnterTypeRef is called when entering the typeRef production.
 	EnterTypeRef(c *TypeRefContext)
 
+	// EnterInstanceOfTypeRef is called when entering the instanceOfTypeRef production.
+	EnterInstanceOfTypeRef(c *InstanceOfTypeRefContext)
+
+	// EnterInstanceOfTypeName is called when entering the instanceOfTypeName production.
+	EnterInstanceOfTypeName(c *InstanceOfTypeNameContext)
+
 	// EnterArraySubscripts is called when entering the arraySubscripts production.
 	EnterArraySubscripts(c *ArraySubscriptsContext)
 
@@ -705,6 +711,12 @@ type ApexParserListener interface {
 
 	// ExitTypeRef is called when exiting the typeRef production.
 	ExitTypeRef(c *TypeRefContext)
+
+	// ExitInstanceOfTypeRef is called when exiting the instanceOfTypeRef production.
+	ExitInstanceOfTypeRef(c *InstanceOfTypeRefContext)
+
+	// ExitInstanceOfTypeName is called when exiting the instanceOfTypeName production.
+	ExitInstanceOfTypeName(c *InstanceOfTypeNameContext)
 
 	// ExitArraySubscripts is called when exiting the arraySubscripts production.
 	ExitArraySubscripts(c *ArraySubscriptsContext)

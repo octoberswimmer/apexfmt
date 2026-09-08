@@ -175,6 +175,23 @@ typeRef
     : typeName (DOT typeName)* arraySubscripts
     ;
 
+// instanceof is the one place a type is followed by expression operators.
+// Routing it through typeRef would put LT into the follow set of typeName,
+// so the "typeArguments?" decision in typeName could not tell "Foo<" apart
+// from a comparison without looking far ahead on every type name it parses.
+// These rules have the same shape as typeRef and typeName but are used only
+// here, so only they carry that follow set.
+instanceOfTypeRef
+    : instanceOfTypeName (DOT instanceOfTypeName)* arraySubscripts
+    ;
+
+instanceOfTypeName
+    : LIST typeArguments?
+    | SET typeArguments?
+    | MAP typeArguments?
+    | id typeArguments?
+    ;
+
 arraySubscripts
     : (LBRACK RBRACK)*
     ;
@@ -466,7 +483,7 @@ expression
     | expression (ADD|SUB) expression                                                                 # arth2Expression
     | expression (LT LT | GT GT GT | GT GT) expression                                                # bitExpression
     | expression (GT | LT) ASSIGN? expression                                                         # cmpExpression
-    | expression INSTANCEOF typeRef                                                                   # instanceOfExpression
+    | expression INSTANCEOF instanceOfTypeRef                                                         # instanceOfExpression
     | expression (TRIPLEEQUAL | TRIPLENOTEQUAL | EQUAL | NOTEQUAL | LESSANDGREATER ) expression       # equalityExpression
     | expression BITAND expression                                                                    # bitAndExpression
     | expression CARET expression                                                                     # bitNotExpression

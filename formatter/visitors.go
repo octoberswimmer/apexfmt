@@ -1574,7 +1574,31 @@ func (v *FormatVisitor) VisitEqualityExpression(ctx *parser.EqualityExpressionCo
 }
 
 func (v *FormatVisitor) VisitInstanceOfExpression(ctx *parser.InstanceOfExpressionContext) interface{} {
-	return v.visitRule(ctx.Expression()).(string) + " instanceof " + v.visitRule(ctx.TypeRef()).(string)
+	return v.visitRule(ctx.Expression()).(string) + " instanceof " + v.visitRule(ctx.InstanceOfTypeRef()).(string)
+}
+
+// instanceOfTypeRef and instanceOfTypeName have the shape of typeRef and
+// typeName and are formatted the same way.
+func (v *FormatVisitor) VisitInstanceOfTypeRef(ctx *parser.InstanceOfTypeRefContext) interface{} {
+	typeNames := []string{}
+	for _, t := range ctx.AllInstanceOfTypeName() {
+		typeNames = append(typeNames, v.visitRule(t).(string))
+	}
+	return strings.Join(typeNames, ".") + ctx.ArraySubscripts().GetText()
+}
+
+func (v *FormatVisitor) VisitInstanceOfTypeName(ctx *parser.InstanceOfTypeNameContext) interface{} {
+	typeName := ""
+	if id := ctx.Id(); id != nil {
+		typeName = v.visitRule(id).(string)
+	} else {
+		typeName = ctx.GetChild(0).(antlr.TerminalNode).GetText()
+	}
+	typeArguments := ""
+	if args := ctx.TypeArguments(); args != nil {
+		typeArguments = v.visitRule(args).(string)
+	}
+	return typeName + typeArguments
 }
 
 func (v *FormatVisitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {

@@ -160,6 +160,18 @@ func (s *BaseApexParserListener) EnterTypeRef(ctx *TypeRefContext) {}
 // ExitTypeRef is called when production typeRef is exited.
 func (s *BaseApexParserListener) ExitTypeRef(ctx *TypeRefContext) {}
 
+// EnterInstanceOfTypeRef is called when production instanceOfTypeRef is entered.
+func (s *BaseApexParserListener) EnterInstanceOfTypeRef(ctx *InstanceOfTypeRefContext) {}
+
+// ExitInstanceOfTypeRef is called when production instanceOfTypeRef is exited.
+func (s *BaseApexParserListener) ExitInstanceOfTypeRef(ctx *InstanceOfTypeRefContext) {}
+
+// EnterInstanceOfTypeName is called when production instanceOfTypeName is entered.
+func (s *BaseApexParserListener) EnterInstanceOfTypeName(ctx *InstanceOfTypeNameContext) {}
+
+// ExitInstanceOfTypeName is called when production instanceOfTypeName is exited.
+func (s *BaseApexParserListener) ExitInstanceOfTypeName(ctx *InstanceOfTypeNameContext) {}
+
 // EnterArraySubscripts is called when production arraySubscripts is entered.
 func (s *BaseApexParserListener) EnterArraySubscripts(ctx *ArraySubscriptsContext) {}
 
