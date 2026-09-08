@@ -33,6 +33,31 @@ func referenceRemoveIndentationFromComment(comment string) string {
 	return regexp.MustCompile(`(?s)^(\s*)(\S)`).ReplaceAllString(unindented, "$1"+strings.Repeat("\t", leadingTabs)+"$2")
 }
 
+var (
+	referenceSpacePaddedMultilineComment  = regexp.MustCompile(`(` + "￻\n*\t*" + `) +`)
+	referenceIndentInjectedNewlines       = regexp.MustCompile("￻\n+")
+	referenceDoubleCapturedNewlines       = regexp.MustCompile("\n(￻\t*￺\n)")
+	referenceNewlinePrefixedInlineComment = regexp.MustCompile("\n\t*￹\n")
+	referenceWhitespaceInBraces           = regexp.MustCompile(`(?s){\n+}`)
+)
+
+// referenceRemoveExtraCommentIndentation is the cleanup as it was written
+// with package regexp, kept as the reference for the whole pipeline.
+func referenceRemoveExtraCommentIndentation(input string) string {
+	input = referenceNewlinePrefixedMultilineComment.ReplaceAllString(input, "$1")
+	input = referenceIndentedInlineComment.ReplaceAllString(input, "$1￺$2")
+	input = referenceSpacePaddedMultilineComment.ReplaceAllString(input, "$1")
+	input = referenceIndentInjectedNewlines.ReplaceAllString(input, "￻\n")
+	input = strings.ReplaceAll(input, "\n￻\n", "\n￻")
+	input = referenceDoubleCapturedNewlines.ReplaceAllString(input, "$1")
+	input = referenceNewlinePrefixedInlineComment.ReplaceAllString(input, "￹\n")
+	input = referenceTabPrefixedInlineComment.ReplaceAllString(input, "$1￹")
+	input = strings.ReplaceAll(input, " ￹ ", "￹ ")
+	input = referenceInlineCommentPattern.ReplaceAllString(input, "$1")
+	input = referenceWhitespaceInBraces.ReplaceAllString(input, "{}")
+	return referenceMultilineCommentPattern.ReplaceAllStringFunc(input, referenceRemoveIndentationFromComment)
+}
+
 var cleanupPasses = []struct {
 	name      string
 	reference func(string) string
@@ -57,6 +82,36 @@ var cleanupPasses = []struct {
 		name:      "inline comment markers",
 		reference: func(s string) string { return referenceInlineCommentPattern.ReplaceAllString(s, "$1") },
 		scan:      removeInlineCommentMarkers,
+	},
+	{
+		name:      "spaces after comment end",
+		reference: func(s string) string { return referenceSpacePaddedMultilineComment.ReplaceAllString(s, "$1") },
+		scan:      removeSpacesAfterCommentEnd,
+	},
+	{
+		name:      "newlines after comment end",
+		reference: func(s string) string { return referenceIndentInjectedNewlines.ReplaceAllString(s, "￻\n") },
+		scan:      collapseNewlinesAfterCommentEnd,
+	},
+	{
+		name:      "newline before adjacent comments",
+		reference: func(s string) string { return referenceDoubleCapturedNewlines.ReplaceAllString(s, "$1") },
+		scan:      removeNewlineBeforeAdjacentComments,
+	},
+	{
+		name:      "newline before inline comment line",
+		reference: func(s string) string { return referenceNewlinePrefixedInlineComment.ReplaceAllString(s, "￹\n") },
+		scan:      removeNewlineBeforeInlineCommentLine,
+	},
+	{
+		name:      "newlines in empty braces",
+		reference: func(s string) string { return referenceWhitespaceInBraces.ReplaceAllString(s, "{}") },
+		scan:      removeNewlinesInEmptyBraces,
+	},
+	{
+		name:      "whole cleanup",
+		reference: referenceRemoveExtraCommentIndentation,
+		scan:      removeExtraCommentIndentation,
 	},
 	{
 		name: "multiline comments",
@@ -87,6 +142,12 @@ func Test_comment_cleanup_scans_match_the_regexp_forms(t *testing.T) {
 		"{\n\n\t￹// c\n￻\n}",
 		"￻\t￺x",
 		"\n\t￺\n\t\t * b￻",
+		"￻\n\n\t  x",
+		"￻\n\n\n",
+		"a\n￻\t￺\nb\n￻￺\n",
+		"x;\n\t\t￹// c\n￻",
+		"{\n\n}\n{\n}{}",
+		"￻ \t ",
 	}
 	r := rand.New(rand.NewSource(1))
 	for i := 0; i < 20000; i++ {

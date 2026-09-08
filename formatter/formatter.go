@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"regexp"
 	"strings"
 	"unicode/utf8"
 
@@ -272,10 +271,48 @@ func isWordCommaOrBrace(c byte) bool {
 		(c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
 }
 
+// editor applies deletions and replacements to a string, copying it only once
+// the first edit is made and returning the original string when there are no
+// edits. Every cleanup pass over the formatted output uses it, so a pass that
+// finds nothing to change costs a scan and no allocation.
+type editor struct {
+	s       string
+	b       strings.Builder
+	pos     int
+	changed bool
+}
+
+func newEditor(s string) *editor {
+	return &editor{s: s}
+}
+
+// replace substitutes with for s[from:to]. Edits must be made in order.
+func (e *editor) replace(from, to int, with string) {
+	if !e.changed {
+		e.changed = true
+		e.b.Grow(len(e.s))
+	}
+	e.b.WriteString(e.s[e.pos:from])
+	e.b.WriteString(with)
+	e.pos = to
+}
+
+func (e *editor) cut(from, to int) {
+	e.replace(from, to, "")
+}
+
+func (e *editor) String() string {
+	if !e.changed {
+		return e.s
+	}
+	e.b.WriteString(e.s[e.pos:])
+	return e.b.String()
+}
+
 // removeNewlinesBeforeCommentStart removes newlines and spaces that precede
 // the tabs before a comment start marker.
 func removeNewlinesBeforeCommentStart(s string) string {
-	var b strings.Builder
+	e := newEditor(s)
 	pos := 0
 	for {
 		m := nextMarker(s, pos, multilineCommentStart, inlineCommentStart)
@@ -290,15 +327,12 @@ func removeNewlinesBeforeCommentStart(s string) string {
 		for w > pos && (s[w-1] == '\n' || s[w-1] == ' ') {
 			w--
 		}
-		b.WriteString(s[pos:w])
-		b.WriteString(s[t : m+markerLen])
+		if w < t {
+			e.cut(w, t)
+		}
 		pos = m + markerLen
 	}
-	if pos == 0 {
-		return s
-	}
-	b.WriteString(s[pos:])
-	return b.String()
+	return e.String()
 }
 
 // removeTabsBeforeIndentedMultilineComment removes the tabs between a
@@ -308,7 +342,7 @@ func removeNewlinesBeforeCommentStart(s string) string {
 // character before the run of tabs does not qualify, the first tab of a run
 // of two or more takes its place and stays.
 func removeTabsBeforeIndentedMultilineComment(s string) string {
-	var b strings.Builder
+	e := newEditor(s)
 	pos := 0
 	// The character after the marker belongs to the previous match, so the
 	// next match cannot begin before it.
@@ -329,33 +363,132 @@ func removeTabsBeforeIndentedMultilineComment(s string) string {
 			if t > guard {
 				prev, _ = utf8.DecodeLastRuneInString(s[:t])
 			}
-			if t > guard && prev != '\n' && prev != '\uFFFB' {
+			if t > guard && prev != '\n' && prev != '￻' {
 				keep = t
 			} else if m-t >= 2 {
 				keep = t + 1
 			}
 		}
 		if keep >= 0 {
-			b.WriteString(s[pos:keep])
-			b.WriteString(multilineCommentStart)
+			e.cut(keep, m)
 			_, size := utf8.DecodeRuneInString(s[next:])
 			guard = next + size
-		} else {
-			b.WriteString(s[pos:next])
 		}
 		pos = next
 	}
-	if pos == 0 {
-		return s
+	return e.String()
+}
+
+// removeSpacesAfterCommentEnd removes the spaces that follow a comment end
+// marker and any newlines and tabs after it, as the regexp
+// "(￻\n*\t*) +" replaced with "$1" did.
+func removeSpacesAfterCommentEnd(s string) string {
+	e := newEditor(s)
+	pos := 0
+	for {
+		m := nextMarker(s, pos, commentEnd)
+		if m < 0 {
+			break
+		}
+		i := m + markerLen
+		for i < len(s) && s[i] == '\n' {
+			i++
+		}
+		for i < len(s) && s[i] == '\t' {
+			i++
+		}
+		j := i
+		for j < len(s) && s[j] == ' ' {
+			j++
+		}
+		if j > i {
+			e.cut(i, j)
+		}
+		pos = j
 	}
-	b.WriteString(s[pos:])
-	return b.String()
+	return e.String()
+}
+
+// collapseNewlinesAfterCommentEnd keeps one newline of a run that follows a
+// comment end marker, as the regexp "￻\n+" replaced with "￻\n" did.
+func collapseNewlinesAfterCommentEnd(s string) string {
+	e := newEditor(s)
+	pos := 0
+	for {
+		m := nextMarker(s, pos, commentEnd)
+		if m < 0 {
+			break
+		}
+		i := m + markerLen
+		j := i
+		for j < len(s) && s[j] == '\n' {
+			j++
+		}
+		if j-i >= 2 {
+			e.cut(i+1, j)
+		}
+		pos = j
+	}
+	return e.String()
+}
+
+// removeNewlineBeforeAdjacentComments removes the newline before a comment
+// end marker that is followed, after tabs, by a multi-line comment start
+// marker and a newline, as the regexp "\n(￻\t*￺\n)" replaced with
+// "$1" did.
+func removeNewlineBeforeAdjacentComments(s string) string {
+	e := newEditor(s)
+	pos := 0
+	for {
+		m := nextMarker(s, pos, commentEnd)
+		if m < 0 {
+			break
+		}
+		next := m + markerLen
+		i := next
+		for i < len(s) && s[i] == '\t' {
+			i++
+		}
+		if m > pos && s[m-1] == '\n' && strings.HasPrefix(s[i:], multilineCommentStart) && i+markerLen < len(s) && s[i+markerLen] == '\n' {
+			e.cut(m-1, m)
+			pos = i + markerLen + 1
+			continue
+		}
+		pos = next
+	}
+	return e.String()
+}
+
+// removeNewlineBeforeInlineCommentLine removes the newline and tabs before an
+// inline comment start marker that ends its line, as the regexp
+// "\n\t*￹\n" replaced with "￹\n" did.
+func removeNewlineBeforeInlineCommentLine(s string) string {
+	e := newEditor(s)
+	pos := 0
+	for {
+		m := nextMarker(s, pos, inlineCommentStart)
+		if m < 0 {
+			break
+		}
+		next := m + markerLen
+		t := m
+		for t > pos && s[t-1] == '\t' {
+			t--
+		}
+		if t > pos && s[t-1] == '\n' && next < len(s) && s[next] == '\n' {
+			e.cut(t-1, m)
+			pos = next + 1
+			continue
+		}
+		pos = next
+	}
+	return e.String()
 }
 
 // removeTabsBeforeInlineComment removes the tabs between an inline comment
 // start marker and a preceding word character, comma or opening brace.
 func removeTabsBeforeInlineComment(s string) string {
-	var b strings.Builder
+	e := newEditor(s)
 	pos := 0
 	for {
 		m := nextMarker(s, pos, inlineCommentStart)
@@ -367,81 +500,82 @@ func removeTabsBeforeInlineComment(s string) string {
 			t--
 		}
 		if t < m && t > pos && isWordCommaOrBrace(s[t-1]) {
-			b.WriteString(s[pos:t])
-		} else {
-			b.WriteString(s[pos:m])
+			e.cut(t, m)
 		}
-		b.WriteString(inlineCommentStart)
 		pos = m + markerLen
 	}
-	if pos == 0 {
-		return s
-	}
-	b.WriteString(s[pos:])
-	return b.String()
+	return e.String()
 }
 
 // removeInlineCommentMarkers removes each inline comment start marker together
 // with the next comment end marker.
 func removeInlineCommentMarkers(s string) string {
-	var b strings.Builder
+	e := newEditor(s)
 	pos := 0
 	for {
 		m := nextMarker(s, pos, inlineCommentStart)
 		if m < 0 {
 			break
 		}
-		e := nextMarker(s, m+markerLen, commentEnd)
-		if e < 0 {
+		end := nextMarker(s, m+markerLen, commentEnd)
+		if end < 0 {
 			break
 		}
-		b.WriteString(s[pos:m])
-		b.WriteString(s[m+markerLen : e])
-		pos = e + markerLen
+		e.cut(m, m+markerLen)
+		e.cut(end, end+markerLen)
+		pos = end + markerLen
 	}
-	if pos == 0 {
-		return s
+	return e.String()
+}
+
+// removeNewlinesInEmptyBraces turns a brace pair holding only newlines into
+// "{}", as the regexp "{\n+}" did.
+func removeNewlinesInEmptyBraces(s string) string {
+	e := newEditor(s)
+	pos := 0
+	for {
+		i := strings.IndexByte(s[pos:], '{')
+		if i < 0 {
+			break
+		}
+		i += pos
+		j := i + 1
+		for j < len(s) && s[j] == '\n' {
+			j++
+		}
+		if j > i+1 && j < len(s) && s[j] == '}' {
+			e.cut(i+1, j)
+			pos = j + 1
+			continue
+		}
+		pos = i + 1
 	}
-	b.WriteString(s[pos:])
-	return b.String()
+	return e.String()
 }
 
 // restoreMultilineComments applies removeIndentationFromComment to each
 // multi-line comment, including the tabs that indent it.
 func restoreMultilineComments(s string) string {
-	var b strings.Builder
+	e := newEditor(s)
 	pos := 0
 	for {
 		m := nextMarker(s, pos, multilineCommentStart)
 		if m < 0 {
 			break
 		}
-		e := nextMarker(s, m+markerLen, commentEnd)
-		if e < 0 {
+		end := nextMarker(s, m+markerLen, commentEnd)
+		if end < 0 {
 			break
 		}
 		t := m
 		for t > pos && s[t-1] == '\t' {
 			t--
 		}
-		b.WriteString(s[pos:t])
-		b.WriteString(removeIndentationFromComment(s[t : e+markerLen]))
-		pos = e + markerLen
+		e.replace(t, end+markerLen, removeIndentationFromComment(s[t:end+markerLen]))
+		pos = end + markerLen
 	}
-	if pos == 0 {
-		return s
-	}
-	b.WriteString(s[pos:])
-	return b.String()
+	return e.String()
 }
-
-var (
-	spacePaddedMultilineComment  = regexp.MustCompile(`(` + "\uFFFB\n*\t*" + `) +`)
-	indentInjectedNewlines       = regexp.MustCompile("\uFFFB\n+")
-	doubleCapturedNewlines       = regexp.MustCompile("\n(\uFFFB\t*\uFFFA\n)")
-	newlinePrefixedInlineComment = regexp.MustCompile("\n\t*\uFFF9\n")
-	whitespaceInBraces           = regexp.MustCompile(`(?s){\n+}`)
-)
 
 // removeExtraCommentIndentation cleans up the formatting of comments after the
 // formatter has run.
@@ -459,36 +593,25 @@ var (
 // formatter runs. This code cleans up the whitespace and removes the comment
 // delimiters.
 //
-// The passes that would need a regexp without a literal prefix are written as
-// scans for the marker instead; package regexp tries such a pattern at every
-// position of the input.
+// Each pass scans for the marker it concerns and copies the output only when
+// it changes something; package regexp would copy the output twice per pass
+// whether or not a pattern matched.
 func removeExtraCommentIndentation(input string) string {
 	if strings.IndexByte(input, markerFirstByte) < 0 {
 		// No comments: only the brace cleanup applies.
-		return whitespaceInBraces.ReplaceAllString(input, "{}")
+		return removeNewlinesInEmptyBraces(input)
 	}
 	input = removeNewlinesBeforeCommentStart(input)
 	input = removeTabsBeforeIndentedMultilineComment(input)
-	input = spacePaddedMultilineComment.ReplaceAllString(input, "$1")
-	input = indentInjectedNewlines.ReplaceAllString(input, "\uFFFB\n")
-
-	// Simple string replacements are faster than regex for exact matches
-	input = strings.ReplaceAll(input, "\n\uFFFB\n", "\n\uFFFB")
-
-	input = doubleCapturedNewlines.ReplaceAllString(input, "$1")
-	input = newlinePrefixedInlineComment.ReplaceAllString(input, "\uFFF9\n")
+	input = removeSpacesAfterCommentEnd(input)
+	input = collapseNewlinesAfterCommentEnd(input)
+	input = strings.ReplaceAll(input, "\n￻\n", "\n￻")
+	input = removeNewlineBeforeAdjacentComments(input)
+	input = removeNewlineBeforeInlineCommentLine(input)
 	input = removeTabsBeforeInlineComment(input)
-
-	// Simple string replacement
-	input = strings.ReplaceAll(input, " \uFFF9 ", "\uFFF9 ")
-
-	// Remove inline comment delimiters
+	input = strings.ReplaceAll(input, " ￹ ", "￹ ")
 	input = removeInlineCommentMarkers(input)
-
-	// Remove newlines in braces
-	input = whitespaceInBraces.ReplaceAllString(input, "{}")
-
-	// Restore formatting of indented multi-line comments
+	input = removeNewlinesInEmptyBraces(input)
 	return restoreMultilineComments(input)
 }
 
