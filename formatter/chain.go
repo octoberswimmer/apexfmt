@@ -156,11 +156,7 @@ func (v *ChainVisitor) VisitLogicalExpression(ctx *parser.LogicalExpressionConte
 func (v *ChainVisitor) VisitConditionalExpression(ctx *parser.ConditionalExpressionContext) interface{} {
 	switch {
 	case ctx.LogicalExpression() != nil:
-		// This branch formatted the nested count with fmt.Sprintf("(%s)"),
-		// which produced a string that visitRule coerces to 0, so a
-		// parenthesized logical expression has never contributed to the
-		// count. Keep that so wrapping decisions do not change.
-		return 0
+		return v.visitRule(ctx.LogicalExpression())
 	case ctx.FieldExpression() != nil:
 		return v.visitRule(ctx.FieldExpression())
 	}

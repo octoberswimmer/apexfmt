@@ -32,6 +32,21 @@ func TestSOQL(t *testing.T) {
 		Account.Name
 ]`},
 			{
+				`[SELECT Id FROM Account WHERE (Name = 'a' OR Name = 'b' OR Name = 'c') AND Industry = 'x']`,
+				`[
+	SELECT
+		Id
+	FROM
+		Account
+	WHERE
+		(
+			Name = 'a' OR
+			Name = 'b' OR
+			Name = 'c'
+		) AND
+		Industry = 'x'
+]`},
+			{
 				`[SELECT Account.Name, count(Id) FROM Contact GROUP BY Account.Name HAVING COUNT(Id) > 10]`,
 				`[
 	SELECT

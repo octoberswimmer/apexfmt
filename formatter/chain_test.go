@@ -69,6 +69,10 @@ WHERE
 			Location__c != null AND
 			Start__c = YESTERDAY
 		)`, 8},
+		// A parenthesized first condition counts its own conditions and
+		// operators: one for the select list, one for the FROM clause, one
+		// for the AND, and two ORs plus one condition inside the parentheses.
+		{`SELECT Id FROM Account WHERE (Name = 'a' OR Name = 'b' OR Name = 'c') AND Industry = 'x'`, 6},
 	}
 	for _, tt := range tests {
 		input := antlr.NewInputStream(tt.input)
