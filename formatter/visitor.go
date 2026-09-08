@@ -167,7 +167,7 @@ func (v *FormatVisitor) visitRule(node antlr.RuleNode) interface{} {
 			tokenText = strings.TrimRight(tokenText[:len(tokenText)-len("\uFFFB")], " \t\n") + "\uFFFB"
 		}
 		if strings.TrimSpace(tokenText) != "" {
-			result = fmt.Sprintf("{\n%s\n}", indent(tokenText))
+			result = "{\n" + indent(tokenText) + "\n}"
 			handledEmptyBlock = true
 		}
 	}
@@ -632,7 +632,7 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 					trailing = " "
 				}
 
-				text = fmt.Sprintf("%s%s%s", leading, text, trailing)
+				text = leading + text + trailing
 				log.Tracef("NORMALIZED COMMENT: %q\n", text)
 				if containsNewline {
 					text = "\uFFFA" + text + "\uFFFB" + "\n"
@@ -657,9 +657,9 @@ func appendHiddenTokens(v *FormatVisitor, result interface{}, tokens []antlr.Tok
 		tokenText := strings.Join(tokenLines, "")
 		switch position {
 		case PositionBefore:
-			result = fmt.Sprintf("%s%s", tokenText, result)
+			result = tokenText + result.(string)
 		case PositionAfter:
-			result = fmt.Sprintf("%s%s", result, tokenText)
+			result = result.(string) + tokenText
 		}
 	}
 

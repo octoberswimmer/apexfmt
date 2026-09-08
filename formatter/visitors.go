@@ -16,25 +16,25 @@ func (v *FormatVisitor) VisitCompilationUnit(ctx *parser.CompilationUnitContext)
 	t := ctx.TypeDeclaration()
 	switch {
 	case t.ClassDeclaration() != nil:
-		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.ClassDeclaration()).(string))
+		return v.Modifiers(t.AllModifier()) + v.visitRule(t.ClassDeclaration()).(string)
 	case t.InterfaceDeclaration() != nil:
-		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.InterfaceDeclaration()).(string))
+		return v.Modifiers(t.AllModifier()) + v.visitRule(t.InterfaceDeclaration()).(string)
 	case t.EnumDeclaration() != nil:
-		return fmt.Sprintf("%s%s", v.Modifiers(t.AllModifier()), v.visitRule(t.EnumDeclaration()).(string))
+		return v.Modifiers(t.AllModifier()) + v.visitRule(t.EnumDeclaration()).(string)
 	}
 	return ""
 }
 
 func (v *FormatVisitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
 	var class strings.Builder
-	class.WriteString(fmt.Sprintf("class %s", v.visitRule(ctx.Id())))
+	class.WriteString("class " + v.visitRule(ctx.Id()).(string))
 	if ctx.EXTENDS() != nil {
-		class.WriteString(fmt.Sprintf(" extends %s", v.visitRule(ctx.TypeRef())))
+		class.WriteString(" extends " + v.visitRule(ctx.TypeRef()).(string))
 	}
 	if ctx.IMPLEMENTS() != nil {
-		class.WriteString(fmt.Sprintf(" implements %s", v.visitRule(ctx.TypeList())))
+		class.WriteString(" implements " + v.visitRule(ctx.TypeList()).(string))
 	}
-	class.WriteString(fmt.Sprintf(" %s", v.visitRule(ctx.ClassBody()).(string)))
+	class.WriteString(" " + v.visitRule(ctx.ClassBody()).(string))
 	return class.String()
 }
 
@@ -43,9 +43,9 @@ func (v *FormatVisitor) VisitTriggerUnit(ctx *parser.TriggerUnitContext) interfa
 	for _, t := range ctx.AllTriggerCase() {
 		triggerCases = append(triggerCases, v.visitRule(t).(string))
 	}
-	return fmt.Sprintf("trigger %s on %s (%s) %s", v.visitRule(ctx.Id(0)), v.visitRule(ctx.Id(1)),
-		strings.Join(triggerCases, ", "),
-		v.visitRule(ctx.TriggerBlock()))
+	return "trigger " + v.visitRule(ctx.Id(0)).(string) + " on " + v.visitRule(ctx.Id(1)).(string) + " (" +
+		strings.Join(triggerCases, ", ") + ") " +
+		v.visitRule(ctx.TriggerBlock()).(string)
 }
 
 func (v *FormatVisitor) VisitTriggerBlock(ctx *parser.TriggerBlockContext) interface{} {
@@ -53,7 +53,7 @@ func (v *FormatVisitor) VisitTriggerBlock(ctx *parser.TriggerBlockContext) inter
 	for _, stmt := range ctx.AllTriggerStatement() {
 		statements = append(statements, v.visitRule(stmt).(string))
 	}
-	return fmt.Sprintf("{\n%s\n}", indent(strings.Join(statements, "\n")))
+	return "{\n" + indent(strings.Join(statements, "\n")) + "\n}"
 }
 
 func (v *FormatVisitor) VisitTriggerStatement(ctx *parser.TriggerStatementContext) interface{} {
@@ -61,21 +61,21 @@ func (v *FormatVisitor) VisitTriggerStatement(ctx *parser.TriggerStatementContex
 }
 
 func (v *FormatVisitor) VisitTriggerCase(ctx *parser.TriggerCaseContext) interface{} {
-	return fmt.Sprintf("%s %s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), ctx.GetChild(1).(antlr.TerminalNode).GetText())
+	return ctx.GetChild(0).(antlr.TerminalNode).GetText() + " " + ctx.GetChild(1).(antlr.TerminalNode).GetText()
 }
 
 func (v *FormatVisitor) VisitEnumDeclaration(ctx *parser.EnumDeclarationContext) interface{} {
 	if ctx.EnumConstants() == nil {
-		return fmt.Sprintf("enum %s {}", v.visitRule(ctx.Id()).(string))
+		return "enum " + v.visitRule(ctx.Id()).(string) + " {}"
 	}
 	enumConstants := v.visitRule(ctx.EnumConstants()).(string)
 	if strings.Contains(enumConstants, "\n") {
-		return fmt.Sprintf("enum %s {\n%s\n}", v.visitRule(ctx.Id()), indent(enumConstants))
+		return "enum " + v.visitRule(ctx.Id()).(string) + " {\n" + indent(enumConstants) + "\n}"
 	}
 	if v.wrap {
-		return fmt.Sprintf("enum %s {\n%s\n}", v.visitRule(ctx.Id()), indent(enumConstants))
+		return "enum " + v.visitRule(ctx.Id()).(string) + " {\n" + indent(enumConstants) + "\n}"
 	}
-	return fmt.Sprintf("enum %s { %s }", v.visitRule(ctx.Id()), enumConstants)
+	return "enum " + v.visitRule(ctx.Id()).(string) + " { " + enumConstants + " }"
 }
 
 func (v *FormatVisitor) VisitEnumConstants(ctx *parser.EnumConstantsContext) interface{} {
@@ -92,9 +92,9 @@ func (v *FormatVisitor) VisitEnumConstants(ctx *parser.EnumConstantsContext) int
 func (v *FormatVisitor) VisitInterfaceDeclaration(ctx *parser.InterfaceDeclarationContext) interface{} {
 	extends := ""
 	if ctx.EXTENDS() != nil {
-		extends = fmt.Sprintf(" extends %s ", v.visitRule(ctx.TypeList()))
+		extends = " extends " + v.visitRule(ctx.TypeList()).(string) + " "
 	}
-	return fmt.Sprintf("interface %s%s {\n%s\n}", ctx.Id().GetText(), extends, indent(v.visitRule(ctx.InterfaceBody()).(string)))
+	return "interface " + ctx.Id().GetText() + extends + " {\n" + indent(v.visitRule(ctx.InterfaceBody()).(string)) + "\n}"
 }
 
 func (v *FormatVisitor) VisitInterfaceBody(ctx *parser.InterfaceBodyContext) interface{} {
@@ -114,7 +114,7 @@ func (v *FormatVisitor) VisitClassBody(ctx *parser.ClassBodyContext) interface{}
 	for _, b := range declarations {
 		cb = append(cb, v.visitRule(b).(string))
 	}
-	return fmt.Sprintf("{\n%s\n}", indent(strings.Join(cb, "\n")))
+	return "{\n" + indent(strings.Join(cb, "\n")) + "\n}"
 }
 
 func (v *FormatVisitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarationContext) interface{} {
@@ -126,9 +126,9 @@ func (v *FormatVisitor) VisitClassBodyDeclaration(ctx *parser.ClassBodyDeclarati
 		if ctx.STATIC() != nil {
 			static = "static "
 		}
-		return fmt.Sprintf("%s%s", static, v.visitRule(ctx.Block()).(string))
+		return static + v.visitRule(ctx.Block()).(string)
 	case ctx.MemberDeclaration() != nil:
-		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
+		return v.Modifiers(ctx.AllModifier()) + v.visitRule(ctx.MemberDeclaration()).(string)
 	}
 	return ""
 }
@@ -142,11 +142,11 @@ func (v *FormatVisitor) VisitInterfaceMethodDeclaration(ctx *parser.InterfaceMet
 	if ctx.TypeRef() != nil {
 		returnType = v.visitRule(ctx.TypeRef()).(string)
 	}
-	return fmt.Sprintf("%s%s %s%s;", v.Modifiers(ctx.AllModifier()), returnType, ctx.MethodId().GetText(), v.visitRule(ctx.FormalParameters()))
+	return v.Modifiers(ctx.AllModifier()) + returnType + " " + ctx.MethodId().GetText() + v.visitRule(ctx.FormalParameters()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitFieldDeclaration(ctx *parser.FieldDeclarationContext) interface{} {
-	return fmt.Sprintf("%s %s;", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.VariableDeclarators()))
+	return v.visitRule(ctx.TypeRef()).(string) + " " + v.visitRule(ctx.VariableDeclarators()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclarationContext) interface{} {
@@ -158,10 +158,10 @@ func (v *FormatVisitor) VisitPropertyDeclaration(ctx *parser.PropertyDeclaration
 	}
 	// Flatten empty getter/setter
 	if len(strings.Join(propertyBlocks, "")) == 8 {
-		return fmt.Sprintf("%s %s {%s}", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), strings.Join(propertyBlocks, " "))
+		return v.visitRule(ctx.TypeRef()).(string) + " " + ctx.Id().GetText() + " {" + strings.Join(propertyBlocks, " ") + "}"
 	}
 	sep := "\n"
-	return fmt.Sprintf("%s %s {%s%s%s}", v.visitRule(ctx.TypeRef()), ctx.Id().GetText(), sep, indent(strings.Join(propertyBlocks, sep)), sep)
+	return v.visitRule(ctx.TypeRef()).(string) + " " + ctx.Id().GetText() + " {" + sep + indent(strings.Join(propertyBlocks, sep)) + sep + "}"
 }
 
 func (v *FormatVisitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) interface{} {
@@ -169,9 +169,9 @@ func (v *FormatVisitor) VisitPropertyBlock(ctx *parser.PropertyBlockContext) int
 		defer restoreWrap(wrap(v))
 	}
 	if ctx.Getter() != nil {
-		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.Getter()))
+		return v.Modifiers(ctx.AllModifier()) + v.visitRule(ctx.Getter()).(string)
 	} else {
-		return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.Setter()))
+		return v.Modifiers(ctx.AllModifier()) + v.visitRule(ctx.Setter()).(string)
 	}
 }
 
@@ -179,7 +179,7 @@ func (v *FormatVisitor) VisitGetter(ctx *parser.GetterContext) interface{} {
 	if ctx.SEMI() != nil {
 		return "get;"
 	} else {
-		return fmt.Sprintf("get %s", v.visitRule(ctx.Block()))
+		return "get " + v.visitRule(ctx.Block()).(string)
 	}
 }
 
@@ -187,12 +187,12 @@ func (v *FormatVisitor) VisitSetter(ctx *parser.SetterContext) interface{} {
 	if ctx.SEMI() != nil {
 		return "set;"
 	} else {
-		return fmt.Sprintf("set %s", v.visitRule(ctx.Block()))
+		return "set " + v.visitRule(ctx.Block()).(string)
 	}
 }
 
 func (v *FormatVisitor) VisitConstructorDeclaration(ctx *parser.ConstructorDeclarationContext) interface{} {
-	return fmt.Sprintf("%s%s %s", v.visitRule(ctx.QualifiedName()), v.visitRule(ctx.FormalParameters()), v.visitRule(ctx.Block()).(string))
+	return v.visitRule(ctx.QualifiedName()).(string) + v.visitRule(ctx.FormalParameters()).(string) + " " + v.visitRule(ctx.Block()).(string)
 }
 
 func (v *FormatVisitor) VisitBlock(ctx *parser.BlockContext) interface{} {
@@ -203,7 +203,7 @@ func (v *FormatVisitor) VisitBlock(ctx *parser.BlockContext) interface{} {
 	if len(statements) == 0 {
 		return "{}"
 	}
-	return fmt.Sprintf("{\n%s\n}", indent(strings.Join(statements, "\n")))
+	return "{\n" + indent(strings.Join(statements, "\n")) + "\n}"
 }
 
 func (v *FormatVisitor) VisitStatement(ctx *parser.StatementContext) interface{} {
@@ -212,25 +212,25 @@ func (v *FormatVisitor) VisitStatement(ctx *parser.StatementContext) interface{}
 }
 
 func (v *FormatVisitor) VisitBlockMemberDeclaration(ctx *parser.BlockMemberDeclarationContext) interface{} {
-	return fmt.Sprintf("%s%s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.MemberDeclaration()))
+	return v.Modifiers(ctx.AllModifier()) + v.visitRule(ctx.MemberDeclaration()).(string)
 }
 
 func (v *FormatVisitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
 	var out strings.Builder
 	if block := ctx.Statement(0).Block(); block != nil {
-		out.WriteString(fmt.Sprintf("if %s %s", v.visitRule(ctx.ParExpression()),
-			v.visitRule(ctx.Statement(0))))
+		out.WriteString("if " + v.visitRule(ctx.ParExpression()).(string) + " " +
+			v.visitRule(ctx.Statement(0)).(string))
 	} else {
-		out.WriteString(fmt.Sprintf("if %s {\n%s\n}", v.visitRule(ctx.ParExpression()),
-			indent(v.visitRule(ctx.Statement(0)).(string))))
+		out.WriteString("if " + v.visitRule(ctx.ParExpression()).(string) + " {\n" +
+			indent(v.visitRule(ctx.Statement(0)).(string)) + "\n}")
 	}
 	if ctx.ELSE() != nil {
 		if block := ctx.Statement(1).Block(); block != nil {
-			out.WriteString(fmt.Sprintf(" else %s", v.visitRule(ctx.Statement(1)).(string)))
+			out.WriteString(" else " + v.visitRule(ctx.Statement(1)).(string))
 		} else if ifStatement := ctx.Statement(1).IfStatement(); ifStatement != nil {
-			out.WriteString(fmt.Sprintf(" else %s", v.visitRule(ifStatement)))
+			out.WriteString(" else " + v.visitRule(ifStatement).(string))
 		} else {
-			out.WriteString(fmt.Sprintf(" else {\n%s\n}", indent(v.visitRule(ctx.Statement(1)).(string))))
+			out.WriteString(" else {\n" + indent(v.visitRule(ctx.Statement(1)).(string)) + "\n}")
 		}
 	}
 	return out.String()
@@ -238,32 +238,32 @@ func (v *FormatVisitor) VisitIfStatement(ctx *parser.IfStatementContext) interfa
 
 func (v *FormatVisitor) VisitWhileStatement(ctx *parser.WhileStatementContext) interface{} {
 	if s := ctx.Statement(); s == nil {
-		return fmt.Sprintf("while %s;", v.visitRule(ctx.ParExpression()))
+		return "while " + v.visitRule(ctx.ParExpression()).(string) + ";"
 	}
 	if block := ctx.Statement().Block(); block != nil {
-		return fmt.Sprintf("while %s %s", v.visitRule(ctx.ParExpression()), v.visitRule(ctx.Statement()))
+		return "while " + v.visitRule(ctx.ParExpression()).(string) + " " + v.visitRule(ctx.Statement()).(string)
 	} else {
-		return fmt.Sprintf("while %s {\n%s\n}", v.visitRule(ctx.ParExpression()), indent(v.visitRule(ctx.Statement()).(string)))
+		return "while " + v.visitRule(ctx.ParExpression()).(string) + " {\n" + indent(v.visitRule(ctx.Statement()).(string)) + "\n}"
 	}
 }
 
 func (v *FormatVisitor) VisitDoWhileStatement(ctx *parser.DoWhileStatementContext) interface{} {
 	if block := ctx.Statement().Block(); block != nil {
-		return fmt.Sprintf("do %s while %s;", v.visitRule(ctx.Statement()), v.visitRule(ctx.ParExpression()))
+		return "do " + v.visitRule(ctx.Statement()).(string) + " while " + v.visitRule(ctx.ParExpression()).(string) + ";"
 	} else {
-		return fmt.Sprintf("do {\n%s\n} while %s;", indent(v.visitRule(ctx.Statement()).(string)), v.visitRule(ctx.ParExpression()))
+		return "do {\n" + indent(v.visitRule(ctx.Statement()).(string)) + "\n} while " + v.visitRule(ctx.ParExpression()).(string) + ";"
 	}
 }
 
 func (v *FormatVisitor) VisitForStatement(ctx *parser.ForStatementContext) interface{} {
 	if statement := ctx.Statement(); statement != nil {
 		if statement.Block() != nil {
-			return fmt.Sprintf("for (%s) %s", v.visitRule(ctx.ForControl()), v.visitRule(ctx.Statement()))
+			return "for (" + v.visitRule(ctx.ForControl()).(string) + ") " + v.visitRule(ctx.Statement()).(string)
 		} else {
-			return fmt.Sprintf("for (%s) {\n%s\n}", v.visitRule(ctx.ForControl()), indent(v.visitRule(ctx.Statement()).(string)))
+			return "for (" + v.visitRule(ctx.ForControl()).(string) + ") {\n" + indent(v.visitRule(ctx.Statement()).(string)) + "\n}"
 		}
 	} else {
-		return fmt.Sprintf("for (%s);", v.visitRule(ctx.ForControl()))
+		return "for (" + v.visitRule(ctx.ForControl()).(string) + ");"
 	}
 }
 
@@ -272,11 +272,11 @@ func (v *FormatVisitor) VisitSwitchStatement(ctx *parser.SwitchStatementContext)
 	for _, w := range ctx.AllWhenControl() {
 		when = append(when, v.visitRule(w).(string))
 	}
-	return fmt.Sprintf("switch on %s {\n%s\n}", v.visitRule(ctx.Expression()), indent(strings.Join(when, "\n")))
+	return "switch on " + v.visitRule(ctx.Expression()).(string) + " {\n" + indent(strings.Join(when, "\n")) + "\n}"
 }
 
 func (v *FormatVisitor) VisitWhenControl(ctx *parser.WhenControlContext) interface{} {
-	return fmt.Sprintf("when %s %s", v.visitRule(ctx.WhenValue()), v.visitRule(ctx.Block()))
+	return "when " + v.visitRule(ctx.WhenValue()).(string) + " " + v.visitRule(ctx.Block()).(string)
 }
 
 func (v *FormatVisitor) VisitWhenValue(ctx *parser.WhenValueContext) interface{} {
@@ -284,9 +284,9 @@ func (v *FormatVisitor) VisitWhenValue(ctx *parser.WhenValueContext) interface{}
 	case ctx.ELSE() != nil:
 		return "else"
 	case ctx.TypeRef() != nil:
-		return fmt.Sprintf("%s %s", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.Id(0)))
+		return v.visitRule(ctx.TypeRef()).(string) + " " + v.visitRule(ctx.Id(0)).(string)
 	case len(ctx.AllId()) == 2:
-		return fmt.Sprintf("%s %s", v.visitRule(ctx.Id(0)), v.visitRule(ctx.Id(1)))
+		return v.visitRule(ctx.Id(0)).(string) + " " + v.visitRule(ctx.Id(1)).(string)
 	default:
 		whenLiterals := []string{}
 		for _, w := range ctx.AllWhenLiteral() {
@@ -298,7 +298,7 @@ func (v *FormatVisitor) VisitWhenValue(ctx *parser.WhenValueContext) interface{}
 
 func (v *FormatVisitor) VisitWhenLiteral(ctx *parser.WhenLiteralContext) interface{} {
 	if w := ctx.WhenLiteral(); w != nil {
-		return fmt.Sprintf("(%s)", v.visitRule(w))
+		return "(" + v.visitRule(w).(string) + ")"
 	}
 	if i := ctx.Id(); i != nil {
 		return v.visitRule(i)
@@ -314,28 +314,28 @@ func (v *FormatVisitor) VisitTryStatement(ctx *parser.TryStatementContext) inter
 		}
 		finally := ""
 		if f := ctx.FinallyBlock(); f != nil {
-			finally = fmt.Sprintf(" %s", v.visitRule(f).(string))
+			finally = " " + v.visitRule(f).(string)
 		}
-		return fmt.Sprintf("try %s %s%s", v.visitRule(ctx.Block()), strings.Join(catchClauses, " "), finally)
+		return "try " + v.visitRule(ctx.Block()).(string) + " " + strings.Join(catchClauses, " ") + finally
 	} else {
-		return fmt.Sprintf("try %s %s", v.visitRule(ctx.Block()), v.visitRule(ctx.FinallyBlock()))
+		return "try " + v.visitRule(ctx.Block()).(string) + " " + v.visitRule(ctx.FinallyBlock()).(string)
 	}
 }
 
 func (v *FormatVisitor) VisitCatchClause(ctx *parser.CatchClauseContext) interface{} {
-	return fmt.Sprintf("catch (%s%s %s) %s",
-		v.Modifiers(ctx.AllModifier()),
-		v.visitRule(ctx.QualifiedName()),
-		v.visitRule(ctx.Id()),
-		v.visitRule(ctx.Block()))
+	return "catch (" +
+		v.Modifiers(ctx.AllModifier()) +
+		v.visitRule(ctx.QualifiedName()).(string) + " " +
+		v.visitRule(ctx.Id()).(string) + ") " +
+		v.visitRule(ctx.Block()).(string)
 }
 
 func (v *FormatVisitor) VisitFinallyBlock(ctx *parser.FinallyBlockContext) interface{} {
-	return fmt.Sprintf("finally %s", v.visitRule(ctx.Block()))
+	return "finally " + v.visitRule(ctx.Block()).(string)
 }
 
 func (v *FormatVisitor) VisitThrowStatement(ctx *parser.ThrowStatementContext) interface{} {
-	return fmt.Sprintf("throw %s;", v.visitRule(ctx.Expression()))
+	return "throw " + v.visitRule(ctx.Expression()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitRunAsStatement(ctx *parser.RunAsStatementContext) interface{} {
@@ -343,7 +343,7 @@ func (v *FormatVisitor) VisitRunAsStatement(ctx *parser.RunAsStatementContext) i
 	if e := ctx.ExpressionList(); e != nil {
 		expressionList = v.visitRule(e).(string)
 	}
-	return fmt.Sprintf("System.runAs(%s) %s", expressionList, v.visitRule(ctx.Block()))
+	return "System.runAs(" + expressionList + ") " + v.visitRule(ctx.Block()).(string)
 }
 
 func (v *FormatVisitor) VisitForControl(ctx *parser.ForControlContext) interface{} {
@@ -356,18 +356,18 @@ func (v *FormatVisitor) VisitForControl(ctx *parser.ForControlContext) interface
 	}
 	init.WriteString(";")
 	if expression := ctx.Expression(); expression != nil {
-		init.WriteString(fmt.Sprintf(" %s", v.visitRule(expression).(string)))
+		init.WriteString(" " + v.visitRule(expression).(string))
 	}
 	init.WriteString(";")
 	if forUpdate := ctx.ForUpdate(); forUpdate != nil {
-		init.WriteString(fmt.Sprintf(" %s", v.visitRule(forUpdate).(string)))
+		init.WriteString(" " + v.visitRule(forUpdate).(string))
 	}
 	return init.String()
 }
 
 func (v *FormatVisitor) VisitEnhancedForControl(ctx *parser.EnhancedForControlContext) interface{} {
 	var out strings.Builder
-	out.WriteString(fmt.Sprintf("%s %s : ", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.Id())))
+	out.WriteString(v.visitRule(ctx.TypeRef()).(string) + " " + v.visitRule(ctx.Id()).(string) + " : ")
 	out.WriteString(v.visitRule(ctx.Expression()).(string))
 	return out.String()
 }
@@ -389,7 +389,7 @@ func (v *FormatVisitor) VisitForUpdate(ctx *parser.ForUpdateContext) interface{}
 }
 
 func (v *FormatVisitor) VisitLocalVariableDeclarationStatement(ctx *parser.LocalVariableDeclarationStatementContext) interface{} {
-	return fmt.Sprintf("%s;", v.visitRule(ctx.LocalVariableDeclaration()))
+	return v.visitRule(ctx.LocalVariableDeclaration()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitInsertStatement(ctx *parser.InsertStatementContext) interface{} {
@@ -401,7 +401,7 @@ func (v *FormatVisitor) VisitInsertStatement(ctx *parser.InsertStatementContext)
 			accessMode = " as user"
 		}
 	}
-	return fmt.Sprintf("insert%s %s;", accessMode, v.visitRule(ctx.Expression()))
+	return "insert" + accessMode + " " + v.visitRule(ctx.Expression()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitUpdateStatement(ctx *parser.UpdateStatementContext) interface{} {
@@ -413,7 +413,7 @@ func (v *FormatVisitor) VisitUpdateStatement(ctx *parser.UpdateStatementContext)
 			accessMode = " as user"
 		}
 	}
-	return fmt.Sprintf("update%s %s;", accessMode, v.visitRule(ctx.Expression()))
+	return "update" + accessMode + " " + v.visitRule(ctx.Expression()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitUpsertStatement(ctx *parser.UpsertStatementContext) interface{} {
@@ -426,14 +426,14 @@ func (v *FormatVisitor) VisitUpsertStatement(ctx *parser.UpsertStatementContext)
 		}
 	}
 	if q := ctx.QualifiedName(); q != nil {
-		return fmt.Sprintf("upsert%s %s %s;", accessMode, v.visitRule(ctx.Expression()), v.visitRule(q))
+		return "upsert" + accessMode + " " + v.visitRule(ctx.Expression()).(string) + " " + v.visitRule(q).(string) + ";"
 	} else {
-		return fmt.Sprintf("upsert%s %s;", accessMode, v.visitRule(ctx.Expression()))
+		return "upsert" + accessMode + " " + v.visitRule(ctx.Expression()).(string) + ";"
 	}
 }
 
 func (v *FormatVisitor) VisitMergeStatement(ctx *parser.MergeStatementContext) interface{} {
-	return fmt.Sprintf("merge %s %s;", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return "merge " + v.visitRule(ctx.Expression(0)).(string) + " " + v.visitRule(ctx.Expression(1)).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitDeleteStatement(ctx *parser.DeleteStatementContext) interface{} {
@@ -445,7 +445,7 @@ func (v *FormatVisitor) VisitDeleteStatement(ctx *parser.DeleteStatementContext)
 			accessMode = " as user"
 		}
 	}
-	return fmt.Sprintf("delete%s %s;", accessMode, v.visitRule(ctx.Expression()))
+	return "delete" + accessMode + " " + v.visitRule(ctx.Expression()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitUndeleteStatement(ctx *parser.UndeleteStatementContext) interface{} {
@@ -457,40 +457,40 @@ func (v *FormatVisitor) VisitUndeleteStatement(ctx *parser.UndeleteStatementCont
 			accessMode = " as user"
 		}
 	}
-	return fmt.Sprintf("undelete%s %s;", accessMode, v.visitRule(ctx.Expression()))
+	return "undelete" + accessMode + " " + v.visitRule(ctx.Expression()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitLocalVariableDeclaration(ctx *parser.LocalVariableDeclarationContext) interface{} {
-	return fmt.Sprintf("%s%s %s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), v.visitRule(ctx.VariableDeclarators()))
+	return v.Modifiers(ctx.AllModifier()) + v.visitRule(ctx.TypeRef()).(string) + " " + v.visitRule(ctx.VariableDeclarators()).(string)
 }
 
 func (v *FormatVisitor) VisitReturnStatement(ctx *parser.ReturnStatementContext) interface{} {
 	if e := ctx.Expression(); e != nil {
-		return fmt.Sprintf("return %s;", v.visitRule(e))
+		return "return " + v.visitRule(e).(string) + ";"
 	}
 	return "return;"
 }
 
 func (v *FormatVisitor) VisitParExpression(ctx *parser.ParExpressionContext) interface{} {
-	return fmt.Sprintf("(%s)", v.visitRule(ctx.Expression()))
+	return "(" + v.visitRule(ctx.Expression()).(string) + ")"
 }
 
 func (v *FormatVisitor) VisitExpressionStatement(ctx *parser.ExpressionStatementContext) interface{} {
-	return fmt.Sprintf("%s;", v.visitRule(ctx.Expression()))
+	return v.visitRule(ctx.Expression()).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitAssignExpression(ctx *parser.AssignExpressionContext) interface{} {
 	assignmentToken := ctx.GetChild(1).(antlr.TerminalNode)
-	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), assignmentToken.GetText(), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " " + assignmentToken.GetText() + " " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitCondExpression(ctx *parser.CondExpressionContext) interface{} {
 	if v.textLen(ctx.Expression(0))+v.textLen(ctx.Expression(1))+v.textLen(ctx.Expression(2)) <= 60 {
-		return fmt.Sprintf("%s ? %s : %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)), v.visitRule(ctx.Expression(2)))
+		return v.visitRule(ctx.Expression(0)).(string) + " ? " + v.visitRule(ctx.Expression(1)).(string) + " : " + v.visitRule(ctx.Expression(2)).(string)
 	}
-	return fmt.Sprintf("%s ?\n%s :\n%s", v.visitRule(ctx.Expression(0)),
-		indent(v.visitRule(ctx.Expression(1)).(string)),
-		indent(v.visitRule(ctx.Expression(2)).(string)))
+	return v.visitRule(ctx.Expression(0)).(string) + " ?\n" +
+		indent(v.visitRule(ctx.Expression(1)).(string)) + " :\n" +
+		indent(v.visitRule(ctx.Expression(2)).(string))
 }
 
 func (v *FormatVisitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContext) interface{} {
@@ -501,9 +501,9 @@ func (v *FormatVisitor) VisitLogAndExpression(ctx *parser.LogAndExpressionContex
 		defer restoreWrap(wrap(v))
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s &&\n%s", v.visitRule(ctx.Expression(0)), indent(v.visitRule(ctx.Expression(1)).(string)))
+		return v.visitRule(ctx.Expression(0)).(string) + " &&\n" + indent(v.visitRule(ctx.Expression(1)).(string))
 	}
-	return fmt.Sprintf("%s && %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " && " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext) interface{} {
@@ -514,9 +514,9 @@ func (v *FormatVisitor) VisitLogOrExpression(ctx *parser.LogOrExpressionContext)
 		defer restoreWrap(wrap(v))
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s ||\n%s", v.visitRule(ctx.Expression(0)), indent(v.visitRule(ctx.Expression(1)).(string)))
+		return v.visitRule(ctx.Expression(0)).(string) + " ||\n" + indent(v.visitRule(ctx.Expression(1)).(string))
 	}
-	return fmt.Sprintf("%s || %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " || " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitCoalExpression(ctx *parser.CoalExpressionContext) interface{} {
@@ -525,21 +525,21 @@ func (v *FormatVisitor) VisitCoalExpression(ctx *parser.CoalExpressionContext) i
 		defer restoreWrap(wrap(v))
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s ??\n%s", v.visitRule(ctx.Expression(0)), indent(v.visitRule(ctx.Expression(1)).(string)))
+		return v.visitRule(ctx.Expression(0)).(string) + " ??\n" + indent(v.visitRule(ctx.Expression(1)).(string))
 	}
-	return fmt.Sprintf("%s ?? %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " ?? " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitBitAndExpression(ctx *parser.BitAndExpressionContext) interface{} {
-	return fmt.Sprintf("%s & %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " & " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitBitOrExpression(ctx *parser.BitOrExpressionContext) interface{} {
-	return fmt.Sprintf("%s | %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " | " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitBitNotExpression(ctx *parser.BitNotExpressionContext) interface{} {
-	return fmt.Sprintf("%s ^ %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " ^ " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitBitExpression(ctx *parser.BitExpressionContext) interface{} {
@@ -551,11 +551,11 @@ func (v *FormatVisitor) VisitBitExpression(ctx *parser.BitExpressionContext) int
 	}
 	left := v.visitRule(ctx.Expression(0)).(string)
 	right := v.visitRule(ctx.Expression(1)).(string)
-	return fmt.Sprintf("%s %s %s", left, strings.Join(operators, ""), right)
+	return left + " " + strings.Join(operators, "") + " " + right
 }
 
 func (v *FormatVisitor) VisitArth1Expression(ctx *parser.Arth1ExpressionContext) interface{} {
-	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " " + ctx.GetChild(1).(antlr.TerminalNode).GetText() + " " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext) interface{} {
@@ -574,38 +574,38 @@ func (v *FormatVisitor) VisitArth2Expression(ctx *parser.Arth2ExpressionContext)
 		sep = "\n\t"
 		defer restoreWrap(unwrap(v))
 	}
-	return fmt.Sprintf("%s %s%s%s", v.visitRule(ctx.Expression(0)), ctx.GetChild(1).(antlr.TerminalNode).GetText(), sep, v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " " + ctx.GetChild(1).(antlr.TerminalNode).GetText() + sep + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitNegExpression(ctx *parser.NegExpressionContext) interface{} {
-	return fmt.Sprintf("%s%s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression()))
+	return ctx.GetChild(0).(antlr.TerminalNode).GetText() + v.visitRule(ctx.Expression()).(string)
 }
 
 func (v *FormatVisitor) VisitPreOpExpression(ctx *parser.PreOpExpressionContext) interface{} {
-	return fmt.Sprintf("%s%s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.Expression()))
+	return ctx.GetChild(0).(antlr.TerminalNode).GetText() + v.visitRule(ctx.Expression()).(string)
 }
 
 func (v *FormatVisitor) VisitPostOpExpression(ctx *parser.PostOpExpressionContext) interface{} {
-	return fmt.Sprintf("%s%s", v.visitRule(ctx.Expression()), ctx.GetChild(1).(antlr.TerminalNode).GetText())
+	return v.visitRule(ctx.Expression()).(string) + ctx.GetChild(1).(antlr.TerminalNode).GetText()
 }
 
 func (v *FormatVisitor) VisitSubExpression(ctx *parser.SubExpressionContext) interface{} {
-	return fmt.Sprintf("(%s)", v.visitRule(ctx.Expression()))
+	return "(" + v.visitRule(ctx.Expression()).(string) + ")"
 }
 
 func (v *FormatVisitor) VisitCastExpression(ctx *parser.CastExpressionContext) interface{} {
-	return fmt.Sprintf("(%s)%s", v.visitRule(ctx.TypeRef()), v.visitRule(ctx.Expression()))
+	return "(" + v.visitRule(ctx.TypeRef()).(string) + ")" + v.visitRule(ctx.Expression()).(string)
 }
 
 func (v *FormatVisitor) VisitNewInstanceExpression(ctx *parser.NewInstanceExpressionContext) interface{} {
-	return fmt.Sprintf("new %s", v.visitRule(ctx.Creator()))
+	return "new " + v.visitRule(ctx.Creator()).(string)
 }
 
 func (v *FormatVisitor) VisitArrayExpression(ctx *parser.ArrayExpressionContext) interface{} {
 	if v.textLen(ctx) < 20 {
 		defer restoreWrap(unwrap(v))
 	}
-	return fmt.Sprintf("%s[%s]", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + "[" + v.visitRule(ctx.Expression(1)).(string) + "]"
 }
 
 func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) interface{} {
@@ -635,19 +635,19 @@ func (v *FormatVisitor) VisitDotExpression(ctx *parser.DotExpressionContext) int
 					if log.IsLevelEnabled(log.DebugLevel) {
 						log.Debugf("%q is method call; safe to wrap before %q", expr, ctx.DotMethodCall().GetText())
 					}
-					return expr.(string) + "\n" + indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
+					return expr.(string) + "\n" + indentTo(dot+v.visitRule(ctx.DotMethodCall()).(string), depth)
 				}
 			default:
 				if log.IsLevelEnabled(log.DebugLevel) {
 					log.Debugf("Wrapping in between %q (%T) and %q", expr, ctx.Expression(), ctx.DotMethodCall().GetText())
 				}
-				return expr.(string) + "\n" + indentTo(fmt.Sprintf("%s%s", dot, v.visitRule(ctx.DotMethodCall())), depth)
+				return expr.(string) + "\n" + indentTo(dot+v.visitRule(ctx.DotMethodCall()).(string), depth)
 			}
 		}
 
-		return fmt.Sprintf("%s%s%s", expr, dot, v.visitRule(ctx.DotMethodCall()))
+		return expr.(string) + dot + v.visitRule(ctx.DotMethodCall()).(string)
 	case ctx.AnyId() != nil:
-		return fmt.Sprintf("%s%s%s", expr, dot, v.visitRule(ctx.AnyId()))
+		return expr.(string) + dot + v.visitRule(ctx.AnyId()).(string)
 	}
 	return ""
 }
@@ -663,7 +663,7 @@ func (v *FormatVisitor) VisitDotMethodCall(ctx *parser.DotMethodCallContext) int
 	if l := ctx.ExpressionList(); l != nil {
 		expressionList = v.visitRule(l).(string)
 	}
-	return fmt.Sprintf("%s(%s)", v.visitRule(ctx.AnyId()), expressionList)
+	return v.visitRule(ctx.AnyId()).(string) + "(" + expressionList + ")"
 }
 
 func (v *FormatVisitor) VisitExpressionList(ctx *parser.ExpressionListContext) interface{} {
@@ -745,7 +745,7 @@ func (v *FormatVisitor) VisitMethodCall(ctx *parser.MethodCallContext) interface
 	if el := ctx.ExpressionList(); el != nil {
 		expressionList = v.visitRule(el).(string)
 	}
-	return fmt.Sprintf("%s(%s)", f, expressionList)
+	return f + "(" + expressionList + ")"
 }
 
 func (v *FormatVisitor) VisitSoslPrimary(ctx *parser.SoslPrimaryContext) interface{} {
@@ -762,9 +762,9 @@ func (v *FormatVisitor) VisitSoqlLiteral(ctx *parser.SoqlLiteralContext) interfa
 	n := i.visitRule(ctx.Query()).(int)
 	if n > 3 {
 		defer restoreWrap(wrap(v))
-		return fmt.Sprintf("[\n%s\n]", indent(v.visitRule(ctx.Query()).(string)))
+		return "[\n" + indent(v.visitRule(ctx.Query()).(string)) + "\n]"
 	}
-	return fmt.Sprintf("[%s]", v.visitRule(ctx.Query()))
+	return "[" + v.visitRule(ctx.Query()).(string) + "]"
 }
 
 func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
@@ -789,7 +789,7 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	query.WriteString(indentTo(v.visitRule(ctx.FromNameList()).(string), indent))
 	if scope := ctx.UsingScope(); scope != nil {
 		query.WriteString(sep)
-		query.WriteString(fmt.Sprintf("%s", v.visitRule(scope).(string)))
+		query.WriteString(v.visitRule(scope).(string))
 	}
 	if where := ctx.WhereClause(); where != nil {
 		query.WriteString(sep)
@@ -826,7 +826,7 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	}
 	if update := ctx.UpdateList(); update != nil {
 		query.WriteString(sep)
-		query.WriteString(fmt.Sprintf("UPDATE %s", v.visitRule(update).(string)))
+		query.WriteString("UPDATE " + v.visitRule(update).(string))
 	}
 	if setOptions := ctx.SetOptionsClause(); setOptions != nil {
 		query.WriteString(sep)
@@ -838,30 +838,30 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 // VisitSetOptionsClause formats a SET OPTIONS clause, which passes a
 // Database.QueryOptions bind variable to the query.
 func (v *FormatVisitor) VisitSetOptionsClause(ctx *parser.SetOptionsClauseContext) interface{} {
-	return fmt.Sprintf("SET OPTIONS %s", v.visitRule(ctx.BoundExpression()).(string))
+	return "SET OPTIONS " + v.visitRule(ctx.BoundExpression()).(string)
 }
 
 func (v *FormatVisitor) VisitSubQuery(ctx *parser.SubQueryContext) interface{} {
 	var query strings.Builder
-	query.WriteString(fmt.Sprintf("SELECT\n%s\nFROM\n%s",
-		indent(v.visitRule(ctx.SubFieldList()).(string)),
+	query.WriteString("SELECT\n" +
+		indent(v.visitRule(ctx.SubFieldList()).(string)) + "\nFROM\n" +
 		indent(v.visitRule(ctx.FromNameList()).(string)),
-	))
+	)
 	if where := ctx.WhereClause(); where != nil {
-		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(where).(string)))
+		query.WriteString("\n" + v.visitRule(where).(string))
 	}
 	if orderBy := ctx.OrderByClause(); orderBy != nil {
-		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(orderBy).(string)))
+		query.WriteString("\n" + v.visitRule(orderBy).(string))
 	}
 	if limit := ctx.LimitClause(); limit != nil {
-		query.WriteString(fmt.Sprintf("\n%s", v.visitRule(limit).(string)))
+		query.WriteString("\n" + v.visitRule(limit).(string))
 	}
 	forClauses := v.visitRule(ctx.ForClauses())
 	if forClauses != "" {
-		query.WriteString(fmt.Sprintf("\n%s", forClauses))
+		query.WriteString("\n" + forClauses.(string))
 	}
 	if update := ctx.UpdateList(); update != nil {
-		query.WriteString(fmt.Sprintf("\nUPDATE %s", v.visitRule(update).(string)))
+		query.WriteString("\nUPDATE " + v.visitRule(update).(string))
 	}
 	return query.String()
 }
@@ -877,9 +877,9 @@ func (v *FormatVisitor) VisitFromNameList(ctx *parser.FromNameListContext) inter
 func (v *FormatVisitor) VisitUpdateList(ctx *parser.UpdateListContext) interface{} {
 	updateList := ""
 	if u := ctx.UpdateList(); u != nil {
-		updateList = fmt.Sprintf(", %s", v.visitRule(u).(string))
+		updateList = ", " + v.visitRule(u).(string)
 	}
-	return fmt.Sprintf("%s%s", ctx.UpdateType().GetText(), updateList)
+	return ctx.UpdateType().GetText() + updateList
 }
 
 func (v *FormatVisitor) VisitFieldNameAlias(ctx *parser.FieldNameAliasContext) interface{} {
@@ -887,7 +887,7 @@ func (v *FormatVisitor) VisitFieldNameAlias(ctx *parser.FieldNameAliasContext) i
 	if s := ctx.SoqlSelectAlias(); s != nil {
 		alias = " " + s.GetText()
 	}
-	return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), alias)
+	return v.visitRule(ctx.FieldName()).(string) + alias
 }
 
 func (v *FormatVisitor) VisitSelectList(ctx *parser.SelectListContext) interface{} {
@@ -917,13 +917,13 @@ func (v *FormatVisitor) VisitSelectEntry(ctx *parser.SelectEntryContext) interfa
 	}
 	switch {
 	case ctx.FieldName() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), alias)
+		return v.visitRule(ctx.FieldName()).(string) + alias
 	case ctx.SoqlFunction() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), alias)
+		return v.visitRule(ctx.SoqlFunction()).(string) + alias
 	case ctx.SubQuery() != nil:
-		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), alias)
+		return "(" + v.visitRule(ctx.SubQuery()).(string) + ")" + alias
 	case ctx.TypeOf() != nil:
-		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
+		return v.visitRule(ctx.TypeOf()).(string)
 	}
 	panic("Unexpected selectEntry")
 }
@@ -935,13 +935,13 @@ func (v *FormatVisitor) VisitSubFieldEntry(ctx *parser.SubFieldEntryContext) int
 	}
 	switch {
 	case ctx.FieldName() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.FieldName()), alias)
+		return v.visitRule(ctx.FieldName()).(string) + alias
 	case ctx.SoqlFunction() != nil:
-		return fmt.Sprintf("%s%s", v.visitRule(ctx.SoqlFunction()), alias)
+		return v.visitRule(ctx.SoqlFunction()).(string) + alias
 	case ctx.SubQuery() != nil:
-		return fmt.Sprintf("(%s)%s", v.visitRule(ctx.SubQuery()), alias)
+		return "(" + v.visitRule(ctx.SubQuery()).(string) + ")" + alias
 	case ctx.TypeOf() != nil:
-		return fmt.Sprintf("%s", v.visitRule(ctx.TypeOf()))
+		return v.visitRule(ctx.TypeOf()).(string)
 	}
 	panic("Unexpected selectEntry")
 }
@@ -969,14 +969,14 @@ func (v *FormatVisitor) VisitTypeOf(ctx *parser.TypeOfContext) interface{} {
 	}
 	elseClause := ""
 	if e := ctx.ElseClause(); e != nil {
-		elseClause = fmt.Sprintf("%s\n", v.visitRule(e))
+		elseClause = v.visitRule(e).(string) + "\n"
 	}
 
-	return fmt.Sprintf("TYPEOF %s\n%s\n%sEND",
-		v.visitRule(ctx.FieldName()),
-		strings.Join(whenClauses, "\n"),
-		elseClause,
-	)
+	return "TYPEOF " +
+		v.visitRule(ctx.FieldName()).(string) + "\n" +
+		strings.Join(whenClauses, "\n") + "\n" +
+		elseClause + "END"
+
 }
 
 func (v *FormatVisitor) VisitForClauses(ctx *parser.ForClausesContext) interface{} {
@@ -988,7 +988,7 @@ func (v *FormatVisitor) VisitForClauses(ctx *parser.ForClausesContext) interface
 }
 
 func (v *FormatVisitor) VisitForClause(ctx *parser.ForClauseContext) interface{} {
-	return fmt.Sprintf("FOR %s", ctx.GetChild(1).(antlr.TerminalNode).GetText())
+	return "FOR " + ctx.GetChild(1).(antlr.TerminalNode).GetText()
 }
 
 func (v *FormatVisitor) VisitWhenClause(ctx *parser.WhenClauseContext) interface{} {
@@ -1031,10 +1031,10 @@ func (v *FormatVisitor) VisitWithClause(ctx *parser.WithClauseContext) interface
 			sep = "\n"
 			indent = 1
 		}
-		return fmt.Sprintf("WITH%s%s", sep, indentTo(v.visitRule(logical).(string), indent))
+		return "WITH" + sep + indentTo(v.visitRule(logical).(string), indent)
 	}
 	if ctx.FilteringExpression() != nil {
-		return fmt.Sprintf("WITH DATA CATEGORY %s", v.visitRule(ctx.FilteringExpression()))
+		return "WITH DATA CATEGORY " + v.visitRule(ctx.FilteringExpression()).(string)
 	}
 	if ctx.SECURITY_ENFORCED() != nil {
 		return "WITH SECURITY_ENFORCED"
@@ -1050,7 +1050,7 @@ func (v *FormatVisitor) VisitWithClause(ctx *parser.WithClauseContext) interface
 		for _, param := range ctx.AllRecordVisibilityContextParam() {
 			params = append(params, v.visitRule(param).(string))
 		}
-		return fmt.Sprintf("WITH RecordVisibilityContext (%s)", strings.Join(params, ", "))
+		return "WITH RecordVisibilityContext (" + strings.Join(params, ", ") + ")"
 	}
 	return "WITH"
 }
@@ -1064,10 +1064,9 @@ func (v *FormatVisitor) VisitFilteringExpression(ctx *parser.FilteringExpression
 }
 
 func (v *FormatVisitor) VisitDataCategorySelection(ctx *parser.DataCategorySelectionContext) interface{} {
-	return fmt.Sprintf("%s %s %s",
-		ctx.SoqlId().GetText(),
-		v.visitRule(ctx.FilteringSelector()),
-		v.visitRule(ctx.DataCategoryName()))
+	return ctx.SoqlId().GetText() + " " +
+		v.visitRule(ctx.FilteringSelector()).(string) + " " +
+		v.visitRule(ctx.DataCategoryName()).(string)
 }
 
 func (v *FormatVisitor) VisitDataCategoryName(ctx *parser.DataCategoryNameContext) interface{} {
@@ -1076,7 +1075,7 @@ func (v *FormatVisitor) VisitDataCategoryName(ctx *parser.DataCategoryNameContex
 		ids = append(ids, id.GetText())
 	}
 	if ctx.LPAREN() != nil {
-		return fmt.Sprintf("(%s)", strings.Join(ids, ", "))
+		return "(" + strings.Join(ids, ", ") + ")"
 	}
 	return strings.Join(ids, ", ")
 }
@@ -1096,14 +1095,14 @@ func (v *FormatVisitor) VisitFilteringSelector(ctx *parser.FilteringSelectorCont
 
 func (v *FormatVisitor) VisitRecordVisibilityContextParam(ctx *parser.RecordVisibilityContextParamContext) interface{} {
 	if intValue := ctx.IntegerLiteral(); intValue != nil {
-		return fmt.Sprintf("maxDescriptorPerRecord=%s", intValue.GetText())
+		return "maxDescriptorPerRecord=" + intValue.GetText()
 	}
 	if boolValue := ctx.BooleanLiteral(); boolValue != nil {
 		switch {
 		case ctx.SUPPORTSDOMAINS() != nil:
-			return fmt.Sprintf("supportsDomains=%s", boolValue.GetText())
+			return "supportsDomains=" + boolValue.GetText()
 		case ctx.SUPPORTSDELEGATES() != nil:
-			return fmt.Sprintf("supportsDelegates=%s", boolValue.GetText())
+			return "supportsDelegates=" + boolValue.GetText()
 		}
 	}
 	return ctx.GetText()
@@ -1125,22 +1124,22 @@ func (v *FormatVisitor) VisitWhereClause(ctx *parser.WhereClauseContext) interfa
 
 func (v *FormatVisitor) VisitLimitClause(ctx *parser.LimitClauseContext) interface{} {
 	if e := ctx.BoundExpression(); e != nil {
-		return fmt.Sprintf("LIMIT %s", v.visitRule(ctx.BoundExpression()))
+		return "LIMIT " + v.visitRule(ctx.BoundExpression()).(string)
 	}
-	return fmt.Sprintf("LIMIT %s", ctx.IntegerLiteral().GetText())
+	return "LIMIT " + ctx.IntegerLiteral().GetText()
 }
 
 func (v *FormatVisitor) VisitOffsetClause(ctx *parser.OffsetClauseContext) interface{} {
 	if e := ctx.BoundExpression(); e != nil {
-		return fmt.Sprintf("OFFSET %s", v.visitRule(ctx.BoundExpression()))
+		return "OFFSET " + v.visitRule(ctx.BoundExpression()).(string)
 	}
-	return fmt.Sprintf("OFFSET %s", ctx.IntegerLiteral().GetText())
+	return "OFFSET " + ctx.IntegerLiteral().GetText()
 }
 
 func (v *FormatVisitor) VisitLogicalExpression(ctx *parser.LogicalExpressionContext) interface{} {
 	switch {
 	case ctx.NOT() != nil:
-		return fmt.Sprintf("NOT %s", v.visitRule(ctx.ConditionalExpression(0)))
+		return "NOT " + v.visitRule(ctx.ConditionalExpression(0)).(string)
 	case len(ctx.AllSOQLOR()) > 0:
 		conditions := []string{}
 		for _, cond := range ctx.AllConditionalExpression() {
@@ -1162,7 +1161,7 @@ func (v *FormatVisitor) VisitLogicalExpression(ctx *parser.LogicalExpressionCont
 func (v *FormatVisitor) VisitConditionalExpression(ctx *parser.ConditionalExpressionContext) interface{} {
 	switch {
 	case ctx.LogicalExpression() != nil:
-		return fmt.Sprintf("(\n%s\n)", indent(v.visitRule(ctx.LogicalExpression()).(string)))
+		return "(\n" + indent(v.visitRule(ctx.LogicalExpression()).(string)) + "\n)"
 	case ctx.FieldExpression() != nil:
 		return v.visitRule(ctx.FieldExpression())
 	}
@@ -1173,9 +1172,9 @@ func (v *FormatVisitor) VisitFieldExpression(ctx *parser.FieldExpressionContext)
 	switch {
 	case ctx.FieldName() != nil:
 		// TODO: Format IN/NOT IN
-		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.FieldName()), v.visitRule(ctx.ComparisonOperator()), v.visitRule(ctx.Value()))
+		return v.visitRule(ctx.FieldName()).(string) + " " + v.visitRule(ctx.ComparisonOperator()).(string) + " " + v.visitRule(ctx.Value()).(string)
 	case ctx.SoqlFunction() != nil:
-		return fmt.Sprintf("%s %s %s", v.visitRule(ctx.SoqlFunction()), v.visitRule(ctx.ComparisonOperator()), v.visitRule(ctx.Value()))
+		return v.visitRule(ctx.SoqlFunction()).(string) + " " + v.visitRule(ctx.ComparisonOperator()).(string) + " " + v.visitRule(ctx.Value()).(string)
 	}
 	panic("Unexpected fieldExpression")
 }
@@ -1205,13 +1204,13 @@ func (v *FormatVisitor) VisitSoqlFunction(ctx *parser.SoqlFunctionContext) inter
 		loc1 := v.visitRule(locationValues[0]).(string)
 		loc2 := v.visitRule(locationValues[1]).(string)
 		unit := ctx.StringLiteral().GetText()
-		return fmt.Sprintf("DISTANCE(%s, %s, %s)", loc1, loc2, unit)
+		return "DISTANCE(" + loc1 + ", " + loc2 + ", " + unit + ")"
 	case ctx.FORMULA() != nil:
-		return fmt.Sprintf("FORMULA(%s)", ctx.StringLiteral().GetText())
+		return "FORMULA(" + ctx.StringLiteral().GetText() + ")"
 	default:
 		panic("Unexpected parameter type for soqlFunction")
 	}
-	return fmt.Sprintf("%s(%s)", strings.ToUpper(ctx.GetChild(0).(antlr.TerminalNode).GetText()), param)
+	return strings.ToUpper(ctx.GetChild(0).(antlr.TerminalNode).GetText()) + "(" + param + ")"
 }
 
 func (v *FormatVisitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameterContext) interface{} {
@@ -1220,7 +1219,7 @@ func (v *FormatVisitor) VisitSoqlFieldsParameter(ctx *parser.SoqlFieldsParameter
 
 func (v *FormatVisitor) VisitDateFieldName(ctx *parser.DateFieldNameContext) interface{} {
 	if ctx.CONVERT_TIMEZONE() != nil {
-		return fmt.Sprintf("convertTimezone(%s)", v.visitRule(ctx.FieldName()))
+		return "convertTimezone(" + v.visitRule(ctx.FieldName()).(string) + ")"
 	}
 	return v.visitRule(ctx.FieldName())
 }
@@ -1236,7 +1235,7 @@ func (v *FormatVisitor) VisitLocationValue(ctx *parser.LocationValueContext) int
 		for _, coord := range ctx.AllCoordinateValue() {
 			coords = append(coords, v.visitRule(coord).(string))
 		}
-		return fmt.Sprintf("GEOLOCATION(%s, %s)", coords[0], coords[1])
+		return "GEOLOCATION(" + coords[0] + ", " + coords[1] + ")"
 	default:
 		panic("Unexpected location value type")
 	}
@@ -1290,7 +1289,7 @@ func (v *FormatVisitor) VisitCurrencyValueValue(ctx *parser.CurrencyValueValueCo
 }
 
 func (v *FormatVisitor) VisitSubQueryValue(ctx *parser.SubQueryValueContext) interface{} {
-	return fmt.Sprintf("(\n%s\n)", indent(v.visitRule(ctx.SubQuery()).(string)))
+	return "(\n" + indent(v.visitRule(ctx.SubQuery()).(string)) + "\n)"
 }
 
 func (v *FormatVisitor) VisitValueListValue(ctx *parser.ValueListValueContext) interface{} {
@@ -1303,7 +1302,7 @@ func (v *FormatVisitor) VisitBoundExpressionValue(ctx *parser.BoundExpressionVal
 
 func (v *FormatVisitor) VisitDateFormula(ctx *parser.DateFormulaContext) interface{} {
 	if ctx.SignedInteger() != nil {
-		return fmt.Sprintf("%s:%s", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.SignedInteger()))
+		return ctx.GetChild(0).(antlr.TerminalNode).GetText() + ":" + v.visitRule(ctx.SignedInteger()).(string)
 	}
 	return ctx.GetChild(0).(antlr.TerminalNode).GetText()
 }
@@ -1321,7 +1320,7 @@ func (v *FormatVisitor) VisitValueList(ctx *parser.ValueListContext) interface{}
 	for _, i := range ctx.AllValue() {
 		values = append(values, v.visitRule(i).(string))
 	}
-	return fmt.Sprintf("(%s)", strings.Join(values, ", "))
+	return "(" + strings.Join(values, ", ") + ")"
 }
 
 func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) interface{} {
@@ -1356,7 +1355,7 @@ func (v *FormatVisitor) VisitGroupByClause(ctx *parser.GroupByClauseContext) int
 }
 
 func (v *FormatVisitor) VisitUsingScope(ctx *parser.UsingScopeContext) interface{} {
-	return fmt.Sprintf("USING SCOPE %s", ctx.SoqlId().GetText())
+	return "USING SCOPE " + ctx.SoqlId().GetText()
 }
 
 func (v *FormatVisitor) formatGroupedClause(keyword string, fields []string, having parser.ILogicalExpressionContext, sep string, indent int) string {
@@ -1364,9 +1363,9 @@ func (v *FormatVisitor) formatGroupedClause(keyword string, fields []string, hav
 	if v.wrap {
 		clause.WriteString("GROUP BY")
 		clause.WriteString(sep)
-		clause.WriteString(indentTo(fmt.Sprintf("%s(%s)", keyword, strings.Join(fields, ", ")), indent))
+		clause.WriteString(indentTo(keyword+"("+strings.Join(fields, ", ")+")", indent))
 	} else {
-		clause.WriteString(fmt.Sprintf("GROUP BY %s(%s)", keyword, strings.Join(fields, ", ")))
+		clause.WriteString("GROUP BY " + keyword + "(" + strings.Join(fields, ", ") + ")")
 	}
 	if having != nil {
 		clause.WriteString(sep)
@@ -1438,11 +1437,11 @@ func (v *FormatVisitor) VisitFieldOrder(ctx *parser.FieldOrderContext) interface
 }
 
 func (v *FormatVisitor) VisitBoundExpression(ctx *parser.BoundExpressionContext) interface{} {
-	return fmt.Sprintf(":%s", v.visitRule(ctx.Expression()))
+	return ":" + v.visitRule(ctx.Expression()).(string)
 }
 
 func (v *FormatVisitor) VisitCreator(ctx *parser.CreatorContext) interface{} {
-	return fmt.Sprintf("%s%s", v.visitRule(ctx.CreatedName()), v.visitRule(ctx.GetChild(1).(antlr.RuleNode)))
+	return v.visitRule(ctx.CreatedName()).(string) + v.visitRule(ctx.GetChild(1).(antlr.RuleNode)).(string)
 }
 
 func (v *FormatVisitor) VisitCreatedName(ctx *parser.CreatedNameContext) interface{} {
@@ -1455,7 +1454,7 @@ func (v *FormatVisitor) VisitCreatedName(ctx *parser.CreatedNameContext) interfa
 
 func (v *FormatVisitor) VisitIdCreatedNamePair(ctx *parser.IdCreatedNamePairContext) interface{} {
 	if typeList := ctx.TypeList(); typeList != nil {
-		return fmt.Sprintf("%s<%s>", v.visitRule(ctx.AnyId()), v.visitRule(typeList))
+		return v.visitRule(ctx.AnyId()).(string) + "<" + v.visitRule(typeList).(string) + ">"
 	}
 	return v.visitRule(ctx.AnyId())
 }
@@ -1474,7 +1473,7 @@ func (v *FormatVisitor) VisitClassCreatorRest(ctx *parser.ClassCreatorRestContex
 
 func (v *FormatVisitor) VisitArrayCreatorRest(ctx *parser.ArrayCreatorRestContext) interface{} {
 	if expression := ctx.Expression(); expression != nil {
-		return fmt.Sprintf("[%s]", v.visitRule(expression))
+		return "[" + v.visitRule(expression).(string) + "]"
 	}
 
 	dimensions := len(ctx.AllLBRACK())
@@ -1500,13 +1499,13 @@ func (v *FormatVisitor) VisitMapCreatorRest(ctx *parser.MapCreatorRestContext) i
 		pairs = append(pairs, v.visitRule(i).(string))
 	}
 	if len(pairs) > 1 {
-		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(pairs, ",\n")))
+		return "{\n" + indent(strings.Join(pairs, ",\n")) + "\n}"
 	}
-	return fmt.Sprintf("{ %s }", strings.Join(pairs, ", "))
+	return "{ " + strings.Join(pairs, ", ") + " }"
 }
 
 func (v *FormatVisitor) VisitMapCreatorRestPair(ctx *parser.MapCreatorRestPairContext) interface{} {
-	return fmt.Sprintf("%s => %s", v.visitRule(ctx.Expression(0)), v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " => " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitSetCreatorRest(ctx *parser.SetCreatorRestContext) interface{} {
@@ -1515,9 +1514,9 @@ func (v *FormatVisitor) VisitSetCreatorRest(ctx *parser.SetCreatorRestContext) i
 		expressions = append(expressions, v.visitRule(i).(string))
 	}
 	if v.textLen(ctx) > 50 {
-		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(expressions, ",\n")))
+		return "{\n" + indent(strings.Join(expressions, ",\n")) + "\n}"
 	}
-	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))
+	return "{ " + strings.Join(expressions, ", ") + " }"
 }
 
 func (v *FormatVisitor) VisitArrayInitializer(ctx *parser.ArrayInitializerContext) interface{} {
@@ -1539,9 +1538,9 @@ func (v *FormatVisitor) VisitArrayInitializer(ctx *parser.ArrayInitializerContex
 
 	wrap := v.wrap || v.textLen(ctx) > 50 || (hasNestedInitializer && len(expressions) > 1)
 	if wrap {
-		return fmt.Sprintf("{\n%s\n}", indent(strings.Join(expressions, ",\n")))
+		return "{\n" + indent(strings.Join(expressions, ",\n")) + "\n}"
 	}
-	return fmt.Sprintf("{ %s }", strings.Join(expressions, ", "))
+	return "{ " + strings.Join(expressions, ", ") + " }"
 }
 
 // Class instance arguments, e.g. (Name = 'Acme', BillingCity = 'Los Angeles') in Account(Name = 'Acme', BillingCity = 'Los Angeles')
@@ -1555,9 +1554,9 @@ func (v *FormatVisitor) VisitArguments(ctx *parser.ArgumentsContext) interface{}
 	}
 	if v.textLen(expressionList) > 40 {
 		defer restoreWrap(wrap(v))
-		return fmt.Sprintf("(\n%s\n)", indent(v.visitRule(expressionList).(string)))
+		return "(\n" + indent(v.visitRule(expressionList).(string)) + "\n)"
 	}
-	return fmt.Sprintf("(%s)", v.visitRule(expressionList))
+	return "(" + v.visitRule(expressionList).(string) + ")"
 }
 
 func (v *FormatVisitor) VisitCmpExpression(ctx *parser.CmpExpressionContext) interface{} {
@@ -1565,17 +1564,17 @@ func (v *FormatVisitor) VisitCmpExpression(ctx *parser.CmpExpressionContext) int
 	if ctx.ASSIGN() != nil {
 		cmpToken += "="
 	}
-	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), cmpToken, v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " " + cmpToken + " " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitEqualityExpression(ctx *parser.EqualityExpressionContext) interface{} {
 	defer restoreWrap(unwrap(v))
 	cmpToken := ctx.GetChild(1).(antlr.TerminalNode).GetText()
-	return fmt.Sprintf("%s %s %s", v.visitRule(ctx.Expression(0)), cmpToken, v.visitRule(ctx.Expression(1)))
+	return v.visitRule(ctx.Expression(0)).(string) + " " + cmpToken + " " + v.visitRule(ctx.Expression(1)).(string)
 }
 
 func (v *FormatVisitor) VisitInstanceOfExpression(ctx *parser.InstanceOfExpressionContext) interface{} {
-	return fmt.Sprintf("%s instanceof %s", v.visitRule(ctx.Expression()), v.visitRule(ctx.TypeRef()))
+	return v.visitRule(ctx.Expression()).(string) + " instanceof " + v.visitRule(ctx.TypeRef()).(string)
 }
 
 func (v *FormatVisitor) VisitTypeList(ctx *parser.TypeListContext) interface{} {
@@ -1606,9 +1605,9 @@ func (v *FormatVisitor) VisitFormalParameters(ctx *parser.FormalParametersContex
 		}
 	}
 	if wrap {
-		return fmt.Sprintf("(\n%s)", strings.Join(params, ",\n"))
+		return "(\n" + strings.Join(params, ",\n") + ")"
 	} else {
-		return fmt.Sprintf("(%s)", strings.Join(params, ", "))
+		return "(" + strings.Join(params, ", ") + ")"
 	}
 }
 
@@ -1621,9 +1620,9 @@ func (v *FormatVisitor) VisitAnnotation(ctx *parser.AnnotationContext) interface
 		} else {
 			vals = v.visitRule(ctx.ElementValue()).(string)
 		}
-		args = fmt.Sprintf("(%s)", vals)
+		args = "(" + vals + ")"
 	}
-	return fmt.Sprintf("@%s%s", v.visitRule(ctx.QualifiedName()), args)
+	return "@" + v.visitRule(ctx.QualifiedName()).(string) + args
 }
 
 func (v *FormatVisitor) VisitElementValuePairs(ctx *parser.ElementValuePairsContext) interface{} {
@@ -1639,11 +1638,11 @@ func (v *FormatVisitor) VisitDelimitedElementValuePair(ctx *parser.DelimitedElem
 	if ctx.COMMA() != nil {
 		delimiter = ", "
 	}
-	return fmt.Sprintf("%s%s", delimiter, v.visitRule(ctx.ElementValuePair()))
+	return delimiter + v.visitRule(ctx.ElementValuePair()).(string)
 }
 
 func (v *FormatVisitor) VisitElementValuePair(ctx *parser.ElementValuePairContext) interface{} {
-	return fmt.Sprintf("%s=%s", v.visitRule(ctx.Id()), v.visitRule(ctx.ElementValue()))
+	return v.visitRule(ctx.Id()).(string) + "=" + v.visitRule(ctx.ElementValue()).(string)
 }
 
 func (v *FormatVisitor) VisitElementValue(ctx *parser.ElementValueContext) interface{} {
@@ -1659,11 +1658,11 @@ func (v *FormatVisitor) VisitElementValueArrayInitializer(ctx *parser.ElementVal
 	if ctx.TrailingComma() != nil {
 		trailingComma = ","
 	}
-	return fmt.Sprintf("(%s%s)", strings.Join(values, ", "), trailingComma)
+	return "(" + strings.Join(values, ", ") + trailingComma + ")"
 }
 
 func (v *FormatVisitor) VisitFormalParameter(ctx *parser.FormalParameterContext) interface{} {
-	return fmt.Sprintf("%s%s %s", v.Modifiers(ctx.AllModifier()), v.visitRule(ctx.TypeRef()), ctx.Id().GetText())
+	return v.Modifiers(ctx.AllModifier()) + v.visitRule(ctx.TypeRef()).(string) + " " + ctx.Id().GetText()
 }
 
 func (v *FormatVisitor) VisitQualifiedName(ctx *parser.QualifiedNameContext) interface{} {
@@ -1688,9 +1687,9 @@ func (v *FormatVisitor) VisitVariableDeclarator(ctx *parser.VariableDeclaratorCo
 		return decl
 	}
 	if v.wrap {
-		return fmt.Sprintf("%s = %s", decl, v.visitRule(ctx.Expression()))
+		return decl + " = " + v.visitRule(ctx.Expression()).(string)
 	}
-	return fmt.Sprintf("%s = %s", decl, v.visitRule(ctx.Expression()))
+	return decl + " = " + v.visitRule(ctx.Expression()).(string)
 }
 
 func (v *FormatVisitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationContext) interface{} {
@@ -1702,13 +1701,13 @@ func (v *FormatVisitor) VisitMethodDeclaration(ctx *parser.MethodDeclarationCont
 	if ctx.Block() != nil {
 		body = " " + v.visitRule(ctx.Block()).(string)
 	}
-	return fmt.Sprintf("%s %s%s%s", returnType, ctx.MethodId().GetText(),
-		v.visitRule(ctx.FormalParameters()),
-		body)
+	return returnType + " " + ctx.MethodId().GetText() +
+		v.visitRule(ctx.FormalParameters()).(string) +
+		body
 }
 
 func (v *FormatVisitor) VisitTypeRefPrimary(ctx *parser.TypeRefPrimaryContext) interface{} {
-	return fmt.Sprintf("%s.class", v.visitRule(ctx.TypeRef()))
+	return v.visitRule(ctx.TypeRef()).(string) + ".class"
 }
 
 func (v *FormatVisitor) VisitTypeRef(ctx *parser.TypeRefContext) interface{} {
@@ -1717,7 +1716,7 @@ func (v *FormatVisitor) VisitTypeRef(ctx *parser.TypeRefContext) interface{} {
 		typeNames = append(typeNames, v.visitRule(t).(string))
 	}
 
-	val := fmt.Sprintf("%s%s", strings.Join(typeNames, "."), ctx.ArraySubscripts().GetText())
+	val := strings.Join(typeNames, ".") + ctx.ArraySubscripts().GetText()
 	return val
 }
 
@@ -1732,79 +1731,79 @@ func (v *FormatVisitor) VisitTypeName(ctx *parser.TypeNameContext) interface{} {
 	if args := ctx.TypeArguments(); args != nil {
 		typeArguments = v.visitRule(args).(string)
 	}
-	return fmt.Sprintf("%s%s", typeName, typeArguments)
+	return typeName + typeArguments
 }
 
 func (v *FormatVisitor) VisitTypeArguments(ctx *parser.TypeArgumentsContext) interface{} {
-	return fmt.Sprintf("<%s>", v.visitRule(ctx.TypeList()))
+	return "<" + v.visitRule(ctx.TypeList()).(string) + ">"
 }
 
 func (v *FormatVisitor) VisitSoslLiteral(ctx *parser.SoslLiteralContext) interface{} {
 	if ctx.BoundExpression() != nil {
-		return fmt.Sprintf("[\n%s]",
-			indent(fmt.Sprintf("FIND\n%s%s", indent(v.visitRule(ctx.BoundExpression()).(string)), v.visitRule(ctx.SoslClauses()))),
-		)
+		return "[\n" +
+			indent("FIND\n"+indent(v.visitRule(ctx.BoundExpression()).(string))+v.visitRule(ctx.SoslClauses()).(string)) + "]"
+
 	}
-	return fmt.Sprintf("%s%s]", ctx.GetChild(0).(antlr.TerminalNode).GetText(), v.visitRule(ctx.SoslClauses()))
+	return ctx.GetChild(0).(antlr.TerminalNode).GetText() + v.visitRule(ctx.SoslClauses()).(string) + "]"
 }
 
 func (v *FormatVisitor) VisitSoslClauses(ctx *parser.SoslClausesContext) interface{} {
 	var clauses strings.Builder
 	if i := ctx.InSearchGroup(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.ReturningFieldSpecList(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithDivisionAssign(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithDataCategory(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithSnippet(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithHighlight(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithSpellCorrection(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithNetworkIn(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithNetworkAssign(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithPricebookIdAssign(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithMetadataAssign(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.WithModeClause(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.LimitClause(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.UpdateListClause(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	return clauses.String()
 }
 
 func (v *FormatVisitor) VisitInSearchGroup(ctx *parser.InSearchGroupContext) interface{} {
-	return fmt.Sprintf("IN %s", v.visitRule(ctx.SearchGroup()))
+	return "IN " + v.visitRule(ctx.SearchGroup()).(string)
 }
 
 func (v *FormatVisitor) VisitSearchGroup(ctx *parser.SearchGroupContext) interface{} {
-	return fmt.Sprintf("%s FIELDS", strings.ToUpper(ctx.GetChild(0).(antlr.TerminalNode).GetText()))
+	return strings.ToUpper(ctx.GetChild(0).(antlr.TerminalNode).GetText()) + " FIELDS"
 }
 
 func (v *FormatVisitor) VisitReturningFieldSpecList(ctx *parser.ReturningFieldSpecListContext) interface{} {
-	return fmt.Sprintf("RETURNING %s", v.visitRule(ctx.FieldSpecList()))
+	return "RETURNING " + v.visitRule(ctx.FieldSpecList()).(string)
 }
 
 func (v *FormatVisitor) VisitFieldSpecList(ctx *parser.FieldSpecListContext) interface{} {
@@ -1819,7 +1818,7 @@ func (v *FormatVisitor) VisitFieldSpec(ctx *parser.FieldSpecContext) interface{}
 	if ctx.FieldSpecClauses() == nil {
 		return v.visitRule(ctx.SoslId())
 	}
-	return fmt.Sprintf("%s%s", v.visitRule(ctx.SoslId()), v.visitRule(ctx.FieldSpecClauses()))
+	return v.visitRule(ctx.SoslId()).(string) + v.visitRule(ctx.FieldSpecClauses()).(string)
 }
 
 func (v *FormatVisitor) VisitWithModeClause(ctx *parser.WithModeClauseContext) interface{} {
@@ -1835,28 +1834,28 @@ func (v *FormatVisitor) VisitWithHighlight(_ *parser.WithHighlightContext) inter
 
 func (v *FormatVisitor) VisitWithSpellCorrection(ctx *parser.WithSpellCorrectionContext) interface{} {
 	if b := ctx.BooleanLiteral(); b != nil {
-		return fmt.Sprintf("WITH SPELL_CORRECTION = %s", strings.ToLower(b.GetText()))
+		return "WITH SPELL_CORRECTION = " + strings.ToLower(b.GetText())
 	}
 	return "WITH SPELL_CORRECTION"
 }
 
 func (v *FormatVisitor) VisitFieldSpecClauses(ctx *parser.FieldSpecClausesContext) interface{} {
 	var clauses strings.Builder
-	clauses.WriteString(fmt.Sprintf("(\n%s", indent(v.visitRule(ctx.FieldList()).(string))))
+	clauses.WriteString("(\n" + indent(v.visitRule(ctx.FieldList()).(string)))
 	if i := ctx.LogicalExpression(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\nWHERE\n%s", indent(v.visitRule(i).(string))))
+		clauses.WriteString("\nWHERE\n" + indent(v.visitRule(i).(string)))
 	}
 	if i := ctx.SoslId(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\nUSING LISTVIEW =  %s", v.visitRule(i)))
+		clauses.WriteString("\nUSING LISTVIEW =  " + v.visitRule(i).(string))
 	}
 	if i := ctx.FieldOrderList(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\nORDER BY %s", v.visitRule(i)))
+		clauses.WriteString("\nORDER BY " + v.visitRule(i).(string))
 	}
 	if i := ctx.LimitClause(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	if i := ctx.OffsetClause(); i != nil {
-		clauses.WriteString(fmt.Sprintf("\n%s", v.visitRule(i)))
+		clauses.WriteString("\n" + v.visitRule(i).(string))
 	}
 	clauses.WriteString(")")
 	return clauses.String()
