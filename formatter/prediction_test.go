@@ -120,3 +120,19 @@ func Test_formatter_reports_syntax_errors_once_after_ll_fallback(t *testing.T) {
 		t.Errorf("expected one reported error, got %d: %q", n, err.Error())
 	}
 }
+
+// The strategy must unwind the parse rather than only record the error: the
+// generated rule functions clear the parser's error after Recover, so a rule
+// that fails without consuming a token inside a loop is otherwise retried at
+// the same token forever. v0.64.0 hung on this input.
+func Test_sll_prediction_stops_at_the_first_error_inside_a_loop(t *testing.T) {
+	src := "public class Test {\n\tpublic static void run() {\n\t\tBoolean result = (/* malformed comment */ ) instanceof Account;\n\t}\n}\n"
+	if _, ok := parseSLL(testEngine(t), tokenStream(src)); ok {
+		t.Fatal("expected SLL prediction to fail on the malformed source")
+	}
+	f := NewFormatter("", strings.NewReader(src))
+	err := f.Format()
+	if err == nil || !strings.Contains(err.Error(), "line 3") {
+		t.Errorf("expected a syntax error on line 3, got %v", err)
+	}
+}

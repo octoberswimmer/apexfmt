@@ -139,30 +139,51 @@ func (f *Formatter) Format() error {
 	return nil
 }
 
-// bailErrorStrategy stops the parser at the first syntax error without
-// reporting it. antlr's BailErrorStrategy passes the cancellation to
-// DefaultErrorStrategy.ReportError, which prints "unknown recognition error
-// type" to stdout, so ReportError is overridden to record the failure only.
+// errBail is the panic value that unwinds an SLL parse at its first syntax
+// error.
+type errBail struct{}
+
+// bailErrorStrategy abandons the parse at the first syntax error. antlr's own
+// BailErrorStrategy is not enough in the Go runtime: the generated rule
+// functions clear the parser's error after calling Recover, and since the
+// strategy consumes no tokens a rule invoked from a loop such as
+// classBodyDeclaration* can fail at the same token forever. Panicking from
+// the strategy unwinds the whole parse; parseSLL recovers the panic.
 type bailErrorStrategy struct {
-	*antlr.BailErrorStrategy
-	failed bool
+	*antlr.DefaultErrorStrategy
 }
 
 func (b *bailErrorStrategy) ReportError(_ antlr.Parser, _ antlr.RecognitionException) {
-	b.failed = true
+	panic(errBail{})
 }
+
+func (b *bailErrorStrategy) Recover(_ antlr.Parser, _ antlr.RecognitionException) {
+	panic(errBail{})
+}
+
+func (b *bailErrorStrategy) RecoverInline(_ antlr.Parser) antlr.Token {
+	panic(errBail{})
+}
+
+func (b *bailErrorStrategy) Sync(_ antlr.Parser) {}
 
 // parseSLL parses the token stream with SLL prediction. It returns false when
 // the parser hit a syntax error, which may or may not be a real error in the
 // source; the caller must then parse again with LL prediction.
-func parseSLL(engine *parser.ParserEngine, stream *antlr.CommonTokenStream) (parser.ICompilationUnitContext, bool) {
+func parseSLL(engine *parser.ParserEngine, stream *antlr.CommonTokenStream) (tree parser.ICompilationUnitContext, ok bool) {
+	defer func() {
+		if r := recover(); r != nil {
+			if _, bailed := r.(errBail); !bailed {
+				panic(r)
+			}
+			tree, ok = nil, false
+		}
+	}()
 	p := engine.NewApexParser(stream)
 	p.RemoveErrorListeners()
-	strategy := &bailErrorStrategy{BailErrorStrategy: antlr.NewBailErrorStrategy()}
-	p.SetErrorHandler(strategy)
+	p.SetErrorHandler(&bailErrorStrategy{DefaultErrorStrategy: antlr.NewDefaultErrorStrategy()})
 	p.GetInterpreter().SetPredictionMode(antlr.PredictionModeSLL)
-	tree := p.CompilationUnit()
-	return tree, !strategy.failed
+	return p.CompilationUnit(), true
 }
 
 func (f *Formatter) Write() error {
