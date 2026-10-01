@@ -1255,8 +1255,9 @@ methodId
     | UPSERT
     ;
 
-// In dot expressions we, can use a wider set of of identifiers, apparently any of them althogh I have excluding VOID
-// in the interests of reducing ambiguity
+// In dot expressions we can use a wider set of identifiers, including keywords.
+// VOID is included because a method or field may be named void and is then
+// referenced as obj.void(...) or Cls.void.
 anyId
     : Identifier
     // Apex Keywords
@@ -1311,6 +1312,7 @@ anyId
     | USER
     | UPSERT
     | VIRTUAL
+    | VOID
     | WEBSERVICE
     | WHEN
     | WHILE

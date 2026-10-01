@@ -401,12 +401,12 @@ func apexparserParserInit() {
 		137, 145, 154, 156, 159, 161, 184, 184, 186, 189, 191, 191, 198, 198, 258,
 		258, 2, 0, 92, 92, 186, 189, 1, 0, 115, 116, 14, 0, 2, 3, 16, 16, 20, 20,
 		22, 22, 34, 36, 39, 39, 43, 44, 48, 48, 51, 51, 53, 53, 55, 58, 61, 180,
-		184, 200, 258, 258, 5, 0, 1, 32, 34, 50, 52, 180, 184, 200, 258, 258, 2375,
-		0, 344, 1, 0, 0, 0, 2, 361, 1, 0, 0, 0, 4, 368, 1, 0, 0, 0, 6, 391, 1,
-		0, 0, 0, 8, 393, 1, 0, 0, 0, 10, 405, 1, 0, 0, 0, 12, 413, 1, 0, 0, 0,
-		14, 421, 1, 0, 0, 0, 16, 429, 1, 0, 0, 0, 18, 437, 1, 0, 0, 0, 20, 446,
-		1, 0, 0, 0, 22, 467, 1, 0, 0, 0, 24, 488, 1, 0, 0, 0, 26, 497, 1, 0, 0,
-		0, 28, 501, 1, 0, 0, 0, 30, 509, 1, 0, 0, 0, 32, 513, 1, 0, 0, 0, 34, 517,
+		184, 200, 258, 258, 4, 0, 1, 32, 34, 180, 184, 200, 258, 258, 2375, 0,
+		344, 1, 0, 0, 0, 2, 361, 1, 0, 0, 0, 4, 368, 1, 0, 0, 0, 6, 391, 1, 0,
+		0, 0, 8, 393, 1, 0, 0, 0, 10, 405, 1, 0, 0, 0, 12, 413, 1, 0, 0, 0, 14,
+		421, 1, 0, 0, 0, 16, 429, 1, 0, 0, 0, 18, 437, 1, 0, 0, 0, 20, 446, 1,
+		0, 0, 0, 22, 467, 1, 0, 0, 0, 24, 488, 1, 0, 0, 0, 26, 497, 1, 0, 0, 0,
+		28, 501, 1, 0, 0, 0, 30, 509, 1, 0, 0, 0, 32, 513, 1, 0, 0, 0, 34, 517,
 		1, 0, 0, 0, 36, 531, 1, 0, 0, 0, 38, 542, 1, 0, 0, 0, 40, 550, 1, 0, 0,
 		0, 42, 555, 1, 0, 0, 0, 44, 571, 1, 0, 0, 0, 46, 581, 1, 0, 0, 0, 48, 607,
 		1, 0, 0, 0, 50, 613, 1, 0, 0, 0, 52, 632, 1, 0, 0, 0, 54, 634, 1, 0, 0,
@@ -41506,6 +41506,7 @@ type IAnyIdContext interface {
 	USER() antlr.TerminalNode
 	UPSERT() antlr.TerminalNode
 	VIRTUAL() antlr.TerminalNode
+	VOID() antlr.TerminalNode
 	WEBSERVICE() antlr.TerminalNode
 	WHEN() antlr.TerminalNode
 	WHILE() antlr.TerminalNode
@@ -41893,6 +41894,10 @@ func (s *AnyIdContext) UPSERT() antlr.TerminalNode {
 
 func (s *AnyIdContext) VIRTUAL() antlr.TerminalNode {
 	return s.GetToken(ApexParserVIRTUAL, 0)
+}
+
+func (s *AnyIdContext) VOID() antlr.TerminalNode {
+	return s.GetToken(ApexParserVOID, 0)
 }
 
 func (s *AnyIdContext) WEBSERVICE() antlr.TerminalNode {
@@ -42511,7 +42516,7 @@ func (p *ApexParser) AnyId() (localctx IAnyIdContext) {
 		p.SetState(2144)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-2251808403619842) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-63050394783186945) != 0) || ((int64((_la-192)) & ^0x3f) == 0 && ((int64(1)<<(_la-192))&511) != 0) || _la == ApexParserIdentifier) {
+		if !(((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&-8589934594) != 0) || ((int64((_la-64)) & ^0x3f) == 0 && ((int64(1)<<(_la-64))&-1) != 0) || ((int64((_la-128)) & ^0x3f) == 0 && ((int64(1)<<(_la-128))&-63050394783186945) != 0) || ((int64((_la-192)) & ^0x3f) == 0 && ((int64(1)<<(_la-192))&511) != 0) || _la == ApexParserIdentifier) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
