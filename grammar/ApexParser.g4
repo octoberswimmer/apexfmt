@@ -586,10 +586,10 @@ query
         orderByClause?
         limitClause?
         offsetClause?
-        allRowsClause?
         forClauses
         (UPDATE updateList)?
         setOptionsClause?
+        allRowsClause?
         ;
 
 subQuery
@@ -797,6 +797,8 @@ offsetClause
     : OFFSET IntegerLiteral
     | OFFSET boundExpression;
 
+// ALL ROWS is the last clause: Salesforce reads it after FOR VIEW, FOR
+// REFERENCE, UPDATE TRACKING and SET OPTIONS, and rejects any clause after it.
 allRowsClause
     : ALL ROWS;
 

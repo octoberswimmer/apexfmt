@@ -272,8 +272,8 @@ func apexparserParserInit() {
 		3, 92, 1225, 8, 92, 1, 92, 1, 92, 1, 93, 1, 93, 1, 93, 1, 93, 1, 94, 1,
 		94, 1, 94, 1, 94, 1, 94, 3, 94, 1238, 8, 94, 1, 94, 3, 94, 1241, 8, 94,
 		1, 94, 3, 94, 1244, 8, 94, 1, 94, 3, 94, 1247, 8, 94, 1, 94, 3, 94, 1250,
-		8, 94, 1, 94, 3, 94, 1253, 8, 94, 1, 94, 3, 94, 1256, 8, 94, 1, 94, 3,
-		94, 1259, 8, 94, 1, 94, 1, 94, 1, 94, 3, 94, 1264, 8, 94, 1, 94, 3, 94,
+		8, 94, 1, 94, 3, 94, 1253, 8, 94, 1, 94, 3, 94, 1256, 8, 94, 1, 94, 1,
+		94, 1, 94, 3, 94, 1261, 8, 94, 1, 94, 3, 94, 1264, 8, 94, 1, 94, 3, 94,
 		1267, 8, 94, 1, 95, 1, 95, 1, 95, 1, 95, 1, 95, 3, 95, 1274, 8, 95, 1,
 		95, 3, 95, 1277, 8, 95, 1, 95, 3, 95, 1280, 8, 95, 1, 95, 1, 95, 1, 95,
 		3, 95, 1285, 8, 95, 1, 96, 1, 96, 1, 96, 5, 96, 1290, 8, 96, 10, 96, 12,
@@ -813,11 +813,11 @@ func apexparserParserInit() {
 		1, 0, 0, 0, 1248, 1250, 3, 260, 130, 0, 1249, 1248, 1, 0, 0, 0, 1249, 1250,
 		1, 0, 0, 0, 1250, 1252, 1, 0, 0, 0, 1251, 1253, 3, 266, 133, 0, 1252, 1251,
 		1, 0, 0, 0, 1252, 1253, 1, 0, 0, 0, 1253, 1255, 1, 0, 0, 0, 1254, 1256,
-		3, 268, 134, 0, 1255, 1254, 1, 0, 0, 0, 1255, 1256, 1, 0, 0, 0, 1256, 1258,
-		1, 0, 0, 0, 1257, 1259, 3, 270, 135, 0, 1258, 1257, 1, 0, 0, 0, 1258, 1259,
-		1, 0, 0, 0, 1259, 1260, 1, 0, 0, 0, 1260, 1263, 3, 274, 137, 0, 1261, 1262,
-		5, 47, 0, 0, 1262, 1264, 3, 330, 165, 0, 1263, 1261, 1, 0, 0, 0, 1263,
-		1264, 1, 0, 0, 0, 1264, 1266, 1, 0, 0, 0, 1265, 1267, 3, 272, 136, 0, 1266,
+		3, 268, 134, 0, 1255, 1254, 1, 0, 0, 0, 1255, 1256, 1, 0, 0, 0, 1256, 1257,
+		1, 0, 0, 0, 1257, 1260, 3, 274, 137, 0, 1258, 1259, 5, 47, 0, 0, 1259,
+		1261, 3, 330, 165, 0, 1260, 1258, 1, 0, 0, 0, 1260, 1261, 1, 0, 0, 0, 1261,
+		1263, 1, 0, 0, 0, 1262, 1264, 3, 272, 136, 0, 1263, 1262, 1, 0, 0, 0, 1263,
+		1264, 1, 0, 0, 0, 1264, 1266, 1, 0, 0, 0, 1265, 1267, 3, 270, 135, 0, 1266,
 		1265, 1, 0, 0, 0, 1266, 1267, 1, 0, 0, 0, 1267, 189, 1, 0, 0, 0, 1268,
 		1269, 5, 61, 0, 0, 1269, 1270, 3, 202, 101, 0, 1270, 1271, 5, 63, 0, 0,
 		1271, 1273, 3, 198, 99, 0, 1272, 1274, 3, 226, 113, 0, 1273, 1272, 1, 0,
@@ -1200,7 +1200,7 @@ func apexparserParserInit() {
 		926, 938, 949, 954, 959, 964, 971, 984, 988, 992, 994, 998, 1016, 1037,
 		1053, 1059, 1096, 1108, 1110, 1123, 1128, 1135, 1141, 1144, 1149, 1159,
 		1166, 1174, 1189, 1192, 1194, 1202, 1217, 1224, 1237, 1240, 1243, 1246,
-		1249, 1252, 1255, 1258, 1263, 1266, 1273, 1276, 1279, 1284, 1291, 1296,
+		1249, 1252, 1255, 1260, 1263, 1266, 1273, 1276, 1279, 1284, 1291, 1296,
 		1300, 1306, 1309, 1316, 1324, 1329, 1336, 1341, 1345, 1351, 1354, 1400,
 		1497, 1505, 1516, 1520, 1527, 1530, 1547, 1562, 1570, 1575, 1582, 1592,
 		1609, 1626, 1634, 1642, 1644, 1647, 1669, 1676, 1687, 1694, 1708, 1713,
@@ -22907,10 +22907,10 @@ type IQueryContext interface {
 	OrderByClause() IOrderByClauseContext
 	LimitClause() ILimitClauseContext
 	OffsetClause() IOffsetClauseContext
-	AllRowsClause() IAllRowsClauseContext
 	UPDATE() antlr.TerminalNode
 	UpdateList() IUpdateListContext
 	SetOptionsClause() ISetOptionsClauseContext
+	AllRowsClause() IAllRowsClauseContext
 
 	// IsQueryContext differentiates from other interfaces.
 	IsQueryContext()
@@ -23116,22 +23116,6 @@ func (s *QueryContext) OffsetClause() IOffsetClauseContext {
 	return t.(IOffsetClauseContext)
 }
 
-func (s *QueryContext) AllRowsClause() IAllRowsClauseContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IAllRowsClauseContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IAllRowsClauseContext)
-}
-
 func (s *QueryContext) UPDATE() antlr.TerminalNode {
 	return s.GetToken(ApexParserUPDATE, 0)
 }
@@ -23166,6 +23150,22 @@ func (s *QueryContext) SetOptionsClause() ISetOptionsClauseContext {
 	}
 
 	return t.(ISetOptionsClauseContext)
+}
+
+func (s *QueryContext) AllRowsClause() IAllRowsClauseContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IAllRowsClauseContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IAllRowsClauseContext)
 }
 
 func (s *QueryContext) GetRuleContext() antlr.RuleContext {
@@ -23326,25 +23326,11 @@ func (p *ApexParser) Query() (localctx IQueryContext) {
 		}
 
 	}
-	p.SetState(1258)
-	p.GetErrorHandler().Sync(p)
-	if p.HasError() {
-		goto errorExit
-	}
-	_la = p.GetTokenStream().LA(1)
-
-	if _la == ApexParserALL {
-		{
-			p.SetState(1257)
-			p.AllRowsClause()
-		}
-
-	}
 	{
-		p.SetState(1260)
+		p.SetState(1257)
 		p.ForClauses()
 	}
-	p.SetState(1263)
+	p.SetState(1260)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -23353,7 +23339,7 @@ func (p *ApexParser) Query() (localctx IQueryContext) {
 
 	if _la == ApexParserUPDATE {
 		{
-			p.SetState(1261)
+			p.SetState(1258)
 			p.Match(ApexParserUPDATE)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -23361,8 +23347,22 @@ func (p *ApexParser) Query() (localctx IQueryContext) {
 			}
 		}
 		{
-			p.SetState(1262)
+			p.SetState(1259)
 			p.UpdateList()
+		}
+
+	}
+	p.SetState(1263)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == ApexParserSET {
+		{
+			p.SetState(1262)
+			p.SetOptionsClause()
 		}
 
 	}
@@ -23373,10 +23373,10 @@ func (p *ApexParser) Query() (localctx IQueryContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if _la == ApexParserSET {
+	if _la == ApexParserALL {
 		{
 			p.SetState(1265)
-			p.SetOptionsClause()
+			p.AllRowsClause()
 		}
 
 	}

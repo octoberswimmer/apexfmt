@@ -815,10 +815,6 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 		query.WriteString(sep)
 		query.WriteString(v.visitRule(offset).(string))
 	}
-	if ctx.AllRowsClause() != nil {
-		query.WriteString(sep)
-		query.WriteString("ALL ROWS")
-	}
 	forClauses := v.visitRule(ctx.ForClauses())
 	if forClauses != "" {
 		query.WriteString(sep)
@@ -831,6 +827,10 @@ func (v *FormatVisitor) VisitQuery(ctx *parser.QueryContext) interface{} {
 	if setOptions := ctx.SetOptionsClause(); setOptions != nil {
 		query.WriteString(sep)
 		query.WriteString(v.visitRule(setOptions).(string))
+	}
+	if ctx.AllRowsClause() != nil {
+		query.WriteString(sep)
+		query.WriteString("ALL ROWS")
 	}
 	return query.String()
 }

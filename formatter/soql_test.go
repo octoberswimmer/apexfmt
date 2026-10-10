@@ -231,7 +231,7 @@ func TestSOQL(t *testing.T) {
 	SET OPTIONS :opts
 ]`},
 			{
-				`[SELECT Id, Name, Industry FROM Account WHERE Industry IN :industries ALL ROWS SET OPTIONS :opts]`,
+				`[SELECT Id, Name, Industry FROM Account WHERE Industry IN :industries SET OPTIONS :opts ALL ROWS]`,
 				`[
 	SELECT
 		Id,
@@ -241,9 +241,17 @@ func TestSOQL(t *testing.T) {
 		Account
 	WHERE
 		Industry IN :industries
-	ALL ROWS
 	SET OPTIONS :opts
+	ALL ROWS
 ]`},
+			{
+				`[SELECT Id FROM Account FOR VIEW ALL ROWS]`,
+				`[SELECT Id FROM Account FOR VIEW ALL ROWS]`,
+			},
+			{
+				`[SELECT Id FROM Account UPDATE TRACKING ALL ROWS]`,
+				`[SELECT Id FROM Account UPDATE TRACKING ALL ROWS]`,
+			},
 			{
 				`[SELECT Id, SBQQ__Quote__c FROM SBQQ__QuoteLineGroup__c WHERE SBQQ__Quote__c IN :quoteIds ORDER BY SBQQ__Quote__c, SBQQ__Number__c]`,
 				`[
