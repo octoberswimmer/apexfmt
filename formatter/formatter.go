@@ -26,11 +26,12 @@ func (f *Formatter) SourceName() string {
 	return "<stdin>"
 }
 
+// errorListener collects the syntax errors of a parse.  Format returns them
+// as one error; printing them is left to the caller.
 type errorListener struct {
 	*antlr.DefaultErrorListener
-	filename       string
-	errors         []string
-	suppressStderr bool
+	filename string
+	errors   []string
 }
 
 func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, column int, msg string, _ antlr.RecognitionException) {
@@ -41,10 +42,6 @@ func (e *errorListener) SyntaxError(_ antlr.Recognizer, _ interface{}, line, col
 		errMsg = fmt.Sprintf("%s: line %d:%d %s", e.filename, line, column, msg)
 	}
 	e.errors = append(e.errors, errMsg)
-	// Still print to stderr for backwards compatibility, but don't exit
-	if !e.suppressStderr {
-		fmt.Fprintln(os.Stderr, errMsg)
-	}
 }
 
 func (e *errorListener) HasErrors() bool {

@@ -1,6 +1,8 @@
 package formatter
 
 import (
+	"io"
+	"os"
 	"strings"
 	"testing"
 )
@@ -80,7 +82,7 @@ func Test_formatter_no_error_on_valid_syntax(t *testing.T) {
 }
 
 func Test_errorListener_accumulates_multiple_errors(t *testing.T) {
-	listener := &errorListener{filename: "test.cls", suppressStderr: true}
+	listener := &errorListener{filename: "test.cls"}
 
 	// Simulate multiple syntax errors
 	listener.SyntaxError(nil, nil, 1, 10, "first error", nil)
@@ -110,7 +112,7 @@ func Test_errorListener_accumulates_multiple_errors(t *testing.T) {
 }
 
 func Test_errorListener_no_errors_returns_nil(t *testing.T) {
-	listener := &errorListener{filename: "test.cls", suppressStderr: true}
+	listener := &errorListener{filename: "test.cls"}
 
 	if listener.HasErrors() {
 		t.Error("Expected HasErrors() to return false for new listener")
@@ -119,5 +121,52 @@ func Test_errorListener_no_errors_returns_nil(t *testing.T) {
 	err := listener.GetError()
 	if err != nil {
 		t.Errorf("Expected GetError() to return nil, got: %v", err)
+	}
+}
+
+// captureStderr returns what fn writes to os.Stderr.
+func captureStderr(t *testing.T, fn func()) string {
+	t.Helper()
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	orig := os.Stderr
+	os.Stderr = w
+	defer func() { os.Stderr = orig }()
+	fn()
+	w.Close()
+	out, err := io.ReadAll(r)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(out)
+}
+
+func Test_formatter_returns_syntax_errors_without_printing_them(t *testing.T) {
+	var err error
+	stderr := captureStderr(t, func() {
+		err = NewFormatter("", strings.NewReader("public class Test { void method() { ")).Format()
+	})
+	if err == nil || !strings.Contains(err.Error(), "line 1:") {
+		t.Errorf("Expected a syntax error naming its line, got: %v", err)
+	}
+	if stderr != "" {
+		t.Errorf("Expected nothing written to stderr, got: %q", stderr)
+	}
+}
+
+func Test_soql_formatter_returns_syntax_errors_without_printing_them(t *testing.T) {
+	var err error
+	stderr := captureStderr(t, func() {
+		f := NewSOQLFormatter()
+		f.SetSource("SELECT Id FROM")
+		err = f.Format()
+	})
+	if err == nil || !strings.Contains(err.Error(), "line 1:") {
+		t.Errorf("Expected a syntax error naming its line, got: %v", err)
+	}
+	if stderr != "" {
+		t.Errorf("Expected nothing written to stderr, got: %q", stderr)
 	}
 }
