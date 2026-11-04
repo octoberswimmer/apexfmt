@@ -92,7 +92,7 @@ func (v *FormatVisitor) VisitEnumConstants(ctx *parser.EnumConstantsContext) int
 func (v *FormatVisitor) VisitInterfaceDeclaration(ctx *parser.InterfaceDeclarationContext) interface{} {
 	extends := ""
 	if ctx.EXTENDS() != nil {
-		extends = " extends " + v.visitRule(ctx.TypeList()).(string) + " "
+		extends = " extends " + v.visitRule(ctx.TypeList()).(string)
 	}
 	return "interface " + ctx.Id().GetText() + extends + " {\n" + indent(v.visitRule(ctx.InterfaceBody()).(string)) + "\n}"
 }
