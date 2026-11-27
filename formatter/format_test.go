@@ -575,6 +575,48 @@ BillingPostalCode = '90210'
 				`undelete as user records;`,
 				`undelete as user records;`,
 			},
+			{
+				`merge as user masterAccount duplicateAccount;`,
+				`merge as user masterAccount duplicateAccount;`,
+			},
+			{
+				`MERGE AS SYSTEM masterAccount duplicates;`,
+				`merge as system masterAccount duplicates;`,
+			},
+			{
+				`switch on x { when -5L { return; } when +5 { return; } when - -5, +-6L { return; } when (-7L) { return; } }`,
+				`switch on x {
+	when -5L {
+		return;
+	}
+	when +5 {
+		return;
+	}
+	when - -5, +-6L {
+		return;
+	}
+	when (-7L) {
+		return;
+	}
+}`,
+			},
+			{
+				`List<List<SObject>> r = [FIND 'Acme' RETURNING Account(Id, toLabel(Name), convertCurrency(AnnualRevenue), FORMAT(convertCurrency(AnnualRevenue)))];`,
+				`List<List<SObject>> r = [FIND 'Acme'
+RETURNING Account(
+	Id,
+	TOLABEL(Name),
+	CONVERTCURRENCY(AnnualRevenue),
+	FORMAT(CONVERTCURRENCY(AnnualRevenue)))];`,
+			},
+			{
+				`List<List<SObject>> r = [FIND 'Acme' RETURNING Account(toLabel(Name), Id, Phone)];`,
+				`List<List<SObject>> r = [FIND 'Acme'
+RETURNING Account(
+	TOLABEL(Name),
+	Id,
+	Phone)];`,
+			},
 		}
 	dmp := diffmatchpatch.New()
 	for i, tt := range tests {

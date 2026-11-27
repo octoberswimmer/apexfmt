@@ -303,7 +303,27 @@ func (v *FormatVisitor) VisitWhenLiteral(ctx *parser.WhenLiteralContext) interfa
 	if i := ctx.Id(); i != nil {
 		return v.visitRule(i)
 	}
+	if ctx.IntegerLiteral() != nil || ctx.LongLiteral() != nil {
+		return whenLiteralSigns(ctx) + ctx.GetStop().GetText()
+	}
 	return ctx.GetText()
+}
+
+// whenLiteralSigns writes the signs before a numeric when literal without
+// spaces, except between two equal signs, which would otherwise be read back
+// as the -- or ++ operator.
+func whenLiteralSigns(ctx *parser.WhenLiteralContext) string {
+	var signs strings.Builder
+	var prev string
+	for i := 0; i < ctx.GetChildCount()-1; i++ {
+		sign := ctx.GetChild(i).(antlr.TerminalNode).GetText()
+		if sign == prev {
+			signs.WriteString(" ")
+		}
+		signs.WriteString(sign)
+		prev = sign
+	}
+	return signs.String()
 }
 
 func (v *FormatVisitor) VisitTryStatement(ctx *parser.TryStatementContext) interface{} {
@@ -433,7 +453,15 @@ func (v *FormatVisitor) VisitUpsertStatement(ctx *parser.UpsertStatementContext)
 }
 
 func (v *FormatVisitor) VisitMergeStatement(ctx *parser.MergeStatementContext) interface{} {
-	return "merge " + v.visitRule(ctx.Expression(0)).(string) + " " + v.visitRule(ctx.Expression(1)).(string) + ";"
+	accessMode := ""
+	if ctx.AS() != nil {
+		if ctx.SYSTEM() != nil {
+			accessMode = " as system"
+		} else if ctx.USER() != nil {
+			accessMode = " as user"
+		}
+	}
+	return "merge" + accessMode + " " + v.visitRule(ctx.Expression(0)).(string) + " " + v.visitRule(ctx.Expression(1)).(string) + ";"
 }
 
 func (v *FormatVisitor) VisitDeleteStatement(ctx *parser.DeleteStatementContext) interface{} {
@@ -1886,7 +1914,20 @@ func (v *FormatVisitor) VisitFieldSpecClauses(ctx *parser.FieldSpecClausesContex
 }
 
 func (v *FormatVisitor) VisitFieldList(ctx *parser.FieldListContext) interface{} {
-	list := []string{v.visitRule(ctx.SoslId()).(string)}
+	var field string
+	switch {
+	case ctx.TOLABEL() != nil:
+		field = "TOLABEL(" + v.visitRule(ctx.SoslId()).(string) + ")"
+	case ctx.CONVERT_CURRENCY() != nil:
+		field = "CONVERTCURRENCY(" + v.visitRule(ctx.SoslId()).(string) + ")"
+	case ctx.FORMAT() != nil && ctx.SoqlFunction() != nil:
+		field = "FORMAT(" + v.visitRule(ctx.SoqlFunction()).(string) + ")"
+	case ctx.FORMAT() != nil:
+		field = "FORMAT(" + v.visitRule(ctx.SoslId()).(string) + ")"
+	default:
+		field = v.visitRule(ctx.SoslId()).(string)
+	}
+	list := []string{field}
 	for _, f := range ctx.AllFieldList() {
 		list = append(list, v.visitRule(f).(string))
 	}

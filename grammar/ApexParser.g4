@@ -334,8 +334,8 @@ whenValue
     ;
 
 whenLiteral
-    : (SUB)? IntegerLiteral
-    | LongLiteral
+    : (SUB|ADD)* IntegerLiteral
+    | (SUB|ADD)* LongLiteral
     | StringLiteral
     | TextBlockLiteral
     | NULL
@@ -398,7 +398,7 @@ upsertStatement
     ;
 
 mergeStatement
-    : MERGE expression expression SEMI
+    : MERGE (AS (SYSTEM | USER))? expression expression SEMI
     ;
 
 runAsStatement
@@ -1056,9 +1056,9 @@ fieldSpecClauses
 
 fieldList
     : soslId (COMMA fieldList)*
-    | TOLABEL LPAREN soslId RPAREN
-    | CONVERT_CURRENCY LPAREN soslId RPAREN
-    | FORMAT LPAREN (soslId | soqlFunction) RPAREN
+    | TOLABEL LPAREN soslId RPAREN (COMMA fieldList)*
+    | CONVERT_CURRENCY LPAREN soslId RPAREN (COMMA fieldList)*
+    | FORMAT LPAREN (soslId | soqlFunction) RPAREN (COMMA fieldList)*
     ;
 
 updateList
